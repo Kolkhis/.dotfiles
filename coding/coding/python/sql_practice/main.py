@@ -29,7 +29,7 @@ students_in_dicts = [
     {"name": "Yennifer of Vengeburg", "age": 15, "score": 66},
 ]
 
-# Since it's not just 1 item being inserted, we need to use `insertmany()`
+# Since it's more than 1 item being inserted, we need to use `insertmany()`
 cursor.executemany("INSERT INTO students VALUES (?,?,?)", students)
 
 # Grab all the items in table `students`
@@ -40,5 +40,5 @@ yen = cursor.execute('SELECT * FROM students WHERE name LIKE "Yen%"')
 print(yen)
 
 
-# Must close the connection at the end.
+# Must close the database connection when we're finished.
 connection.close()

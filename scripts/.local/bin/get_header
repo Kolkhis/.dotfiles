@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [[ -n "$1" ]]; then
+    # Find the first match (`grep -m 1`)
+    description=$(grep -m 1 '^# ' "$1" | sed -E 's/^# /* /')
+    echo "$description"
+    realpath "$1"
+else
+    echo "No file was provided."
+    exit 1
+fi
+
+
+
