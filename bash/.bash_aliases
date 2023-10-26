@@ -16,22 +16,13 @@ alias dots="cd ~/.dotfiles/"
 alias clsa='printf "\e[H\e[2J"'
 alias nv="cd ~/.dotfiles/nvim/.config/nvim/"
 alias boost="cd ~/.dotfiles/notes/notes/skilstak/"
+alias cal="ncal -b"
 
 # godmode
 set -o vi
 
-RESET="\[\033[0m\]"
-BOLD="\[\033[1m\]"
-UNDERLINE="\[\033[4m\]"
-
-YELLOW="\[\033[33m\]"
-RED="\[\033[31m\]"
-GREEN="\[\033[32m\]"
-BLUE="\[\033[34m\]"
-MAGENTA="\[\033[35m\]"
-CYAN="\[\033[36m\]"
-WHITE="\[\033[37m\]"
-
+export NOTES_HOME="/home/kolkhis/notes"
+export LC_ALL=C.UTF-8
 export EDITOR=nvim
 export PATH=~/bin:$PATH
 export PATH=$PATH:/usr/local/go/bin
@@ -47,6 +38,20 @@ parse_git_branch() {
     # printf "$(git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/')"
 }
 
+YELLOW="\[\033[33m\]"
+GREEN="\[\033[32m\]"
+CYAN="\[\033[36m\]"
+RED="\[\033[31m\]"
+BLUE="\[\033[34m\]"
+MAGENTA="\[\033[35m\]"
+WHITE="\[\033[37m\]"
+
+RESET="\[\033[0m\]"
+BOLD="\[\033[1m\]"
+UNDERLINE="\[\033[4m\]"
+
+
+
 # Customize prompt
 export PS1=\
 "${GREEN}\
@@ -59,3 +64,16 @@ ${RESET} $ "
 
 # $(uptime | awk '{print $10}')
 # 2:03:58
+
+export RESET="\033[0m"
+export BOLD="\033[1m"
+export UNDERLINE="\033[4m"
+
+export YELLOW="\033[33m"
+export GREEN="\033[32m"
+export CYAN="\033[36m"
+export RED="\033[31m"
+export BLUE="\033[34m"
+export MAGENTA="\033[35m"
+export WHITE="\033[37m"
+
