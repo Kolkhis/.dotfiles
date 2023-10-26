@@ -62,9 +62,12 @@ local format_sources = {
   null_ls.builtins.formatting.djlint,
   null_ls.builtins.formatting.prettierd,
   null_ls.builtins.formatting.beautysh,
-  null_ls.builtins.formatting.shfmt,
+  null_ls.builtins.formatting.shfmt.with({
+      extra_args = {"-i", "4", "-ci",}
+  }),
   -- null_ls.builtins.diagnostics.shellcheck,
 }
+
 
 -- inlay hints
 vim.keymap.set({'n', 'v'}, '<leader>dh', function ()
