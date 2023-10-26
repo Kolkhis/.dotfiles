@@ -1,15 +1,21 @@
+
+# shellcheck shell=bash
+# shellcheck disable=SC2059
+
 alias cls="clear"
-alias path="printf \"${PATH//:/\\n}\""
+alias path='printf "${PATH//:/\\n}"'
 # Search with DuckDuckGo
-alias ?="duck"
+alias "?"="duck"
 
 # Use charmbracelet/mods to talk to ChatGPT
-alias ??="gpt"
+alias "??"="gpt"
 alias aoc="cd ~/.dotfiles/coding/coding/advent_of_code/"
 alias py="python3"
 alias python="python3"
 alias dots="cd ~/.dotfiles/"
 alias clsa='printf "\e[H\e[2J"'
+alias nv="cd ~/.dotfiles/nvim/.config/nvim/"
+alias boost="cd ~/.dotfiles/notes/notes/skilstak/"
 
 # godmode
 set -o vi
@@ -52,3 +58,4 @@ ${YELLOW}\
 ${RESET} $ "
 
 # $(uptime | awk '{print $10}')
+# 2:03:58

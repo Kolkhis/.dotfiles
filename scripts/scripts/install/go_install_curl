@@ -33,7 +33,7 @@ go_install() {
         fi
 
         # Reload bash
-        source "${HOME}/.bashrc"
+        source "$HOME/.bashrc"
 
         # Confirm Installation
         go version

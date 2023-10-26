@@ -15,9 +15,8 @@
 * fzf
 * shfmt
 * netstat
+* ncal - calendar
 * parallel <- Check this out. It's apparently sick.
-* nodejs
-* npm
 
 * jq (jquery)
 * python3.10-venv
@@ -26,7 +25,7 @@
 
 ```bash
 sudo apt-get update && sudo apt-get upgrade
-sudo apt-get install stow gcc unzip tree w3m lolcat lynx tmux screen tldr fzf shfmt netstat nodejs npm -y
+sudo apt-get install stow gcc unzip tree w3m lolcat lynx tmux screen tldr fzf shfmt ncal nodejs npm python3.10-venv -y
 ```
 
 * charmbracelet/mods (ChatGPT from the command line)
@@ -35,6 +34,13 @@ sudo mkdir -p /etc/apt/keyrings
 curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
 echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
 sudo apt-get update && sudo apt-get install mods
+```
+
+* nvm (Node Version Manager)
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash )
+exec bash -l
+nvm install node
 ```
 
 ... probably more that I can't think of right now. Is there a better way to get a list of packages
@@ -50,7 +56,12 @@ L3MON - [Android Hax](https://www.golinuxcloud.com/l3mon-hack-android-mobile-rem
 JuiceSSH - [SSH client for Android](https://juicessh.com/)
 
 
+Static site generator (available on pip):
+mkdocs 
+mkdocs-material
+mkdocs-awesome-pages-plugin
 
-
-
+Learning hacking stuff:
+TryHackMe and pentesterlab
+When looking for XSS also look for SSTI or CSTI
 
