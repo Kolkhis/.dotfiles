@@ -20,7 +20,7 @@ vim.o.path = vim.o.path .. '**'
 vim.o.hlsearch = false
 
 -- Set line numbers
-vim.o.number = true
+vim.o.nu = true
 vim.o.rnu = true
 
 -- Keep 5 lines before the cursor when scrolling

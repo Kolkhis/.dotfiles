@@ -11,6 +11,8 @@ git clone https://github.com/wbthomason/packer.nvim "$env:LOCALAPPDATA\nvim-data
 return require('packer').startup(function(use)
   use('wbthomason/packer.nvim')
 
+  use({ 'sourcegraph/sg.nvim', run = 'nvim -l build/init.lua' })
+
   use('Kolkhis/streamer-mode.nvim')
   -- use('E:/Coding/nvim_plugin/dev/streamer-mode.nvim')
   -- use('/home/kolkhis/plugin_dev/streamer-mode.nvim')
@@ -32,7 +34,8 @@ return require('packer').startup(function(use)
     end,
   }) -- treesitter. Highlighting syntax and stuff
 
-  --[[ SIR TIMOTHY POPE - POPE OF VIM ]]--
+  --[[ SIR TIMOTHY POPE - POPE OF VIM ]]
+  --
   use('tpope/vim-commentary') -- Commenting with gc / gcgc / gcc
   use('tpope/vim-fugitive') -- Git sht
   use('tpope/vim-surround')
@@ -45,6 +48,33 @@ return require('packer').startup(function(use)
   use('nvim-tree/nvim-web-devicons')
 
   --[[ LSP/autocompletion stuff ]]
+
+  use({
+    'williamboman/mason.nvim',
+    run = function()
+      local language_servers = {
+        'bash-language-server',
+        'shellcheck',
+        'shfmt',
+        'lua-language-server',
+        'stylua',
+        'vim-language-server',
+        'gopls',
+        'clangd',
+        'clang-format',
+        'pyright',
+        'black',
+        'djlint',
+        'html-lsp',
+        'prettierd',
+      }
+      local server_str = ''
+      for idx, server in ipairs(language_servers) do
+        server_str = server_str .. server .. ' '
+      end
+      vim.cmd(('MasonInstall %s'):format(server_str))
+    end,
+  })
 
   use({
     'VonHeikemen/lsp-zero.nvim',
