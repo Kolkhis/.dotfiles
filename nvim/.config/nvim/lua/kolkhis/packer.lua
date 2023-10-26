@@ -32,6 +32,7 @@ return require('packer').startup(function(use)
     end,
   }) -- treesitter. Highlighting syntax and stuff
 
+  --[[ SIR TIMOTHY POPE - POPE OF VIM:]]
   use('tpope/vim-commentary') -- Commenting with gc / gcgc / gcc
 
   use('tpope/vim-fugitive') -- Git sht
@@ -91,3 +92,5 @@ return require('packer').startup(function(use)
 
   use({ 'akinsho/bufferline.nvim', tag = '*', requires = 'nvim-tree/nvim-web-devicons' }) -- Bufferline for tab views of buffers.
 end)
+
+
