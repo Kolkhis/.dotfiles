@@ -1,0 +1,18 @@
+# List of options:
+# https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Readline-Init-File
+
+set editing-mode vi
+set bell-style none
+set blink-matching-paren on
+# Use LS_COLORS to color completion options
+set colored-completion-prefix on
+set colored-stats on
+# Ignore case when filename matching/completion
+set completion-ignore-case on
+# use - and _ interchangably with completions
+set completion-map-case on
+# Max completions before user is prompted to display them
+set completion-query-items 80
+
+
+
