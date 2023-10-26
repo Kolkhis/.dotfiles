@@ -12,6 +12,7 @@ alias py="python3"
 alias python="python3"
 alias clsa='printf "\e[H\e[2J"'
 alias cal="ncal -b"
+alias tree="tree -a"
 
 # Navigation
 alias dots="cd ~/.dotfiles/"
