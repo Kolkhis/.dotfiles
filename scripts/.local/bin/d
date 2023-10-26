@@ -1,0 +1,29 @@
+#!/bin/bash
+
+oxford="https://www.oxfordlearnersdictionaries.com/definition/american_english"
+merriam="https://www.merriam-webster.com/dictionary"
+base_url=${merriam}
+if [[ "$1" == -* ]]; then
+    while [[ "$1" == -* ]]; do
+        case $1 in
+            (-m) 
+                base_url=${merriam}
+                shift;;
+            (-o) 
+                base_url=${oxford}
+                shift;;
+            (-h|--help) 
+                printf "usage:  d [-o] [-m] word\n"
+                printf "        d [-h|--help]\n"
+                printf " -m             Use Merriam Webster (default)\n" 
+                printf " -o             Use Oxford Learner's Dictionary\n"
+                printf " -h, --help     Display this help text\n\n"
+                printf "d - Quickly and easily look up word definitions\n    from the command line using w3m.\n"
+                exit 0;;
+            (*)
+                printf "Unknown option: %s" "$1";; esac
+    done
+fi
+
+search_term="$(printf "%s" "$*" | tr ' ' '+')"
+exec w3m "${base_url}/${search_term}"
