@@ -3,7 +3,8 @@
 url="https://lite.duckduckgo.com/lite?kd=-1&kp=-1&q=$(urlencode "$*")" # 🦆
 #chat "🦆 searching: $* $url"
 #exec lynx "$url"
-exec w3m -o indent_incr=20 "$url"  # For using w3m instead
+exec w3m -s -W -o indent_incr=20 "$url" 
+# exec w3m -o indent_incr=20 "$url"   # Normal w3m search
 #exec lynx "duckduckgo.com/lite?q=$*" # 🦆
 #exec lynx "duckduckgo.com/lite?q=$*"
 
