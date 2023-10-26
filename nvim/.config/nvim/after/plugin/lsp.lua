@@ -35,6 +35,16 @@ local function setup_lua_ls()
           styluaArgs = { '--config-path', ConfigPath },
         },
       },
+      -- Bash = {
+      --   formatting = {
+      --     shfmtArgs = { '-i 4' },
+      --   },
+      -- },
+      -- Shell = {
+      --   formatting = {
+      --     shfmtArgs = { '-i 4' },
+      --   },
+      -- },
     },
   })
 end
@@ -63,6 +73,8 @@ local format_sources = {
   null_ls.builtins.formatting.djlint,
   null_ls.builtins.formatting.prettierd,
   null_ls.builtins.formatting.beautysh,
+  null_ls.builtins.formatting.shfmt,
+  null_ls.builtins.formatting.shellharden,
 }
 
 --- ocaml

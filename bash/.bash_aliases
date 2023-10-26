@@ -6,6 +6,7 @@ alias aoc="cd ~/.dotfiles/coding/coding/advent_of_code/"
 alias py="python3"
 alias python="python3"
 alias dots="cd ~/.dotfiles/"
+alias clsa='printf "\e[H\e[2J"'
 
 # godmode
 set -o vi
@@ -21,3 +22,5 @@ parse_git_branch() {
 }
 
 export PS1="\[\033[1;34m\]\u@\h \[\033[32m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "
+export PATH=~/bin:$PATH
+
