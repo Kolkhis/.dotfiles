@@ -114,13 +114,35 @@ https://neovim.io/doc/user/usr_41.html#function-list
 
 
 --[[
-
-
 anything in nvim/plugin will load/run at runtime.
-
 package.loaded has a table of loaded packages.
-
 vim.api.nvim_get_keymaps
+<<<<<<< HEAD
+--]]
+
+  --[[  Neo-Tree Setup  ]]
+  -- Switching from neo-tree to harpoon
+  --
+  -- use({
+  --   'nvim-neo-tree/neo-tree.nvim',
+  --   branch = 'v2.x',
+  --   requires = {
+  --     'nvim-lua/plenary.nvim',
+  --     'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
+  --     'MunifTanjim/nui.nvim',
+  --   },
+  --   config = function()
+  --     -- Unless you are still migrating, remove the deprecated commands from v1.x
+  --     vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
+  --     vim.fn.sign_define('DiagnosticSignError', { text = ' ', texthl = 'DiagnosticSignError' })
+  --     vim.fn.sign_define('DiagnosticSignWarn', { text = ' ', texthl = 'DiagnosticSignWarn' })
+  --     vim.fn.sign_define('DiagnosticSignInfo', { text = ' ', texthl = 'DiagnosticSignInfo' })
+  --     vim.fn.sign_define('DiagnosticSignHint', { text = '', texthl = 'DiagnosticSignHint' })
+  --   end,
+  -- })
+--[[  End of Neo-Tree Setup  ]]
+  --
+=======
 
 
 
@@ -152,4 +174,5 @@ vim.api.nvim_get_keymaps
 
 
 
+>>>>>>> bb809311f3ed94b45ffc87eb4058c9127dceefa2
 
