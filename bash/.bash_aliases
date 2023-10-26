@@ -12,19 +12,30 @@ alias "??"="gpt"
 alias py="python3"
 alias python="python3"
 alias clsa='printf "\e[H\e[2J"'
+
+# Auto-flags
+alias ls='ls --color=auto --classify'
+alias ll='ls --color=auto --classify --almost-all -l --human-readable' # ls -CFAlh
+alias l='ll' # ls -CFAlh
 alias cal="ncal -b"
 alias tree="tree -a"
-alias ip="ip -color "
+alias ip="ip -color"
 
 # Navigation
 alias dots="cd ~/.dotfiles/"
 alias aoc="cd ~/.dotfiles/coding/coding/advent_of_code/"
 alias nv="cd ~/.dotfiles/nvim/.config/nvim/"  
-alias boost="cd ~/.dotfiles/notes/notes/skilstak/" 
+alias boost="cd ~/notes/skilstak/" 
 alias rp="cd ~/Repos/github.com/kolkhis/"
 alias s="cd ~/.dotfiles/scripts/.local/bin/"
 alias n="cd ~/notes/"
-alias vless="$VIMRUNTIME/macros/less.sh"
+
+# Using vim/neovim as `less`
+export VRT="/usr/share/vim/vim82"
+alias vless="\${VRT}/macros/less.sh"
+export NVRT="/usr/share/nvim/runtime/"
+alias nvl="\${NVRT}/macros/less.sh"
+
 # godmode
 set -o vi
 
@@ -62,17 +73,37 @@ GREY='\[\e[38;5;241m\]'
 MUTED_BLUEGREEN="\[\e[38;5;30m\]"
 RED_256="\[\e[38;5;160m\]"
 RESET="\[\e[0m\]"
+LIGHT_PURPLE="\[\e[38;5;99m\]"
+SOFT_BLUE="\[\e[38;5;81m\]"
+
+# NAME_COLOR=${DARK_YELLOW}
+# HOST_COLOR=${BURNT_ORANGE}
+# PATH_COLOR=${MUTED_BLUEGREEN}
+
+case $USER in
+    (root)
+        NAME_COLOR=${RED_256};
+        HOST_COLOR=${BURNT_ORANGE};
+        PATH_COLOR=${LIGHT_PURPLE}
+	;;
+    (*)
+        NAME_COLOR=${DARK_YELLOW};
+        HOST_COLOR=${BURNT_ORANGE};
+        PATH_COLOR=${MUTED_BLUEGREEN}
+	;;
+esac
+        
 
 export PS1=\
-"${DARK_YELLOW}\
+"${NAME_COLOR}\
 \u${GREY}@\
-${BURNT_ORANGE}\
+${HOST_COLOR}\
 \h${GREY}:\
-${MUTED_BLUEGREEN}\
+${PATH_COLOR}\
 \w\
 ${RED_256}\
 \$(get_git_branch)\
- ${GREY}\$ ${RESET}"
+${GREY}~\\$ ${RESET}"
 
 export PS2="${RED_256}~> "
 
