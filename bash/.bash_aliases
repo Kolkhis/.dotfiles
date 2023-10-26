@@ -35,61 +35,43 @@ export EDITOR=nvim
 export PATH=~/bin:$PATH
 export PATH=$PATH:/usr/local/go/bin
 export TERM=xterm-256color
+COLUMNS=120
+LINES=30
+export COLUMNS LINES
 export force_color_prompt=yes
 GPG_TTY=$(tty)
 export GPG_TTY
 
-if [ -f ~/.bash_functions ]; then
-    . ~/.bash_functions
-fi
 
-BLACK=$'\e[30m'
-RESET="\[\033[0m\]"
-BOLD="\[\033[1m\]"
-UNDERLINE="\[\033[4m\]"
+# BLACK=$'\e[30m'
+# RESET="\[\033[0m\]"
+# BOLD="\[\033[1m\]"
+# UNDERLINE="\[\033[4m\]"
 
-get_git_branch() {
-    branch="$(git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/')"
-    printf "${branch}${RESET}"
-}
+# Very simple prompt
+# export PS1="\u@\h:\w\$ "
 
-export LIGHT_BLUE="\e[38;5;68m"
+# Customize prompt - Non-printing characters need to be escaped with \[ \] in the prompt.
 
-# BASH Base Colors:
-export BLACK=$'\e[30m'
-export RED=$'\e[31m'
-export GREEN=$'\e[32m'
-export YELLOW=$'\e[33m'
-export BLUE=$'\e[34m'
-export MAGENTA=$'\e[35m'
-export CYAN=$'\e[36m'
-export WHITE=$'\e[37m'
+BURNT_ORANGE='\[\e[38;5;130m\]' # 130 172 166
+DARK_YELLOW="\[\e[38;5;58m\]"
+GREY='\[\e[38;5;241m\]'
+MUTED_BLUEGREEN="\[\e[38;5;30m\]"
+RED_256="\[\e[38;5;160m\]"
+RESET="\[\e[0m\]"
 
-
-export RESET=$'\e[0m'
-export BOLD=$'\e[1m'
-export UNDERLINE=$'\e[4m'
-
-export BURNT_ORANGE='\e[38;5;130m' # 130 172 166
-export DARK_YELLOW="\e[38;5;58m"
-export GREY='\e[38;5;241m'
-export MUTED_BLUEGREEN="\e[38;5;30m"
-export RED_256="\e[38;5;160m"
-# Customize prompt
 export PS1=\
 "${DARK_YELLOW}\
-\u${RESET}${GREY}@\
-${RESET}${BURNT_ORANGE}\
-\h${RESET}${GREY}:${RESET}\
+\u${GREY}@\
+${BURNT_ORANGE}\
+\h${GREY}:\
 ${MUTED_BLUEGREEN}\
 \w\
-${RESET}${RED_256}\
-\$(parse_git_branch)\
- ${RESET}${GREY}\$${RESET} "
+${RED_256}\
+\$(get_git_branch)\
+ ${GREY}\$ ${RESET}"
+
 
 # $(uptime | awk '{print $10}')
 # 2:03:58
 eval "$(dircolors -b ~/.dircolors)"
-
-
-
