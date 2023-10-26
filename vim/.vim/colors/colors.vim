@@ -41,7 +41,7 @@ let g:colors.editor = {
 \ 'disabled': '#464B5D',
 \ 'accent': '#84FFFF'
 \ }
-" Please translate the following lua script into VimScript, such that it will work in Vim 8.2, using the colors your provided in your last message:
+
 " LSP colors
 let g:colors.lsp = {
 \ 'error': '#FF5370',

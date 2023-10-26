@@ -23,9 +23,19 @@ hi IncSearch guifg=Black guibg=DarkRed
 " gutter/errors
 hi LineNr guifg=#546E7A
 hi Special guifg=#F78C6C
-hi Error guifg=DarkRed guibg=NONE
-hi ALEError guifg=NONE guibg=DarkRed
-hi ALEWarning guifg=NONE guibg=DarkRed
+hi Error guifg=#B70404 guibg=NONE
+hi WarningMsg guifg=#C07F00 guibg=NONE
+hi link ALEError Error 
+hi link ALEWarning WarningMsg
+hi link ALEWarningSign Error
+hi link ALEWarningLine WarningMsg
+hi link ALEWarningSignLineNr WarningMsg
+
+" XXX FIXME TODO
+hi TODO guifg=#19A7CE guibg=#27005D
+hi link FIXME TODO
+hi link XXX TODO
+
 
 
 " status line

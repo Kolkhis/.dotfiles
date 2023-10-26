@@ -25,15 +25,16 @@ set t_Co=256    " number of colors
 
 set path+=**
 command! MakeTags !ctags -R .
-
+ 
 let g:mapleader=" "
 let g:maplocalleader=" "
 
 " put that banner away, netrw. no one wants to see that.
-let g:netrw_banner=0
-let g:netrw_alto=1      " split opens on bottom instead of top
-let g:netrw_altv=1      " vsplit opens on right instead of left
-let g:netrw_preview=1   " open previews in vsplit
+" let g:netrw_banner=0
+let g:netrw_alto=1        " split opens on bottom instead of top
+let g:netrw_altv=1        " vsplit opens on right instead of left
+let g:netrw_preview=1     " open previews in vsplit
+let g:netrw_liststyle=3   " tree view
 
 
 " Format Options:
@@ -43,6 +44,8 @@ set fo-=twa2vbB]p
 
 
 " Remaps:
+" :h :nme
+" :h mapmode
 " Specify a register to delete/yank/etc into, e.g., `"a` for register a
 nnoremap <leader>dd "add 
 vnoremap <leader>d "ad 
@@ -64,6 +67,8 @@ nnoremap <leader>ar :source ~/.vimrc<CR>
 nnoremap <leader>gh :h ins-completion<CR> |"
 " Get the identifier needed for highlights
 nnoremap <leader>si :echo synIDattr(synID(line("."), col("."), 1), "name")<CR>
+" insert a capture group in command mode
+cnoremap <leader>\ \(\)<Left><Left>
 
 " Options:
 set fdm=marker      " foldmethod
@@ -95,6 +100,7 @@ set ic              " ignorecase
 set scs             " smartcase
 set scl=number      " signcolumn
 set ut=400          " updatetime
+set wmnu            " wildmenu - show matching files on tab complete
 
 " Indentation:
 set sw=4            " shiftwidth=4
@@ -161,14 +167,37 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     call plug#end()
 
     " ALE
+    let g:ale_sign_info = "┉"
     let g:ale_sign_error = "よ"
-    let g:ale_sign_warning = "ω"
+    let g:ale_sign_warning = "☺" " ω
     let g:ale_detail_to_floating_preview = 1
     let g:ale_completion_enabled = 1
     let g:ale_floating_preview = 1
+
+    " Go
     let g:ale_go_langserver_executable = '/usr/bin/gopls'
-    let g:ale_linters = {'go': ['gopls', 'gometalinter', 'gofmt', 'gobuild']}
-    let g:ale_fixers = {'go': ['gopls']}
+
+    " Python
+    " let g:ale_python_pyright_executable = "home/kolkhis/.nvm/versions/node/v20.8.1/bin/pyright"
+    let g:ale_python_pyright_executable = "pyright-langserver"
+    
+    " let g:ale_python_pyright_config = {
+    " \ 'python': {
+    " \   'pythonPath': '/bin/python3',
+    " \   'venvPath': './venv/',
+    " \ },
+    " \}
+    let g:ale_python_auto_pipenv = 1
+    let g:ale_python_auto_virtualenv = 1
+
+    let g:ale_linters = {
+                \ 'go': ['gopls', 'gometalinter', 'gofmt', 'gobuild'], 
+                \ 'python': ['pyright']
+                \ }
+    let g:ale_fixers = {
+                \ 'go': ['gopls'], 
+                \ 'python3': ['pyright']
+                \ }
 
     " vim-go
     let g:go_fmt_autosave = 1
