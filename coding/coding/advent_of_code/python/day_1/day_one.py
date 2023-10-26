@@ -32,9 +32,12 @@ elf_dict = split_ownership(cleaned_data)
 vals = [*elf_dict.values()]
 vals.sort(reverse=True)
 
-cals = vals[0] + vals[1] + vals[2]
+most_cals = vals[0]
 
-print(f"Top three elves are carrying {cals} calories.")
+top_three = sum(vals[0:3])
+
+print(f"The elf carrying the most calories is carrying {most_cals} calories.")  # answer to pt1
+print(f"The three elves carrying the most calories are carrying {top_three} calories put together.")  # answer to pt2
 
 
 
