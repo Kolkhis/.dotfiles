@@ -1,5 +1,7 @@
 vim.cmd('colo material-deep-ocean')
 
+vim.api.nvim_set_hl(0, 'Cursor', { fg = 'White', bg = 'Red' })
+
 vim.g.netrw_banner = false
 vim.g.netrw_alto = false
 vim.g.netrw_altv = true
