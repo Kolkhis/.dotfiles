@@ -21,6 +21,7 @@
 
 * jq (jquery)
 * python3.10-venv
+* python3-pip
 * nvim ( sudo add-apt-repository ppa:neovim-ppa/unstable -y )
 * cargo (rust) - `curl https://sh.rustup.rs -sSf | sh`
 
