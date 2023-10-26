@@ -45,7 +45,7 @@ set fo+=croqnlmM1j
 set fo-=twa2vbB]p
 
 
-" REMAPS:
+" Remaps:
 " Specify a register to delete/yank/etc into, e.g., `"a` for register a
 nnoremap <leader>dd "add 
 vnoremap <leader>d "ad 
@@ -64,8 +64,10 @@ vnoremap J :m '>+1<CR>gv=gv
 vnoremap X y/<C-R>"<CR>
 " hot-reloading .vimrc
 nnoremap <leader>ar :source ~/.vimrc<CR>
-nmap <leader>gh :h ins-completion<CR>
+nmap <leader>gh :h ins-completion<CR> |"
 
+" Options:
+set fdm=marker      " foldmethod
 set nu              " number
 set rnu             " relativenumber
 set so=5            " scrolloff=5
@@ -100,6 +102,40 @@ set sts=4           " softtabstop=4
 set et              " expandtab
 set ai              " autoindent
 set sta             " smarttab - <Tab> inserts spaces
+
+
+" Highlight on yank:
+if v:version >= 801
+    aug highlightYankedText
+        au!
+        au TextYankPost * call YankHighlight()
+    aug end
+
+    fu! YankHighlight()
+        if v:event['operator'] == 'y'
+            if (!exists('g:yanked_text_matches'))
+                let g:yanked_text_matches = []
+            endif
+
+            let g:yank_match_id = matchadd('IncSearch', ".\\%>'\\[\\_.*\\%<']..")
+            let g:yank_window_id = winnr()
+            call add(g:yanked_text_matches, [g:yank_match_id, g:yank_window_id])
+            call timer_start(100, 'DelYankHighlight')
+        endif
+    endf
+
+    fu! DelYankHighlight(timer_id)
+        while !empty(g:yanked_text_matches)
+            let l:match = remove(g:yanked_text_matches, 0)
+            let l:match_id = l:match[0]
+            let l:window_id = l:match[1]
+            try
+                call matchdelete(l:match_id, l:window_id)
+            endtry
+        endwhile
+    endf
+
+endif
 
 
 " Plugins:
