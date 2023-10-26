@@ -36,6 +36,7 @@ return require('packer').startup(function(use)
   use('tpope/vim-commentary') -- Commenting with gc / gcgc / gcc
   use('tpope/vim-fugitive') -- Git sht
   use('tpope/vim-surround')
+  use('tpope/vim-repeat')
 
   -- theme
   use('marko-cerovac/material.nvim')

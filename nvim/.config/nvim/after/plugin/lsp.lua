@@ -39,9 +39,8 @@ local function setup_lua_ls()
   })
 end
 
--- .lua_ls.setup(lsp.nvim_lua_ls())
 local function error_handler(err)
-  print('Error encountered while setting up lua_ls: ' .. err)
+  print(('Error encountered while setting up lua_ls: \n%s' ):format(err))
 end
 xpcall(setup_lua_ls, error_handler)
 
@@ -64,7 +63,7 @@ local format_sources = {
   null_ls.builtins.formatting.prettierd,
   null_ls.builtins.formatting.beautysh,
   null_ls.builtins.formatting.shfmt,
-  null_ls.builtins.diagnostics.shellcheck,
+  -- null_ls.builtins.diagnostics.shellcheck,
 }
 
 -- inlay hints
@@ -72,6 +71,8 @@ vim.keymap.set({'n', 'v'}, '<leader>dh', function ()
     -- Enable/disable/toggle inlay hints for a buffer
     vim.lsp.inlay_hint(0)
 end, { noremap=true, silent=true })
+
+
 
 --- ocaml
 -- null_ls.builtins.formatting.ocamlformat
@@ -87,7 +88,7 @@ end, { noremap=true, silent=true })
 -- null_ls.builtins.formatting.shellharden
 
 if not os.is_phone then -- Termux doesn't have clang support yet
-  table.insert(format_sources, null_ls.builtins.formatting.clang_format)
+    table.insert(format_sources, null_ls.builtins.formatting.clang_format)
 end
 
 null_ls.setup({
