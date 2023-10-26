@@ -1,2 +1,9 @@
 #!/bin/bash
-curl cht.sh/$1
+if [[ -z $1 ]]; then
+    echo "You didn't give any arguments."
+fi
+arguments="$1/"
+shift;
+arguments+=$( printf "$*" | tr '[:blank:]' '+' )
+echo "Querying cht.sh for $arguments"
+curl https://cht.sh/"$*"
