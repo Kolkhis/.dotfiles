@@ -18,17 +18,3 @@ something you like, use it!
 
 Currently trying out Stow for my first-time dotfile management. I like it so far.
 
-
-
-
-#### Core utils to remember
-
-* cat
-* read
-* grep
-* tr
-* echo 
-* sed
-* awk
-* ... what else?
-

@@ -1,3 +1,8 @@
+
+set nocp            "Compatible not set"
+filetype plugin on  "Enable plugins"
+
+
 colorscheme koehler
 syntax on
 set scrolloff=5

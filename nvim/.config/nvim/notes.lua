@@ -21,9 +21,9 @@ https://www.vimregex.com/
 
 
 
+--[=[ Regex with vim ]=]--
 
---[[ Regex with vim
---
+--[[
 			Pattern atom
 
     ^ start matching from beginning of a line
@@ -57,32 +57,10 @@ For more info, :h pattern-atoms
     \{number} match exactly with specified number
         /c\{5} match exactly 'ccccc'
 
-For more info, :h pattern-overview
+For more info, 
+:h pattern-overview
+:h character-classes
 
-
-Character Classes
-    [abcde] match any of 'a' or 'b' or 'c' or 'd' or 'e' ONE time
-        use [a-e] as shortform
-    [^abcde] match any character other than 'a' or 'b' or 'c' or 'd' or 'e'
-        use [^a-e] as shortform
-    [aeiou] match vowel character
-    [^aeiou] match consonant character
-    \a matches alphabet character, short-cut for [a-zA-Z]
-    \A matches other than alphabet [^a-zA-Z]
-    \l matches lowercase alphabets [a-z]
-    \L matches other than lowercase alphabets [^a-z]
-    \u matches uppercase alphabets [A-Z]
-    \U matches other than uppercase alphabets [^A-Z]
-    \d matches digit character [0-9]
-    \D matches other than digit [^0-9]
-    \x matches hexademical character [0-9a-fA-F]
-    \X matches other than hexademical [^0-9a-fA-F]
-    \w matches any alphanumeric character or underscore [a-zA-Z0-9_]
-    \W match other than alphanumeric character or underscore [^a-zA-Z0-9_]
-    \s matches white-space characters space and tab
-    \S matches other than white-space characters
-    \t used in replacestring to insert a Tab character
-    \r used in replacestring to insert a newline character
 ]]--
 
 
@@ -115,7 +93,6 @@ https://neovim.io/doc/user/usr_41.html#function-list
 --]]
 
 --- Playing with the vim.api
--- vim.keymap.set('n', '<leader>wow', '<CMD>lua print("wow")<CR>')
 -- vim.keymap.set('n', '<leader>tk', function ()
 -- 	-- vim.cmd('lua print("wowowow")')
 -- 	-- local buf = vim.api.nvim_get_current_buf()
@@ -147,10 +124,26 @@ vim.api.nvim_get_keymaps
 
 
 
+:h wincmd
+
+:e https://github.com/somefile.c -- this works
+
 --]]
 
+--[=[ Refactoring tip ]=]--
+--[=[ 
+-- Grep with Telescope, add to quickfix list
+-- Then, to apply a cmd to each thing:
+:cdo <cmd>
 
+:h cdo
 
+]=]
+--[[
+--
+-- Disable LSP for current buffer
+-- :lua vim.lsp.diagnostics.disable(vim.api.nvim_get_current_buf())
+--]]
 
 
 
