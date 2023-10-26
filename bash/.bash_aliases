@@ -67,18 +67,20 @@ GPG_TTY=$(tty)
 export GPG_TTY
 
 
-BURNT_ORANGE='\[\e[38;5;130m\]' # 130 172 166
+BURNT_ORANGE='\[\e[38;5;130m\]'
 DARK_YELLOW="\[\e[38;5;58m\]"
 GREY='\[\e[38;5;241m\]'
 MUTED_BLUEGREEN="\[\e[38;5;30m\]"
 RED_256="\[\e[38;5;160m\]"
 RESET="\[\e[0m\]"
 LIGHT_PURPLE="\[\e[38;5;99m\]"
-SOFT_BLUE="\[\e[38;5;81m\]"
+# SOFT_BLUE="\[\e[38;5;81m\]"
 
-# NAME_COLOR=${DARK_YELLOW}
-# HOST_COLOR=${BURNT_ORANGE}
-# PATH_COLOR=${MUTED_BLUEGREEN}
+DARK_RED="\[\e[38;5;88m\]"
+SEP_COLOR=${DARK_RED}
+FIRST_SEP="┎"   # ┎┏┍ ┏ ┒ ┒┎ ┏ ┍
+SECOND_SEP="┖"  # ┖┗┕ ┖ ┚ ┨┠ ┣ ┝ ┫┠
+                #         ┚┖ ┗ ┕
 
 case $USER in
     (root)
@@ -93,12 +95,24 @@ case $USER in
 	;;
 esac
 
-# 88
-DARK_RED="\[\e[38;5;88m\]"
-SEP_COLOR=${DARK_RED}
-FIRST_SEP="┎" # ┎┏┍
-SECOND_SEP="┖" #┖┗┕
-export PS1=\
+# different prompt for git bash
+case $(hostname) in
+    ("D01")
+        SEP_COLOR="\[\e[38;5;129m\]";
+        export PS1=\
+"${SEP_COLOR}${FIRST_SEP} \
+${NAME_COLOR}\
+\u${GREY}@\
+${HOST_COLOR}\
+\h${GREY}:\
+${PATH_COLOR}\
+\w\
+\n${SEP_COLOR}${SECOND_SEP}\
+${GREY} \\$ ${RESET}";
+        ;;
+    (*)
+        SEP_COLOR="\[\e[38;5;88m\]";
+        export PS1=\
 "${SEP_COLOR}${FIRST_SEP} \
 ${NAME_COLOR}\
 \u${GREY}@\
@@ -109,12 +123,11 @@ ${PATH_COLOR}\
 ${RED_256}\
 \$(get_git_branch)\
 \n${SEP_COLOR}${SECOND_SEP}\
-${GREY} \\$ ${RESET}"
-# ┏
-# ┖
+${GREY} \\$ ${RESET}";
+        ;;
+esac
+
 export PS2="${RED_256}~> "
-
-
 
 # $(uptime | awk '{print $10}')
 # 2:03:58

@@ -1,0 +1,10 @@
+#!/bin/bash
+# script for pulling dotfiles from homelab to main PC
+homelab_sync() {
+    if [[ "$(hostname)" == "D01" ]]; then
+        scp homelab:/home/kolkhis/.dotfiles/bash/.bash* ~
+        scp -r homelab:/home/kolkhis/.dotfiles/vim/.vim/* ~
+        scp homelab:/home/kolkhis/.dotfiles/vim/.vimrc ~
+    fi
+}
+homelab_sync
