@@ -1,20 +1,11 @@
 local os = require('kolkhis.detect_os')
 
+-- requirements: stylua (mason), upzip (sudo apt install unzip)
 if os.is_linux and not os.is_phone then
   require('bufferline').setup({
     options = {
       separator_style = 'thin',
       { '-', '-' },
-    },
-  })
-end
-
-if os.is_phone then
-  require('neo-tree').setup({
-    popup_border_style = 'rounded',
-    window = {
-      position = 'left',
-      width = 20,
     },
   })
 end

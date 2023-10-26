@@ -3,7 +3,7 @@ lsp.preset('recommended')
 
 local os = require('kolkhis.detect_os')
 if os.is_linux or os.is_phone then
-  ConfigPath = vim.fs.normalize('~/.config/nvim/stylua.toml')
+  ConfigPath = vim.fs.normalize('~/.dotfiles/nvim/.config/nvim/stylua.toml')
 else
   ConfigPath = vim.fs.normalize('E:/Coding/.config/stylua.toml')
 end
@@ -76,8 +76,7 @@ local format_sources = {
 --
 --
 --- bash/.sh Quotes variables and stuff
--- null_ls.builtins.formatting.shellharden 
-
+-- null_ls.builtins.formatting.shellharden
 
 if not os.is_phone then -- Termux doesn't have clang support yet
   table.insert(format_sources, null_ls.builtins.formatting.clang_format)

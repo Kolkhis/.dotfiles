@@ -1,0 +1,19 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/kolkhis/.dotfiles/vim/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	//
+,html	notes/no_plugins.vim	/^nnoremap ,html :-1read $HOME\/.vim\/.skeleton.html<CR>3jwf>a$/;"	m
+MakeTags	notes/no_plugins.vim	/^command! MakeTags !ctags -R .$/;"	c
+g:netrw_altv	notes/no_plugins.vim	/^let g:netrw_altv=1          " open splits to the right$/;"	v
+g:netrw_banner	notes/no_plugins.vim	/^let g:netrw_banner=0        " disable annoying banner$/;"	v
+g:netrw_browse_split	notes/no_plugins.vim	/^let g:netrw_browse_split=4  " open in prior window$/;"	v
+g:netrw_list_hide	notes/no_plugins.vim	/^let g:netrw_list_hide.=',\\(^\\|\\s\\s\\)\\zs\\.\\S\\+'$/;"	v
+g:netrw_list_hide	notes/no_plugins.vim	/^let g:netrw_list_hide=netrw_gitignore#Hide()$/;"	v
+g:netrw_liststyle	notes/no_plugins.vim	/^let g:netrw_liststyle=3     " tree view$/;"	v
