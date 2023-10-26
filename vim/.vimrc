@@ -70,6 +70,11 @@ nnoremap <leader>si :echo synIDattr(synID(line("."), col("."), 1), "name")<CR>
 " insert a capture group in command mode
 cnoremap <leader>\ \(\)<Left><Left>
 
+" Resize current window
+nnoremap <leader>- :resize -5<CR>
+nnoremap <leader>+ :resize +5<CR>
+nnoremap <leader>= :resize +5<CR>
+
 " Options:
 set fdm=marker      " foldmethod
 set nu              " number
@@ -166,54 +171,7 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
     call plug#end()
 
-    " ALE
-    let g:ale_sign_info = "┉"
-    let g:ale_sign_error = "よ"
-    let g:ale_sign_warning = "☺" " ω
-    let g:ale_detail_to_floating_preview = 1
-    let g:ale_completion_enabled = 1
-    let g:ale_floating_preview = 1
-
-    " Go
-    let g:ale_go_langserver_executable = '/usr/bin/gopls'
-
-    " Python
-    " let g:ale_python_pyright_executable = "home/kolkhis/.nvm/versions/node/v20.8.1/bin/pyright"
-    let g:ale_python_pyright_executable = "pyright-langserver"
-    
-    " let g:ale_python_pyright_config = {
-    " \ 'python': {
-    " \   'pythonPath': '/bin/python3',
-    " \   'venvPath': './venv/',
-    " \ },
-    " \}
-    let g:ale_python_auto_pipenv = 1
-    let g:ale_python_auto_virtualenv = 1
-
-    let g:ale_linters = {
-                \ 'go': ['gopls', 'gometalinter', 'gofmt', 'gobuild'], 
-                \ 'python': ['pyright']
-                \ }
-    let g:ale_fixers = {
-                \ 'go': ['gopls'], 
-                \ 'python3': ['pyright']
-                \ }
-
-    " vim-go
-    let g:go_fmt_autosave = 1
-    let g:go_gopls_enabled = 1
-    let g:go_highlight_types = 1
-    let g:go_highlight_fields = 1
-    let g:go_doc_popup_window = 1
-    let g:go_highlight_operators = 1
-    let g:go_highlight_functions = 1
-    let g:go_highlight_extra_types = 1
-    let g:go_highlight_function_calls = 1
-    let g:go_highlight_build_constraints = 1
-    let g:go_highlight_diagnostic_errors = 1
-    let g:go_highlight_diagnostic_watnings = 1
-    let g:go_highlight_variable_assignments = 1
-    let g:go_highlight_variable_declarations = 1
-
+    call ale_config#SetAleOptions()
+    call vim_go_config#SetVimGoOptions()
 endif
 
