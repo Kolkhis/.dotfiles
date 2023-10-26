@@ -1,0 +1,6 @@
+plugin/packer_compiled.lua
+.luarc.json
+termux_backup/
+lua/dev/
+
+

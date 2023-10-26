@@ -1,0 +1,223 @@
+W3M(1)                                                                                    General Commands Manual                                                                                    W3M(1)
+
+NAME
+       w3m - a text based web browser and pager
+
+SYNOPSIS
+       w3m [OPTION]... [ file | URL ]...
+
+DESCRIPTION
+       w3m  is  a  text  based  browser which can display local or remote web pages as well as other documents.  It is able to process HTML tables and frames but it ignores JavaScript and Cascading Style
+       Sheets.  w3m can also serve as a pager for text files named as arguments or passed on standard input, and as a general purpose directory browser.
+
+       w3m organizes its content in buffers or tabs, allowing easy navigation between them.  With the w3m-img extension installed, w3m can display inline graphics in web pages.  And whenever  w3m's  HTML
+       rendering capabilities do not meet your needs, the target URL can be handed over to a graphical browser with a single command.
+
+       For help with runtime options, press “H” while running w3m.
+
+ARGUMENTS
+       When given one or more command line arguments, w3m will handle targets according to content type.  For web, w3m gets this information from HTTP headers; for relative or absolute file system paths,
+       it relies on filenames.
+
+       With no argument, w3m expects data from standard input and assumes “text/plain” unless another MIME type is given by the user.
+
+       If provided with no target and no fallback target (see for instance option -v below), w3m will exit with usage information.
+
+OPTIONS
+       Command line options are introduced with a single “-” character and may take an argument.
+
+   General options
+       -B     with no other target defined, use the bookmark page for startup
+
+       -M     monochrome display
+
+       -no-mouse
+              deactivate mouse support
+
+       -num   display each line's number
+
+       -N     distribute multiple command line arguments to tabs.  By default, a stack of buffers is used
+
+       -ppc num
+              width of num pixels per character.  Range of 4.0 to 32.0, default 8.0.  Larger values will make tables narrower.  (Implementation not verified)
+
+       -ppl num
+              height of num pixels per line.  Range of 4.0 to 64.0.  (Implementation not verified)
+
+       -title, -title=TERM
+              use the buffer name as terminal title string.  With specified TERM, this sets the title configuration style accordingly
+
+       -v     with no other target defined, welcome users with a built-in page
+
+       -W     toggle wrapping mode in searches
+
+       -X     do not initialize/deinitialize the terminal
+
+       +num   go to line num; only effective for num larger than the number of lines in the terminal
+
+   Browser options
+       -cols num
+              with stdout as destination; HTML is rendered to lines of num characters
+
+       -cookie, -no-cookie
+              use stored cookies and accept new ones, or do neither
+
+       -F     render frames
+
+       -graph, -no-graph
+              use or do not use graphic characters for drawing HTML table and frame borders
+
+       -header string
+              append string to the HTTP(S) request.  Expected to match the header syntax Variable: Value
+
+       -m     Render the body of Usenet messages according to the header “Content-type”
+
+       -no-proxy
+              do not use proxy
+
+       -post file
+              use POST method to upload data defined in file.  The syntax to be used is var1=value1[&var2=value2]...
+
+       -4     IPv4 only.  Corresponds to dns_order=4 in configuration files
+
+       -6     IPv6 only.  Corresponds to dns_order=6 in configuration files
+
+   Text pager options
+       -l num number of lines preserved internally when receiving plain text from stdin (default 10,000)
+
+       -r     use caret notation to display special escape characters (such as ANSI escapes or nroff-style backspaces for bold and underlined characters) instead of processing them
+
+       -s     squeeze multiple blank lines into one
+
+       -t num set tab width to num columns.  No effect on stdout
+
+   Data type/encoding options
+       -I charset
+              user defined character encoding of input data
+
+       -O charset
+              user defined character encoding of output data
+
+       -T type
+              explicit characterization of input data by MIME type
+
+   Options for data output, followed by immediate exit
+       -dump  dump rendered page into stdout.  Set implicitly when output is directed to a file or pipe
+
+       -dump_source
+              dump the page's source code into stdout
+
+       -dump_head
+              dump response of a HEAD request for a URL into stdout
+
+       -dump_both
+              dump HEAD, and source code for a URL into stdout
+
+       -dump_extra
+              dump HEAD, source code, and extra information for a URL into stdout
+
+       -help  show a summary of compiled-in features and command line options
+
+       -show-option
+              show all available configuration options
+
+       -version
+              show the version of w3m
+
+   Options for overriding default settings and resources
+       -bookmark file
+              use file instead of the default bookmark.html file
+
+       -config file
+              use file instead of the default configuration file
+
+       -debug DO NOT USE
+
+       -o option=value
+              modify one configuration item with an explicitly given value; without option=value, equivalent to -show-option
+
+       -reqlog
+              log headers of HTTP communication in file ~/.w3m/request.log
+
+EXAMPLES
+   Pager-like usage
+       Combine snippets of HTML code and preview the page
+              $ cat header.html footer.html | w3m -T text/html
+
+       Compare two files using tabs
+              $ w3m -N config.old config
+
+   Browser-like usage
+       Display web content in monochrome terminal
+              $ w3m -M http://w3m.sourceforge.net
+
+       Display embedded graphics
+              $ w3m -o auto_image=TRUE http://w3m.sourceforge.net
+
+       Display content from Usenet
+              $ w3m -m nntp://news.aioe.org/comp.os.linux.networking
+
+       Upload data for a URL using the POST method
+              $ w3m -post - http://example.com/form.php <<<'a=0&b=1'
+
+   Filter-like usage
+       Convert an HTML file to plain text with a defined line length
+              $ w3m -cols 40 foo.html > foo.txt
+
+       Output the bookmarks page as text with an appended list of links
+              $ w3m -B -o display_link_number=1 > out.txt
+
+       Conversion of file format and character encoding
+              $ w3m -T text/html -I EUC-JP -O UTF-8 < foo.html > foo.txt
+
+   Start with no input
+       Welcome users with a built-in page
+              $ w3m -v
+
+ENVIRONMENT
+       w3m recognises the environment variable WWW_HOME as defining a fallback target for use if it is invoked without one.
+
+FILES
+       ~/.w3m/bookmark.html
+              default bookmark file
+
+       ~/.w3m/config
+              user defined configuration file; overrides /etc/w3m/config
+
+       ~/.w3m/cookie
+              cookie jar; written on exit, read on launch
+
+       ~/.w3m/history
+              browser history - visited files and URLs
+
+       ~/.w3m/keymap
+              user defined key bindings; overrides default key bindings
+
+       ~/.w3m/mailcap
+              external viewer configuration file
+
+       ~/.w3m/menu
+              user defined menu; overrides default menu
+
+       ~/.w3m/mime.types
+              MIME types file
+
+       ~/.w3m/mouse
+              user defined mouse settings
+
+       ~/.w3m/passwd
+              password and username file
+
+       ~/.w3m/pre_form
+              contains predefined values to fill recurrent HTML forms
+
+SEE ALSO
+       README and example files are to be found in the doc directory of your w3m installation.  Recent information about w3m may be found on the project's web pages at ⟨http://w3m.sourceforge.net⟩
+
+ACKNOWLEDGMENTS
+       w3m has incorporated code from several sources.  Users have contributed patches and suggestions over time.
+
+AUTHOR
+       Akinori ITO ⟨aito@fw.ipsj.or.jp⟩
+
+w3m 0.5.3                                                                                        2016-08-06                                                                                          W3M(1)
