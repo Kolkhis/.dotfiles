@@ -2,6 +2,7 @@
 # shellcheck disable=SC2059
 
 alias cls='printf "\e[H\e[2J"'
+alias c='clear'
 alias path='printf "${PATH//:/\\n}"'
 # Search with DuckDuckGo
 alias "?"="duck"
@@ -13,6 +14,7 @@ alias python="python3"
 alias clsa='printf "\e[H\e[2J"'
 alias cal="ncal -b"
 alias tree="tree -a"
+alias ip="ip -color "
 
 # Navigation
 alias dots="cd ~/.dotfiles/"
@@ -21,6 +23,7 @@ alias nv="cd ~/.dotfiles/nvim/.config/nvim/"
 alias boost="cd ~/.dotfiles/notes/notes/skilstak/" 
 alias rp="cd ~/Repos/github.com/kolkhis/"
 alias s="cd ~/.dotfiles/scripts/.local/bin/"
+alias vless="$VIMRUNTIME/macros/less.sh"
 # godmode
 set -o vi
 
@@ -35,6 +38,7 @@ shopt -s nocaseglob
 #force_fignore
 
 
+export VRT="/usr/share/vim/vim82"
 export NOTES_HOME="/home/kolkhis/notes"
 export LC_ALL=C.UTF-8
 export EDITOR=nvim
