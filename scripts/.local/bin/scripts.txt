@@ -1,3 +1,5 @@
+Scripts borrows from rwxrob:
+
 https://raw.githubusercontent.com/rwxrob/dot/main/scripts/figl
 https://raw.githubusercontent.com/rwxrob/dot/main/scripts/255color
 https://raw.githubusercontent.com/rwxrob/dot/main/scripts/bannerfish
