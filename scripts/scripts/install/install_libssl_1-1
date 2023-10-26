@@ -1,0 +1,20 @@
+#!/bin/bash
+
+
+install_libssl1.1() {
+    mkdir -p ~/install/libssl1.1
+    cd ~/install/libssl1.1 || exit
+    # curl -o /tmp/libssl1.1_1.1.0g-2ubuntu4_amd64.deb http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
+    curl -O http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
+    if [[ -f libssl1.1_1.1.0g-2ubuntu4_amd64.deb ]]; then
+        printf "Download successful, attempting to install libssl1.1\n"
+        sudo dpkg -i libssl1.1_1.1.0g-2ubuntu4_amd64.deb
+        if [[ $? -eq 0 ]]; then
+            printf "Install was successful.\n"
+        fi
+    fi
+    cd - || exit
+
+}
+
+install_libssl1.1
