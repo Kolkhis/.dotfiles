@@ -1,6 +1,7 @@
 
 " Config from 'How to do 90% of what plugins do (with just vim)
-
+" Use vim-plug. Plug 'dense-analysis/ale' - let g:ale_linters = {'go': ['gometalinter', 'gofmt', 'gobuild']}
+"                       ^ Pseudo-LSP
 " don't pretend to be vi
 set nocompatible
 

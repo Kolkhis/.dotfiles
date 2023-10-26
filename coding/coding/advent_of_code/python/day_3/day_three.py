@@ -39,7 +39,6 @@ def find_common_items(c1, c2, common_items):
     for char in set(c1):
         if char in c2:
             common_items.append(char)
-    # return shared_items
 
 
 def get_priority(char):
