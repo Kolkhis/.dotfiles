@@ -9,6 +9,7 @@ require('telescope').setup({
   },
 })
 local builtin = require('telescope.builtin')
+local themes = require('telescope.themes')
 vim.keymap.set('n', '<leader>pf', builtin.find_files, { desc = '<leader>pf [P]arse [F]iles' })
 vim.keymap.set('n', '<leader>pg', builtin.git_files, { desc = '<leader>pg [P]arse [G]it Files' })
 vim.keymap.set('n', '<leader>su', builtin.grep_string, { desc = '[S]earch [U]sages of Word' })
@@ -32,26 +33,31 @@ vim.keymap.set({'n', 'v'}, '<leader>ch', builtin.command_history, { desc = '[C]o
 --     vim.cmd('Telescope current_buffer_fuzzy_find')
 -- end, { desc = '[/] Fuzzily search in current buffer' })
 
-local themes = require('telescope.themes')
 
 vim.keymap.set('n', '<leader>hw', function ()
 	vim.cmd('normal! yiw')
 	local word = vim.fn.expand('<cword>')
 	builtin.help_tags(themes.get_ivy({ winblend = 5, search = word }))
-	-- vim.cmd(('normal! i%s'):format(word))  -- This successfully inputs text into the search bar, but only the literal '<cWORD> <Esc>)'
-	vim.api.nvim_put({word}, 'c', true, false)
+	-- vim.cmd(('normal! i%s'):format(vim.fn.expand('<cword>')))  -- This successfully inputs text into the search bar, but only the literal '<cWORD> <Esc>)'
+	-- vim.api.nvim_put({word}, 'c', true, false)
 	-- vim.api.nvim_put
 end, {desc = 'Search [H]elp Tags for [W]ord'})
+
+--------------------------
 
 vim.keymap.set('n', '<leader>sh', function ()
 	local word = vim.fn.expand('<cword>')
 	builtin.help_tags(themes.get_ivy({ winblend = 5, search = word }))
 end, {desc = '[S]earch [H]elp Tags'})
 
+--------------------------
+
 vim.keymap.set('n', '<leader>pw', function ()
 	builtin.grep_string( { search = vim.fn.expand('<cword>') } )
 	end,
 { desc = 'Search [p]roject for [w]ord Under Cursor' })
+
+--------------------------
 
 vim.keymap.set('n', '<leader>pW', function ()
 	builtin.grep_string( { search = vim.fn.expand('<cWORD>') } )
