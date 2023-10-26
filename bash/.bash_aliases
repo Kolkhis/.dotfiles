@@ -48,16 +48,6 @@ GPG_TTY=$(tty)
 export GPG_TTY
 
 
-# BLACK=$'\e[30m'
-# RESET="\[\033[0m\]"
-# BOLD="\[\033[1m\]"
-# UNDERLINE="\[\033[4m\]"
-
-# Very simple prompt
-# export PS1="\u@\h:\w\$ "
-
-# Customize prompt - Non-printing characters need to be escaped with \[ \] in the prompt.
-
 BURNT_ORANGE='\[\e[38;5;130m\]' # 130 172 166
 DARK_YELLOW="\[\e[38;5;58m\]"
 GREY='\[\e[38;5;241m\]'
@@ -75,6 +65,9 @@ ${MUTED_BLUEGREEN}\
 ${RED_256}\
 \$(get_git_branch)\
  ${GREY}\$ ${RESET}"
+
+export PS2="${RED_256}~> "
+
 
 
 # $(uptime | awk '{print $10}')
