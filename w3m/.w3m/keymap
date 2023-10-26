@@ -1,27 +1,7 @@
 # w3m vim-like keymap file
 #   by @sansna
 
-########## invalidate defaults ##########
-keymap K NULL
-keymap J NULL
-keymap SPC NULL
-keymap - NULL
-keymap + NULL
-keymap C-v NULL
-keymap ESC-v NULL
-keymap C-f NULL
-keymap C-b NULL
-keymap C-n NULL
-keymap C-p NULL
-keymap < NULL
-keymap > NULL
-keymap . NULL
-keymap , NULL
-keymap ^ NULL
-keymap C-a NULL
-keymap W NULL
-
-
+#---------# invalidate defaults #---------#
 keymap g NULL
 keymap ESC-< NULL
 keymap ESC-> NULL
@@ -132,15 +112,6 @@ keymap ESC-n NULL
 keymap ESC-p NULL
 keymap \" NULL
 
-keymap ^[[1~ NULL
-keymap ^[[2~ NULL
-keymap ^[[4~ NULL
-keymap ^[[6~ NULL
-keymap ^[[5~ NULL
-keymap ^[[28~ NULL
-keymap ^[[E NULL
-keymap ^[[L NULL
-
 keymap o NULL
 keymap C-k NULL
 keymap D NULL
@@ -154,20 +125,64 @@ keymap C-z NULL
 keymap ZZ NULL
 keymap ZQ NULL
 
+keymap ^[[1~ NULL
+keymap ^[[2~ NULL
+keymap ^[[4~ NULL
+keymap ^[[6~ NULL
+keymap ^[[5~ NULL
+keymap ^[[28~ NULL
+keymap ^[[E NULL
+keymap ^[[L NULL
 
-########## command ##########
+keymap K NULL
+keymap J NULL
+keymap SPC NULL
+keymap - NULL
+keymap + NULL
+keymap C-v NULL
+keymap ESC-v NULL
+keymap C-f NULL
+keymap C-b NULL
+keymap C-n NULL
+keymap C-p NULL
+keymap < NULL
+keymap > NULL
+keymap . NULL
+keymap , NULL
+keymap ^ NULL
+keymap C-a NULL
+keymap W NULL
+
+
+
+#---------# commands #---------#
 keymap :: COMMAND
 keymap :H HELP
 keymap :O OPTIONS
 keymap :d DOWNLOAD_LIST
 
-########## history navigation ##########
+
+#---------# shifting #---------#
+# keymap > SHIFT_RIGHT
+# keymap < SHIFT_LEFT
+# keymap "C-." RIGHT
+# keymap "C-," LEFT
+keymap > RIGHT
+keymap < LEFT
+
+#---------# other stuff #---------#
+keymap :F MENU
+# keymap C-f LINK_MENU
+keymap C-[ ESC
+keymap "C-s" SET_OPTION
+
+#---------# history navigation #---------#
 keymap L NEXT
 keymap H PREV
 keymap :p SELECT_MENU
 keymap :h HISTORY
 
-########## scrolling ##########
+#---------# page navigation #---------#
 keymap C-e UP
 keymap C-y DOWN
 keymap gg BEGIN
@@ -177,8 +192,9 @@ keymap d NEXT_PAGE
 keymap C-u PREV_PAGE
 keymap u PREV_PAGE
 keymap zz CENTER_V
-########## cursor ##########
 
+
+#---------# cursor #---------#
 #keymap l MOVE_RIGHT
 keymap l NEXT_TAB
 #keymap h MOVE_LEFT
@@ -195,10 +211,14 @@ keymap 0 LINE_BEGIN
 keymap $ LINE_END
 keymap w NEXT_WORD
 keymap b PREV_WORD
-########## cursor history ##########
+
+
+#---------# cursor history #---------#
 keymap C-i REDO
 keymap C-o UNDO
-########## navigation ##########
+
+
+#---------# navigation #---------#
 keymap f MOVE_LIST_MENU
 keymap F LIST_MENU
 keymap C-n NEXT_LINK
@@ -220,23 +240,23 @@ keymap ESC-C-j SUBMIT
 keymap C-] TAB_LINK
 keymap C-j GOTO_LINK
 
-########## info ##########
+#---------# info #---------#
 keymap y PEEK
 keymap gC-g INFO
 keymap C-g LINE_INFO
 keymap gf VIEW
 
-########## search ##########
+#---------# search #---------#
 keymap / ISEARCH
 keymap ? ISEARCH_BACK
 keymap n SEARCH_NEXT
 keymap N SEARCH_PREV
 
-########## bookmarks ##########
+#---------# bookmarks #---------#
 keymap a ADD_BOOKMARK
 keymap :b VIEW_BOOKMARK
 
-########## tab ##########
+#---------# tab #---------#
 keymap x CLOSE_TAB
 keymap gh GOTO https://lite.duckduckgo.com/lite
 keymap gH TAB_GOTO https://lite.duckduckgo.com/lite 
@@ -248,7 +268,7 @@ keymap C-wH TAB_LEFT
 keymap t TAB_GOTO
 keymap T TAB_MENU
 
-########## quit ##########
+#---------# quit #---------#
 keymap ZZ EXIT
 keymap C-Q EXIT
 keymap ZQ QUIT

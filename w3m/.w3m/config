@@ -33,7 +33,7 @@ image_map_list 1
 fold_line 0
 show_lnum 0
 show_srch_str 1
-label_topline 0
+label_topline 1
 nextpage_topline 0
 color 1
 basic_color terminal
@@ -57,7 +57,7 @@ emacs_like_lineedit 0
 space_autocomplete 0
 vi_prec_num 0
 mark_all_pages 0
-wrap_search 0
+wrap_search 1
 ignorecase_search 1
 use_migemo 1
 migemo_command cmigemo -q -d /usr/share/cmigemo/utf-8/migemo-dict
