@@ -1,4 +1,3 @@
-
 set nocp            " nocompatible
 filetype plugin on  " enable netrw (technically a plugin)
 syntax on           " syntax highlighting
@@ -19,8 +18,8 @@ else
 endif
 
 
-set viminfo='20,<1000,s1000                " Don't truncate yanks/deletes
-set completeopt=menuone,noselect,preview   " cot - autocompletion/omnicompletion settings
+set viminfo='20,<1000,s1000         " Don't truncate yanks/deletes
+set cot=menuone,noselect,popup      " completeopt - autocompletion/omnicompletion settings
 set t_vb=       " visual bell output code
 set t_Co=256    " number of colors
 
@@ -92,6 +91,8 @@ set tm=274          " timeoutlen=500 - This is annoying
 set ttm=5           " ttimeoutlen=-1 
 set ic              " ignorecase
 set scs             " smartcase
+set scl=number      " signcolumn
+set ut=400          " updatetime
 
 " Indentation:
 set sw=4            " shiftwidth=4
@@ -156,5 +157,32 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     Plug 'dense-analysis/ale'
     Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
     call plug#end()
+
+    " ALE
+    let g:ale_sign_error = "よ"
+    let g:ale_sign_warning = "ω"
+    let g:ale_detail_to_floating_preview = 1
+    let g:ale_completion_enabled = 1
+    let g:ale_floating_preview = 1
+    let g:ale_go_langserver_executable = '/usr/bin/gopls'
+    let g:ale_linters = {'go': ['gopls', 'gometalinter', 'gofmt', 'gobuild']}
+    let g:ale_fixers = {'go': ['gopls']}
+
+    " vim-go
+    let g:go_fmt_autosave = 1
+    let g:go_gopls_enabled = 1
+    let g:go_highlight_types = 1
+    let g:go_highlight_fields = 1
+    let g:go_doc_popup_window = 1
+    let g:go_highlight_operators = 1
+    let g:go_highlight_functions = 1
+    let g:go_highlight_extra_types = 1
+    let g:go_highlight_function_calls = 1
+    let g:go_highlight_build_constraints = 1
+    let g:go_highlight_diagnostic_errors = 1
+    let g:go_highlight_diagnostic_watnings = 1
+    let g:go_highlight_variable_assignments = 1
+    let g:go_highlight_variable_declarations = 1
+
 endif
 
