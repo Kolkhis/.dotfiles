@@ -2,5 +2,7 @@ cookie
 history
 *.html
 w3mtmp*.gz
+w3mcache*
 TODO.md
+
 

@@ -1,8 +1,12 @@
-python3.10-venv
 stow
+gcc
+unzip
 w3m
 lynx
-nvim (sudo add-apt-repository ppa:neovim-ppa/unstable -y)
+python3.10-venv
+nvim (
+sudo add-apt-repository ppa:neovim-ppa/unstable -y
+)
 tmux
 screen
 fzf
