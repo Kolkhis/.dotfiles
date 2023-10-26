@@ -1,9 +1,9 @@
--- set colorscheme
 vim.cmd('colo material-deep-ocean')
 
 vim.g.netrw_banner = false
-vim.g.netrw_alto = true
+vim.g.netrw_alto = false
 vim.g.netrw_altv = true
+vim.g.netrw_preview = 1 -- open previews in vsplit
 
 
 -- Modify path for better find/completion
@@ -44,7 +44,7 @@ vim.o.timeout = true
 vim.o.timeoutlen = 350
 
 -- Set completeopt to have a better completion experience
-vim.o.completeopt = 'menuone,noselect'
+vim.o.completeopt = 'menuone,noselect,' -- preview
 
 -- Enable 24-bit RGB
 vim.o.termguicolors = true

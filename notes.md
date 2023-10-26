@@ -108,6 +108,37 @@ BlackBox by StackOverflow
 
 
 
+### Git Commit Messages
+<details>
+<summary>Git commit message convention</summary>
+[type]: [description]
+
+[body]
+
+Where:
+
+[type]: Indicates the type of the commit. It should be one of the following:
+
+* feat: A new feature or functionality added.
+
+* fix: A bug fix or error correction.
+
+* docs: Documentation updates or changes.
+
+* style: Changes to code formatting, indentation, etc.
+
+* refactor: Code refactoring or restructuring without adding new features or fixing bugs.
+
+* test: Adding or updating tests.
+
+* chore: Maintenance tasks or other miscellaneous changes.
+
+
+[description]: A brief and concise description of the change made in the commit. It should start with a capitalized verb and should not exceed 50 characters.
+
+[body] (optional): A more detailed description of the changes made in the commit. This part is optional but can be useful for providing additional context or information about the changes.
+</details>
+
 ### Tmux Commands
 <details>
 <summary> Session Management:</summary>
@@ -126,9 +157,7 @@ BlackBox by StackOverflow
 
     * tmux has-session: Check if a session exists.
 
-</details>
 
-<details>
 <summary> Window Management: </summary>
 
     * tmux new-window: Create a new window.
@@ -145,9 +174,7 @@ BlackBox by StackOverflow
 
     * tmux kill-window: Close the current window.
 
-</details>
 
-<details>
 <summary> Pane Management: </summary>
 
     * tmux split-window: Split the current pane into two vertical panes.
@@ -164,9 +191,6 @@ BlackBox by StackOverflow
 
     * tmux kill-pane: Close the current pane.
 
-</details>
-
-<details>
 <summary> Miscellaneous Commands:</summary>
 
     * tmux list-keys: List all keybindings.
@@ -177,10 +201,7 @@ BlackBox by StackOverflow
 
     * tmux source-file <file>: Load a configuration file.
 
-</details>
 
-
-<details>
 <summary> Session, Window, and Pane Indexing:</summary>
 
     * tmux choose-session: Interactively choose a session.
@@ -191,10 +212,6 @@ BlackBox by StackOverflow
 
     * tmux switch-client -t <target-client>: Switch to a specific client (session or window).
 
-</details>
-
-
-<details>
 <summary> Copy Mode (for copying text):</summary>
 
     * tmux copy-mode: Enter copy mode.
