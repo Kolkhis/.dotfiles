@@ -180,5 +180,10 @@ Window navigation:
 
 
 
+<<<<<<< HEAD
+>>>>>>> refs/rewritten/Merge
+
+=======
 >>>>>>> bb809311f3ed94b45ffc87eb4058c9127dceefa2
 ]=======]
+>>>>>>> 3981dfa (fix: Fix python indentation madness)
