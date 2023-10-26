@@ -1,0 +1,5 @@
+#!/bin/bash
+
+journalctl -u ssh | grep invalid | tee -a ~/invalid_connections.txt | wc -l >> ~/invalid_connections.txt
+# journalctl -u ssh | grep -c invalid | xargs echo "message"
+
