@@ -14,11 +14,14 @@ Regex
 https://www.vimregex.com/
 
 
--- Dev repo for apt
+-- Nightly repo for apt
 -- sudo add-apt-repository ppa:neovim-ppa/unstable -y
 
 --]]
 
+
+-- `c/word` <- change to searched text
+-- `c?word` <- same as above, change backwards to search term
 
 
 --[=[ Regex with vim ]=]--
@@ -115,6 +118,7 @@ https://neovim.io/doc/user/usr_41.html#function-list
 
 --[[
 anything in nvim/plugin will load/run at runtime.
+
 package.loaded has a table of loaded packages.
 vim.api.nvim_get_keymaps
 <<<<<<< HEAD
@@ -142,10 +146,12 @@ vim.api.nvim_get_keymaps
   -- })
 --[[  End of Neo-Tree Setup  ]]
   --
-=======
 
 
 
+--[=======[
+
+Window navigation:
 :h wincmd
 
 :e https://github.com/somefile.c -- this works
@@ -154,13 +160,13 @@ vim.api.nvim_get_keymaps
 
 --[=[ Refactoring tip ]=]--
 --[=[ 
--- Grep with Telescope, add to quickfix list
--- Then, to apply a cmd to each thing:
+>> Grep with Telescope, add to quickfix list
+>> Then, to apply a cmd to each thing:
 :cdo <cmd>
 
 :h cdo
 
-]=]
+--]=]
 --[[
 --
 -- Disable LSP for current buffer
@@ -175,4 +181,4 @@ vim.api.nvim_get_keymaps
 
 
 >>>>>>> bb809311f3ed94b45ffc87eb4058c9127dceefa2
-
+]=======]
