@@ -4,6 +4,7 @@ history
 w3mtmp*.gz
 w3mcache*
 TODO.md
+.netrwhist
 coding/coding/python/*
 packer_compiled.lua
 
