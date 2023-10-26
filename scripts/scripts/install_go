@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Download Go
+wget https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
+
+# Extract Go
+sudo tar -C /usr/local -xzf go1.21.1.linux-amd64.tar.gz
+
+# Add Go to PATH
+echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.bashrc
+
+# Reload bash
+exec bash -l
+
+# Confirm Installation
+go version
+

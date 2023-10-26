@@ -28,6 +28,7 @@ WHITE="\[\033[37m\]"
 
 export EDITOR=nvim
 export PATH=~/bin:$PATH
+export PATH=$PATH:/usr/local/go/bin
 export TERM=xterm-256color
 export force_color_prompt=yes
 GPG_TTY=$(tty)
