@@ -3,9 +3,7 @@ set nocp            " nocompatible
 filetype plugin on  " enable netrw (technically a plugin)
 syntax on           " syntax highlighting
 
-if filereadable(expand("~/.vim/colors.vim"))
-    source ~/.vim/colors.vim
-endif
+colo ocean
 
 if isdirectory(expand("~/.vim/undodir/"))
     set undodir=~/.vim/undodir
