@@ -28,6 +28,7 @@ apt-mark showmanual
 * visidata
 * youtube-dl
 * cmatrix
+* net-tools
 
 ## Programming
 * jq (jquery - install )
@@ -61,7 +62,8 @@ sudo apt-get update && sudo apt-get install clang libtool-bin libpython3-dev -y
 sudo apt-get update && sudo apt-get upgrade
 sudo apt-get install stow gcc unzip tree entr w3m lolcat \
 lynx tmux screen tldr fzf shfmt ncal nodejs npm xterm visidata \
-python3.10-venv python3-pip gopls clang libtool-bin libpython3-dev -y
+python3.10-venv python3-pip gopls clang libtool-bin libpython3-dev \
+net-tools -y
 ```
 
 ### Installing Other Packages (packages not up-to-date or unavailable on `apt`)
@@ -192,7 +194,8 @@ sudo apt-get update && sudo apt-get upgrade -y
 
 sudo apt-get install stow gcc unzip tree entr w3m lolcat \
 lynx tmux screen tldr fzf shfmt ncal nodejs npm xterm visidata \
-python3.10-venv python3-pip gopls clang libtool-bin libpython3-dev -y
+python3.10-venv python3-pip gopls clang libtool-bin libpython3-dev \
+net-tools -y
 
 install_nvm
 install_libssl1.1
