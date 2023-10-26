@@ -92,10 +92,15 @@ case $USER in
         PATH_COLOR=${MUTED_BLUEGREEN}
 	;;
 esac
-        
 
+# 88
+DARK_RED="\[\e[38;5;88m\]"
+SEP_COLOR=${DARK_RED}
+FIRST_SEP="┎" # ┎┏┍
+SECOND_SEP="┖" #┖┗┕
 export PS1=\
-"${NAME_COLOR}\
+"${SEP_COLOR}${FIRST_SEP} \
+${NAME_COLOR}\
 \u${GREY}@\
 ${HOST_COLOR}\
 \h${GREY}:\
@@ -103,8 +108,10 @@ ${PATH_COLOR}\
 \w\
 ${RED_256}\
 \$(get_git_branch)\
-${GREY}~\\$ ${RESET}"
-
+\n${SEP_COLOR}${SECOND_SEP}\
+${GREY} \\$ ${RESET}"
+# ┏
+# ┖
 export PS2="${RED_256}~> "
 
 
