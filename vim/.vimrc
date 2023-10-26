@@ -61,7 +61,9 @@ vnoremap J :m '>+1<CR>gv=gv
 vnoremap X y/<C-R>"<CR>
 " hot-reloading .vimrc
 nnoremap <leader>ar :source ~/.vimrc<CR>
-nmap <leader>gh :h ins-completion<CR> |"
+nnoremap <leader>gh :h ins-completion<CR> |"
+" Get the identifier needed for highlights
+nnoremap <leader>si :echo synIDattr(synID(line("."), col("."), 1), "name")<CR>
 
 " Options:
 set fdm=marker      " foldmethod
