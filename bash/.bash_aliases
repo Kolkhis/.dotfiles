@@ -23,6 +23,7 @@ alias nv="cd ~/.dotfiles/nvim/.config/nvim/"
 alias boost="cd ~/.dotfiles/notes/notes/skilstak/" 
 alias rp="cd ~/Repos/github.com/kolkhis/"
 alias s="cd ~/.dotfiles/scripts/.local/bin/"
+alias n="cd ~/notes/"
 alias vless="$VIMRUNTIME/macros/less.sh"
 # godmode
 set -o vi
