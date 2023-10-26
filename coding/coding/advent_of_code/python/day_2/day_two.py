@@ -21,18 +21,6 @@ Total score = sum of score for each round
 
 """
 
-challenger = {
-    "A": "rock",
-    "B": "paper",
-    "C": "scissors",
-}
-
-user = {
-    "X": "rock",
-    "Y": "paper",
-    "Z": "scissors",
-}
-
 points_hand = {
     "rock": 1,
     "paper": 2,
@@ -43,6 +31,18 @@ points_outcome = {
     "loss": 0,
     "draw": 3,
     "win": 6,
+}
+
+challenger = {
+    "A": "rock",
+    "B": "paper",
+    "C": "scissors",
+}
+
+user = {
+    "X": "rock",
+    "Y": "paper",
+    "Z": "scissors",
 }
 
 
@@ -81,3 +81,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

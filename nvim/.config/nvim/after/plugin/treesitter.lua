@@ -52,7 +52,7 @@ require('nvim-treesitter.configs').setup({
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
     -- Instead of true it can also be a list of languages
     highlight = { enable = false },
-    indent = { enable = true },
+    indent = { enable = false },
     incremental_selection = {
       enable = true,
       keymaps = {

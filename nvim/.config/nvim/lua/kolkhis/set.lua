@@ -5,6 +5,13 @@ vim.g.netrw_alto = false
 vim.g.netrw_altv = true
 vim.g.netrw_preview = 1 -- open previews in vsplit
 
+-- Fix dumb python indenting
+vim.g.python_indent = {
+    open_paren = 4,
+    nested_paren = 4,
+    continue = 4,
+    closed_paren_align_last_line = false
+}
 
 -- Modify path for better find/completion
 vim.o.path = vim.o.path .. '**'
@@ -50,12 +57,12 @@ vim.o.completeopt = 'menuone,noselect,' -- preview
 vim.o.termguicolors = true
 
 -- Indentation
-vim.go.smarttab = false -- Smart tabbing
-vim.o.smartindent = true -- Smart indenting (for C-like programs?)
-vim.o.shiftwidth = 4 -- Set Tab to 4 spaces.
-vim.o.tabstop = 4
+vim.o.smarttab = true -- Smart tabbing
+vim.o.smartindent = false -- Smart indenting (for C-like programs?)
+-- vim.o.tabstop = 4
+
 vim.o.softtabstop = 4
-vim.o.autoindent = true
+vim.o.shiftwidth = 4 -- Set Tab to 4 spaces.
 vim.o.expandtab = true
 
 vim.o.showbreak = '> ' -- Show a > when lines wrap
