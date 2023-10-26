@@ -9,7 +9,7 @@ go_install() {
 
     # Download Go ()
     if [[ ! -f /tmp/go1.21.1.linux-amd64.tar.gz ]]; then
-        curl -o /tmp/go1.21.1.linux-amd64.tar.gz https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
+        curl -fsSL -o /tmp/go1.21.1.linux-amd64.tar.gz https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
     fi
 
     # Check that the download succeeded
@@ -28,7 +28,7 @@ go_install() {
             fi
         done
 
-        if ! $go_path_exists; then
+        if [[ ! $go_path_exists ]]; then
             echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.bashrc
         fi
 
@@ -40,6 +40,7 @@ go_install() {
     else
         echo "There was a problem downloading Go."
     fi
+    cd - || exit
 }
 
 go_install

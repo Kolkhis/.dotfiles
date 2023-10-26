@@ -1,7 +1,0 @@
-#!/bin/bash
-# clip2md
-# copy clipboard rich-text to stdout markdown
-
-xclip -o -selection clipboard -t text/html | \
-    pandoc -f html -t markdown | \
-    sed -r 's/^-   /\* /; s/^    -   /  - /;'
