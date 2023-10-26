@@ -44,19 +44,18 @@ nvim
 
 #### GPG for git
 
+##### Plain GPG Protected Credential Helper:
 1. Set git to use gpg
 `$ git config --global credential.credentialStore gpg`
 
 1. Generate gpg key
-
-`$ gpg --full-generate-key`
-
-1. Specify the type. RSA/whatever (default) is good.
-1. Specify key size (4096)
-1. Enter when key will expire
-1. Verify
-1. Enter User info (Email should be the same as GH account)
-1. Set a password
+    1. Run `$ gpg --full-generate-key`
+    1. Specify the type. RSA/whatever (default) is good.
+    1. Specify key size (4096)
+    1. Enter when key will expire
+    1. Verify
+    1. Enter User info (Email should be the same as GH account)
+    1. Set a password
 1. Get the secret key
 `$ gpg --list-secret-keys --keyid-format=long`
 It will look something like `rsa4096/<secret_key>` under the `sec` section. Only take the key.
@@ -70,7 +69,13 @@ It will look something like `rsa4096/<secret_key>` under the `sec` section. Only
     * Profile > Settings > SSH and GPG keys. Paste key.
  
 
+##### Other Git Encryption Solutions:
 
+`git-remote-gcrypt`
+`git-secret`
+`git-crypt`
+
+BlackBox by StackOverflow
 
 
 
