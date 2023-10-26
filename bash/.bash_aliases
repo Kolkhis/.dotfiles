@@ -26,8 +26,13 @@ set -o vi
 # Allow ** for recursive matches ('lib/**/*.rb' => 'lib/a/b/c.rb')
 shopt -s globstar
 
+# Include dotfiles in pathname expansion
 shopt -s dotglob
 shopt -s nocaseglob
+
+#extdebug
+#force_fignore
+
 
 export NOTES_HOME="/home/kolkhis/notes"
 export LC_ALL=C.UTF-8
