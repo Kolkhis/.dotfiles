@@ -3,49 +3,40 @@ set nocp            " nocompatible
 filetype plugin on  " enable netrw (technically a plugin)
 syntax on           " syntax highlighting
 
-" Set undo files to not clutter up pwd
-if ! isdirectory(expand('~/.vim/undodir'))
-    echo("No undo directory! Fix with `mkdir ~/.vim/undodir`.")
-else
+if filereadable(expand("~/.vim/colors.vim"))
+    source ~/.vim/colors.vim
+endif
+
+if isdirectory(expand("~/.vim/undodir/"))
     set undodir=~/.vim/undodir
     set undofile
+else
+    echo("No undo directory! Fix with `mkdir ~/.vim/undodir`.")
+endif
+
+if isdirectory(expand("~/.vim/vimswap/"))
+    set dir=~/.vim/vimswap//
+else
+    echo("There is no swap directory! Fix with `mkdir ~/.vim/vimswap`.")
 endif
 
 
+set viminfo='20,<1000,s1000                " Don't truncate yanks/deletes
+set completeopt=menuone,noselect,preview   " cot - autocompletion/omnicompletion settings
+set t_vb=       " visual bell output code
+set t_Co=256    " number of colors
 
-set viminfo='20,<1000,s1000               " Don't truncate yanks/deletes
-set completeopt=menuone,noselect,preview  " cot - autocompletion/omnicompletion settings
-
-set t_Co=256
-set t_AB=^[[48;5;%dm
-set t_AF=^[[38;5;%dm
-set t_vb=           " visual bell output code
-
-" FILE SEARCHING:
-" Set path to search in subfolders, tab-completion for all file-related tasks
 set path+=**
-
-
-" TAGS:
-""" This is basically a fzf, type `:find *.vim<Tab>` and it pulls up all .vim
-""" files in the current directory and all subdirectories (with `set path+=**` set)
-"no_plugins.vim"
 command! MakeTags !ctags -R .
-" C-] will jump to tag
-" g<C-]> will list all tags
-" <C-t> will jump back up the tag stack
 
 let g:mapleader=" "
 let g:maplocalleader=" "
 
-nmap <leader>gh ":h ins-completion<CR>"
-
+" put that banner away, netrw. no one wants to see that.
 let g:netrw_banner=0
-let g:netrw_altv=1 " Vertical split opens on right instead of left
-let g:netrw_alto=1 " Horizontal split opens on bottom instead of top
-let g:netrw_preview=1 " Open previews in vertical split
-
-
+let g:netrw_alto=1      " split opens on bottom instead of top
+let g:netrw_altv=1      " vsplit opens on right instead of left
+let g:netrw_preview=1   " open previews in vsplit
 
 
 " Format Options:
@@ -65,9 +56,15 @@ noremap <leader>pV :Sex!<CR>
 " Copy to system clipboard
 noremap <leader>y "+y
 noremap <leader>Y "+Y
+noremap! zj <Esc>
+vnoremap zj <Esc>
 " Awesome remap for moving lines around
 vnoremap K :m '<-2<CR>gv=gv
 vnoremap J :m '>+1<CR>gv=gv
+vnoremap X y/<C-R>"<CR>
+" hot-reloading .vimrc
+nnoremap <leader>ar :source ~/.vimrc<CR>
+nmap <leader>gh :h ins-completion<CR>
 
 set nu              " number
 set rnu             " relativenumber
@@ -80,7 +77,6 @@ set is              " incsearch
 set nohls           " nohlsearch
 set noeb            " noerrorbells
 set novb            " novisualbell
-set tm=500          " timeoutlen=500
 set bo=all          " belloff=all
 set ww+=,~          " whichwrap+=,~  - Which movement keys can go to next line 
 set ru              " ruler
@@ -92,6 +88,10 @@ set tf              " ttyfast
 set sc              " showcmd - show typed chars in the bottom right 
 set hid             " hidden - don't unload a buffer when it's 'abandoned'
 set icon
+set tm=274          " timeoutlen=500 - This is annoying
+set ttm=5           " ttimeoutlen=-1 
+set ic              " ignorecase
+set scs             " smartcase
 
 " Indentation:
 set sw=4            " shiftwidth=4
@@ -121,17 +121,6 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     Plug 'tpope/vim-fugitive'
     Plug 'dense-analysis/ale'
     Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
-    Plug 'whatyouhide/vim-gotham'
     call plug#end()
 endif
-
-" func LessInitFunc() abort
-"     set nocursorcolumn
-" endfunction
-
-colorscheme gotham256
-
-
-" Make background transparent
-" hi Normal guibg=NONE ctermbg=NONE  
 
