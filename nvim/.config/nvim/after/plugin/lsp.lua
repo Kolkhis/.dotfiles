@@ -15,7 +15,7 @@ end)
 -- Set up neodev before lspconfig
 require('neodev').setup({})
 
--- EXPERIMENT: Try error handling for termux port (Maybe not needed - lua ls is now set up)
+-- EXPERIMENT: Try error handling for termux port (Maybe not needed)
 local lspconfig = require('lspconfig')
 
 local function setup_lua_ls()
@@ -35,16 +35,6 @@ local function setup_lua_ls()
           styluaArgs = { '--config-path', ConfigPath },
         },
       },
-      -- Bash = {
-      --   formatting = {
-      --     shfmtArgs = { '-i 4' },
-      --   },
-      -- },
-      -- Shell = {
-      --   formatting = {
-      --     shfmtArgs = { '-i 4' },
-      --   },
-      -- },
     },
   })
 end
@@ -53,7 +43,7 @@ end
 local function error_handler(err)
   print('Error encountered while setting up lua_ls: ' .. err)
 end
-local success = xpcall(setup_lua_ls, error_handler)
+xpcall(setup_lua_ls, error_handler)
 
 lsp.set_sign_icons({
   error = '✘',
@@ -74,8 +64,14 @@ local format_sources = {
   null_ls.builtins.formatting.prettierd,
   null_ls.builtins.formatting.beautysh,
   null_ls.builtins.formatting.shfmt,
-  null_ls.builtins.formatting.shellharden,
+  null_ls.builtins.diagnostics.shellcheck,
 }
+
+-- inlay hints
+vim.keymap.set({'n', 'v'}, '<leader>dh', function ()
+    -- Enable/disable/toggle inlay hints for a buffer
+    vim.lsp.inlay_hint(0)
+end, { noremap=true, silent=true })
 
 --- ocaml
 -- null_ls.builtins.formatting.ocamlformat

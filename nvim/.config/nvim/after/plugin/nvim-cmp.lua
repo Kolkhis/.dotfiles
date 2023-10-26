@@ -24,8 +24,8 @@ cmp.setup({
 })
 
 -- set up snips (this only adds frameworks to filetypes)
-local luasnip = require('luasnip')
-luasnip.filetype_extend('python', {'django'} )
+-- local luasnip = require('luasnip')
+-- luasnip.filetype_extend('python', {'django'} )
 
   -- sources = cmp.config.sources({
   --   { name = 'nvim_lsp' },
