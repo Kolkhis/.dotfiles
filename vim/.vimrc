@@ -4,6 +4,7 @@ syntax on           " syntax highlighting
 
 colo ocean
 
+" TODO: Set directories to appropriate OS path: if has('linux') / if has('win32')
 if isdirectory(expand("~/.vim/undodir/"))
     set undodir=~/.vim/undodir
     set undofile
