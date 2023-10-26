@@ -34,6 +34,7 @@ apt-mark showmanual
 * jq (jquery - install )
 * python3.10-venv
 * python3-pip
+* pyright (use npm - `sudo npm install -g pyright`)
 * gopls
 
 Needed for compiling Vim:
@@ -64,6 +65,7 @@ sudo apt-get install stow gcc unzip tree entr w3m lolcat \
 lynx tmux screen tldr fzf shfmt ncal nodejs npm xterm visidata \
 python3.10-venv python3-pip gopls clang libtool-bin libpython3-dev \
 net-tools -y
+sudo npm install -g pyright
 ```
 
 ### Installing Other Packages (packages not up-to-date or unavailable on `apt`)
@@ -202,5 +204,5 @@ install_libssl1.1
 go_install
 install_neovim
 install_mods
-
+sudo npm install -g pyright
 ```
