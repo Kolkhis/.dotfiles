@@ -160,6 +160,7 @@ keymap :: COMMAND
 keymap :H HELP
 keymap :O OPTIONS
 keymap :d DOWNLOAD_LIST
+keymap :A ACCESSKEY
 
 
 #---------# shifting #---------#
@@ -167,13 +168,13 @@ keymap :d DOWNLOAD_LIST
 # keymap < SHIFT_LEFT
 # keymap "C-." RIGHT
 # keymap "C-," LEFT
-keymap > RIGHT
-keymap < LEFT
+keymap > MOVE_RIGHT1
+keymap < MOVE_LEFT1
 
 #---------# other stuff #---------#
 keymap :F MENU
 # keymap C-f LINK_MENU
-keymap C-[ ESC
+# keymap C-[ 
 keymap "C-s" SET_OPTION
 
 #---------# history navigation #---------#
@@ -199,7 +200,7 @@ keymap zz CENTER_V
 keymap l NEXT_TAB
 #keymap h MOVE_LEFT
 keymap h PREV_TAB
-#keymap j MOVE_DOWN1
+keymap j MOVE_DOWN1
 keymap j UP
 #keymap k MOVE_UP1
 keymap k DOWN
@@ -210,7 +211,8 @@ keymap UP MOVE_UP1
 keymap 0 LINE_BEGIN
 keymap $ LINE_END
 keymap w NEXT_WORD
-keymap b PREV_WORD
+# keymap b PREV_WORD
+
 
 
 #---------# cursor history #---------#
@@ -255,6 +257,9 @@ keymap N SEARCH_PREV
 #---------# bookmarks #---------#
 keymap a ADD_BOOKMARK
 keymap :b VIEW_BOOKMARK
+keymap b BOOKMARK
+keymap B BOOKMARK
+
 
 #---------# tab #---------#
 keymap x CLOSE_TAB
@@ -267,6 +272,10 @@ keymap C-wL TAB_RIGHT
 keymap C-wH TAB_LEFT
 keymap t TAB_GOTO
 keymap T TAB_MENU
+keymap S SUBMIT
+keymap E GOTO
+keymap e TAB_GOTO_RELATIVE
+
 
 #---------# quit #---------#
 keymap ZZ EXIT
