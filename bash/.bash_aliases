@@ -5,6 +5,7 @@ alias ??="gpt"
 alias aoc="cd ~/.dotfiles/coding/coding/advent_of_code/"
 alias py="python3"
 alias python="python3"
+alias dots="cd ~/.dotfiles/"
 
 # godmode
 set -o vi

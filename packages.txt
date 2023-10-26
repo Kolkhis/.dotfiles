@@ -12,5 +12,6 @@ tmux
 screen
 tldr
 fzf
+parallel <- Check this out. It's apparently sick.
 ... probably more that I can't think of right now. Is there a better way to get a list of packages
 that were *explicitly* installed by the user with `Advanced Packaging Tool` (apt)?

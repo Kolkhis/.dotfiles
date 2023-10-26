@@ -1,0 +1,12 @@
+#!/bin/bash
+# md2clip
+# copy stdin markdown to clipboard rich-text (text/html)
+{
+    echo '---'
+    echo 'title:'
+    echo 'header-includes: <meta http-equiv="content-type" content="text/html; charset=utf-8"/>'
+    echo '---'
+    cat
+} | pandoc -f markdown -s -t html --quiet | \
+    sed '/<title>/d' | \
+    xclip -i -selection clipboard -t text/html
