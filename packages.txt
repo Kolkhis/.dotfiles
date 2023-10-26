@@ -3,6 +3,7 @@ gcc
 unzip
 tree
 w3m
+lolcat
 lynx
 golang
 python3.10-venv

@@ -1,0 +1,11 @@
+https://raw.githubusercontent.com/rwxrob/dot/main/scripts/figl
+https://raw.githubusercontent.com/rwxrob/dot/main/scripts/255color
+https://raw.githubusercontent.com/rwxrob/dot/main/scripts/bannerfish
+https://raw.githubusercontent.com/rwxrob/dot/main/scripts/colorstrip
+https://raw.githubusercontent.com/rwxrob/dot/main/scripts/duck
+https://raw.githubusercontent.com/rwxrob/dot/main/scripts/lynx
+https://raw.githubusercontent.com/rwxrob/dot/main/scripts/screenkey
+https://raw.githubusercontent.com/rwxrob/dot/main/scripts/cheat
+https://raw.githubusercontent.com/rwxrob/dot/main/scripts/gpt
+https://raw.githubusercontent.com/rwxrob/dot/main/scripts/termcolors
+

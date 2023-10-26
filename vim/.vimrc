@@ -53,6 +53,7 @@ let g:netrw_altv=1 " Vertical split opens on right instead of left
 let g:netrw_alto=1 " Horizontal split opens on bottom instead of top
 let g:netrw_preview=1 " Open previews in vertical split
 
+colorscheme koehler "
 
 set showcmd " show typed chars in the bottom right 
 
@@ -65,6 +66,8 @@ nnoremap <leader>dd "add
 " :b <substring> goes to one of these buffers
 " e.g., `:b plug` will go to no_plugins.vim, or :b rc will go to vimrc
 
+set encoding=utf-8
+
 set wrapscan
 
 set incsearch nohls
@@ -76,31 +79,27 @@ set belloff=all
 
 
 set tabstop=4
+set smarttab  " <Tab> inserts spaces
 set softtabstop=4
 set expandtab
 set shiftwidth=4
-
-
-
-
-set shiftwidth=4
 set autoindent
-set tabstop=4
-set softtabstop=4
-set expandtab    
+
+
 set undodir=$HOME'/.vim/undodir'  " Set undo files to not clutter up pwd
 set undofile
+
+set viminfo='20,<1000,s1000  " Allow yanking large stuff..?
 
 " set nocp            "Compatible not set"
 " filetype plugin on  "Enable plugins"
 
-" colorscheme koehler
+" colorscheme koehler "
 " syntax on
 " set scrolloff=5
 " set sidescrolloff=5
 " set clipboard='unnamed'
 " 
-" set viminfo='20,<1000,s1000  " Allow yanking large stuff..?
 
 " " Turn off screen flashing/bells
 " set incsearch nohls

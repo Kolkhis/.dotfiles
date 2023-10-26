@@ -108,37 +108,6 @@ BlackBox by StackOverflow
 
 
 
-### Git Commit Messages
-<details>
-<summary>Git commit message convention</summary>
-[type]: [description]
-
-[body]
-
-Where:
-
-[type]: Indicates the type of the commit. It should be one of the following:
-
-* feat: A new feature or functionality added.
-
-* fix: A bug fix or error correction.
-
-* docs: Documentation updates or changes.
-
-* style: Changes to code formatting, indentation, etc.
-
-* refactor: Code refactoring or restructuring without adding new features or fixing bugs.
-
-* test: Adding or updating tests.
-
-* chore: Maintenance tasks or other miscellaneous changes.
-
-
-[description]: A brief and concise description of the change made in the commit. It should start with a capitalized verb and should not exceed 50 characters.
-
-[body] (optional): A more detailed description of the changes made in the commit. This part is optional but can be useful for providing additional context or information about the changes.
-</details>
-
 ### Tmux Commands
 <details>
 <summary> Session Management:</summary>
@@ -226,4 +195,35 @@ Where:
 [![twitch](https://img.shields.io/badge/Twitch-purple?style=for-the-badge&logo=twitch&logoColor=white)](https://twitch.tv/kolkhis)
 [![ko-fi](https://img.shields.io/badge/kofi-pink?style=for-the-badge&logo=kofi&logoColor=white)](https://ko-fi.com/kolkhis)
 
+
+### Git Commit Messages
+<details>
+<summary>Git commit message convention</summary>
+[type]: [description]
+
+[body]
+
+Where:
+
+[type]: Indicates the type of the commit. It should be one of the following:
+
+* feat: A new feature or functionality added.
+
+* fix: A bug fix or error correction.
+
+* docs: Documentation updates or changes.
+
+* style: Changes to code formatting, indentation, etc.
+
+* refactor: Code refactoring or restructuring without adding new features or fixing bugs.
+
+* test: Adding or updating tests.
+
+* chore: Maintenance tasks or other miscellaneous changes.
+
+
+[description]: A brief and concise description of the change made in the commit. It should start with a capitalized verb and should not exceed 50 characters.
+
+[body] (optional): A more detailed description of the changes made in the commit. This part is optional but can be useful for providing additional context or information about the changes.
+</details>
 
