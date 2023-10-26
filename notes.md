@@ -220,4 +220,10 @@ Where:
 
 </details>
 
+ Invisible disability gaining visible ability through coding
+
+[![twitter](https://img.shields.io/badge/Twitter-blue?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/null_kol)
+[![twitch](https://img.shields.io/badge/Twitch-purple?style=for-the-badge&logo=twitch&logoColor=white)](https://twitch.tv/kolkhis)
+[![ko-fi](https://img.shields.io/badge/kofi-pink?style=for-the-badge&logo=kofi&logoColor=white)](https://ko-fi.com/kolkhis)
+
 

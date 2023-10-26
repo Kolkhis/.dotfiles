@@ -4,6 +4,7 @@ unzip
 tree
 w3m
 lynx
+golang
 python3.10-venv
 nvim (
 sudo add-apt-repository ppa:neovim-ppa/unstable -y
