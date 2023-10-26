@@ -3,5 +3,6 @@ plugin/packer_compiled.lua
 termux_backup/
 lua/dev/
 sync_config
+.netrwhist
 
 
