@@ -8,12 +8,12 @@ git clone --depth 1 https://github.com/wbthomason/packer.nvim\
 -- Windows:
 git clone https://github.com/wbthomason/packer.nvim "$env:LOCALAPPDATA\nvim-data\site\pack\packer\start\packer.nvim"
 --]]
-
 return require('packer').startup(function(use)
   use('wbthomason/packer.nvim')
 
   use('Kolkhis/streamer-mode.nvim')
   -- use('E:/Coding/nvim_plugin/dev/streamer-mode.nvim')
+  -- use('/home/kolkhis/plugin_dev/streamer-mode.nvim')
 
   use('ThePrimeagen/harpoon')
   --Telescope
