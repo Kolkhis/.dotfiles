@@ -2,6 +2,7 @@ alias cls="clear"
 alias path="printf \"${PATH//:/\\n}\""
 alias ?="duck"
 alias ??="gpt"
+alias aoc="cd ~/.dotfiles/coding/coding/advent_of_code/"
 
 set -o vi
 export EDITOR=vi

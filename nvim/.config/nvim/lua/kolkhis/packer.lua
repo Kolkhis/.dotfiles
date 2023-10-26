@@ -8,6 +8,7 @@ git clone --depth 1 https://github.com/wbthomason/packer.nvim\
 -- Windows:
 git clone https://github.com/wbthomason/packer.nvim "$env:LOCALAPPDATA\nvim-data\site\pack\packer\start\packer.nvim"
 --]]
+
 return require('packer').startup(function(use)
   use('wbthomason/packer.nvim')
 
@@ -42,8 +43,7 @@ return require('packer').startup(function(use)
   use('nvim-tree/nvim-web-devicons')
 
   --[[ LSP/autocompletion stuff ]]
-  --
-  --
+
   use({
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v2.x',
@@ -66,7 +66,11 @@ return require('packer').startup(function(use)
       { 'rafamadriz/friendly-snippets' },
     },
   })
+
   use('folke/neodev.nvim')
+
+  -- null-ls - formatting
+  use('jose-elias-alvarez/null-ls.nvim')
 
   -- Auto pairs
   use({
@@ -76,8 +80,6 @@ return require('packer').startup(function(use)
     end,
   })
 
-  -- null-ls - formatting
-  use('jose-elias-alvarez/null-ls.nvim')
 
   -- Rainbow Parentheseseseses
   -- use('HiPhish/nvim-tx-rainbow2')

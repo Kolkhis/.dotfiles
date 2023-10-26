@@ -1,6 +1,7 @@
 stow
 gcc
 unzip
+tree
 w3m
 lynx
 python3.10-venv

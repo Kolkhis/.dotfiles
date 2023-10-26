@@ -73,6 +73,8 @@ set novisualbell
 set t_vb=
 set tm=500
 set belloff=all
+
+
 set shiftwidth=4
 set tabstop=4
 set softtabstop=4
