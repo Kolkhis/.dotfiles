@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+
+declare -a DIRS
+
+IFS=$'\n' read -r -d '' -a DIRS < <(find . -maxdepth 1 -type d)
+printf "Number of directories in DIRS: %s \n" "${#DIRS[@]}"
+
+for d in "${DIRS[@]}"; do
+    d=$(basename "$d")
+    if [[ "$d" =~ ^\./\. ]] || [[ "$d" =~ ^\. ]]; then
+        printf "Directory that starts with a dot, being ignored: %s \n" "$d"
+        continue
+    else
+        printf "Directory being stowed: %s \n" "$d"
+        stow -R "$d"
+    fi
+done
+
