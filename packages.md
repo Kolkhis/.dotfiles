@@ -17,6 +17,7 @@
 * netstat
 * ncal - calendar
 * parallel <- Check this out. It's apparently sick.
+* xterm
 
 * jq (jquery)
 * python3.10-venv
