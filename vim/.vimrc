@@ -5,17 +5,20 @@ syntax on           " syntax highlighting
 colo ocean
 
 " TODO: Set directories to appropriate OS path: if has('linux') / if has('win32')
+" $HOME/vimfiles/undodir
 if isdirectory(expand("~/.vim/undodir/"))
     set undodir=~/.vim/undodir
     set undofile
 else
-    echo("No undo directory! Fix with `mkdir ~/.vim/undodir`.")
+    echo("No undo directory! Creating it...")
+    silent !mkdir -p ~/.vim/undodir
 endif
 
 if isdirectory(expand("~/.vim/vimswap/"))
     set dir=~/.vim/vimswap//
 else
-    echo("There is no swap directory! Fix with `mkdir ~/.vim/vimswap`.")
+    echo("There is no swap directory! Creating it...")
+    silent !mkdir -p ~/.vim/vimswap
 endif
 
 
@@ -99,7 +102,6 @@ set hi=200          " history - Command History
 set tf              " ttyfast
 set sc              " showcmd - show typed chars in the bottom right 
 set hid             " hidden - don't unload a buffer when it's 'abandoned'
-set icon
 set tm=274          " timeoutlen=500 - This is annoying
 set ttm=5           " ttimeoutlen=-1 
 set ic              " ignorecase
@@ -107,6 +109,7 @@ set scs             " smartcase
 set scl=number      " signcolumn
 set ut=400          " updatetime
 set wmnu            " wildmenu - show matching files on tab complete
+set icon
 
 " Indentation:
 set sw=4            " shiftwidth=4
