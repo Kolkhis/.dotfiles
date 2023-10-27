@@ -58,7 +58,18 @@ vim.keymap.set(
   'c',
   [[<leader>\]],
   [[\(\)<Left><Left>]],
-  { silent = false, desc = 'Put Capture Group in expression in command mode.' })
+  { silent = false, desc = 'Put Capture Group in expression in command mode.' }
+)
 
-
-
+-- Add a Markdown bullet point and checkbox "[ ]"
+local md_aug_id = vim.api.nvim_create_augroup('MarkdownAug', { clear = false })
+vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
+  pattern = { '*.md' },
+  callback = function()
+    vim.keymap.set({ 'n', 'i' }, '<leader>td', function()
+      vim.api.nvim_put({ '* [ ]' }, 'c', true, true)
+    end)
+  end,
+  group = md_aug_id,
+  desc = 'Add a keybinding (<leader>td) to add a bullet point and TODO checkbox.',
+})
