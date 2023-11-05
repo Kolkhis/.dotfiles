@@ -20,3 +20,10 @@ shopts() {
 }
 
 
+goto() {
+    p=$(which "$1")
+    d=$(dirname "$p")
+    printf "Going to %s. \n" "$d"
+    cd "$d" || exit
+}
+
