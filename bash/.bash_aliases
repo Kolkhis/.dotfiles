@@ -49,7 +49,8 @@ shopt -s nocaseglob
 #extdebug
 #force_fignore
 
-
+# set timezone
+export TZ="America/New_York"
 export VRT="/usr/share/vim/vim82"
 export NOTES_HOME="/home/kolkhis/notes"
 export LC_ALL=C.UTF-8
@@ -65,7 +66,6 @@ export COLUMNS LINES
 export force_color_prompt=yes
 GPG_TTY=$(tty)
 export GPG_TTY
-
 
 BURNT_ORANGE='\[\e[38;5;130m\]'
 DARK_YELLOW="\[\e[38;5;58m\]"
