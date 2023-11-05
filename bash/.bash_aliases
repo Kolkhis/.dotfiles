@@ -98,17 +98,7 @@ esac
 # different prompt for git bash
 case $(hostname) in
     ("D01")
-        SEP_COLOR="\[\e[38;5;129m\]";
-        export PS1=\
-"${SEP_COLOR}${FIRST_SEP} \
-${NAME_COLOR}\
-\u${GREY}@\
-${HOST_COLOR}\
-\h${GREY}:\
-${PATH_COLOR}\
-\w\
-\n${SEP_COLOR}${SECOND_SEP}\
-${GREY} \\$ ${RESET}";
+        source /etc/profile.d/git-prompt.sh;
         ;;
     (*)
         SEP_COLOR="\[\e[38;5;88m\]";
@@ -121,7 +111,7 @@ ${HOST_COLOR}\
 ${PATH_COLOR}\
 \w\
 ${RED_256}\
-\$(get_git_branch)\
+$(get_git_branch)\
 \n${SEP_COLOR}${SECOND_SEP}\
 ${GREY} \\$ ${RESET}";
         ;;
@@ -132,3 +122,4 @@ export PS2="${RED_256}~> "
 # $(uptime | awk '{print $10}')
 # 2:03:58
 eval "$(dircolors -b ~/.dircolors)"
+
