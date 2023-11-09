@@ -12,6 +12,8 @@ if isdirectory(expand("~/.vim/undodir/"))
 else
     echo("No undo directory! Creating it...")
     silent !mkdir -p ~/.vim/undodir
+    set undodir=~/.vim/undodir
+    set undofile
 endif
 
 if isdirectory(expand("~/.vim/vimswap/"))
@@ -19,6 +21,7 @@ if isdirectory(expand("~/.vim/vimswap/"))
 else
     echo("There is no swap directory! Creating it...")
     silent !mkdir -p ~/.vim/vimswap
+    set dir=~/.vim/vimswap//
 endif
 
 
@@ -74,10 +77,36 @@ nnoremap <leader>si :echo synIDattr(synID(line("."), col("."), 1), "name")<CR>
 " insert a capture group in command mode
 cnoremap <leader>\ \(\)<Left><Left>
 
+" Auto-center cursor on screen when jumping
+nnoremap <C-u> <C-u>zz
+vnoremap <C-u> <C-u>zz
+nnoremap <C-d> <C-d>zz
+vnoremap <C-d> <C-d>zz
+
 " Resize current window
 nnoremap <leader>- :resize -5<CR>
 nnoremap <leader>+ :resize +5<CR>
 nnoremap <leader>= :resize +5<CR>
+
+function! ToggleCase()
+  let cword = expand('<cword>')
+  let lcase = cword =~ '^\l\+$'
+  let ucase = cword =~ '^\u\+$'
+  if lcase
+    execute "normal! viwU"
+  elseif ucase
+    execute "normal! viwu"
+  else 
+    execute "normal! viwu"
+  endif
+endfunction
+
+" nnoremap <C-c> :echo expand('<cword>')': Is Uppercase: ' match(expand('<cword>'), '[A-Z]*') '\rIs Lowercase: ' match(expand('<cword>'), '[a-z]*')
+" nnoremap <C-c> :echo expand('<cword>')': Is Uppercase: ' (expand('<cword>') =~ '^\u\+$') '\rIs Lowercase: ' (expand('<cword>') =~ '^\l\+$')
+" '\rIs Lowercase: ' match(expand(expr))
+
+inoremap <C-c> <Esc>:call ToggleCase()<CR>
+nnoremap <C-c> <Esc>:call ToggleCase()<CR>
 
 " Options:
 set fdm=marker      " foldmethod
@@ -119,6 +148,17 @@ set et              " expandtab
 set ai              " autoindent
 set sta             " smarttab - <Tab> inserts spaces
 
+augroup MarkdownAug
+  autocmd!
+  autocmd BufEnter,BufWinEnter *.md :
+    nnoremap <buffer> ;td :call <SID>AddMarkdownCheckbox()<CR>
+    inoremap <buffer> ;td <Esc>:call <SID>AddMarkdownCheckbox()<CR>a
+augroup END
+
+function! s:AddMarkdownCheckbox()
+  call setline('.', '* [ ]')
+  call cursor(line('.'), col('.') + 1)
+endfunction
 
 " Highlight on yank:
 if v:version >= 801
