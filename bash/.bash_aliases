@@ -11,6 +11,7 @@ alias "?"="duck"
 alias "??"="gpt"
 alias py="python3"
 alias python="python3"
+alias vim="nvim"
 alias clsa='printf "\e[H\e[2J"'
 
 # Auto-flags
@@ -25,6 +26,7 @@ alias ip="ip -color"
 alias dots="cd ~/.dotfiles/"
 alias aoc="cd ~/.dotfiles/coding/coding/advent_of_code/"
 alias nv="cd ~/.dotfiles/nvim/.config/nvim/"  
+alias v="cd ~/.dotfiles/vim"
 alias boost="cd ~/notes/skilstak/" 
 alias rp="cd ~/Repos/github.com/kolkhis/"
 alias s="cd ~/.dotfiles/scripts/.local/bin/"
@@ -111,7 +113,7 @@ ${HOST_COLOR}\
 ${PATH_COLOR}\
 \w\
 ${RED_256}\
-$(get_git_branch)\
+\$(get_git_branch)\
 \n${SEP_COLOR}${SECOND_SEP}\
 ${GREY} \\$ ${RESET}";
         ;;
