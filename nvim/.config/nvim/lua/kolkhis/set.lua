@@ -83,6 +83,7 @@ vim.o.matchtime = 1
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
+-- vim.cmd('au! TextYankPost * silent! lua vim.highlight.on_yank()') -- vimscript+lua implementation
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function()
