@@ -74,20 +74,19 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
     desc = 'Add a keybinding (<leader>td) to add a bullet point and TODO checkbox.',
 })
 
-
 -- case toggling in insert mode
-vim.keymap.set({ 'i' }, '<C-l>', function()
+vim.keymap.set({ 'i', 'n' }, '<C-c>', function()
     local cword = vim.fn.expand('<cword>')
-    local lcase = cword:match('%l*')
-    local ucase = cword:match('%u*')
-    if lcase then
-        if lcase == cword then
-            vim.cmd('normal! viwUei')
-            return
-        end
-    end
-    if ucase then
-        vim.cmd('normal! viwuei')
+    local lcase = cword:match('%l')
+    local ucase = cword:match('%u')
+    if lcase and not ucase then
+        vim.cmd('execute "normal! viwU"')
+    elseif not lcase and ucase then
+        vim.cmd('execute "normal! viwu"')
+    elseif lcase and ucase then
+        vim.cmd('execute "normal! viwU"')
+    else
+        return
     end
 end)
 
