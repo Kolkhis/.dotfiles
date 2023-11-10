@@ -15,15 +15,87 @@ function! kolkhis#ToggleCase()
 endfunction
 
 
+function! kolkhis#SetAleOptions()
+    " ALE
+    let g:ale_completion_enabled = 1  
+    let g:ale_sign_info = "⑆" " ┉ 〇 ☼
+    let g:ale_sign_error = "よ" " ♢ 〄
+    let g:ale_sign_warning = "☺" " ω ∆  ⑇ ⑈ ⑉ 
+    let g:ale_detail_to_floating_preview = 1
+    let g:ale_completion_enabled = 1
+    let g:ale_floating_preview = 1
+    " Go
+    let g:ale_go_langserver_executable = '/usr/bin/gopls'
+    " Python
+    let g:ale_python_pyright_executable = "pyright-langserver"
+    let g:ale_python_auto_pipenv = 1
+    let g:ale_python_auto_virtualenv = 1
+    let g:ale_linters = {
+                \ 'go': ['gopls', 'gometalinter', 'gofmt', 'gobuild'], 
+                \ 'python': ['pyright']
+                \ }
+    let g:ale_fixers = {
+                \ 'go': ['gopls'], 
+                \ 'python3': ['pyright']
+                \ }
+endfunction
+
+
+
+
+function! kolkhis#SetVimGoOptions()
+    " vim-go basic functionality
+    let g:go_fmt_autosave = 1
+    let g:go_gopls_enabled = 1
+    let g:go_doc_popup_window = 1
+    " highlights
+    let g:go_highlight_types = 1
+    let g:go_highlight_fields = 1
+    let g:go_highlight_operators = 1
+    let g:go_highlight_functions = 1
+    let g:go_highlight_extra_types = 1
+    let g:go_highlight_function_calls = 1
+    let g:go_highlight_build_constraints = 1
+    let g:go_highlight_diagnostic_errors = 1
+    let g:go_highlight_diagnostic_watnings = 1
+    let g:go_highlight_variable_assignments = 1
+    let g:go_highlight_variable_declarations = 1
+    let g:go_highlight_extra_types = 1
+    let g:go_highlight_operators = 1
+    let g:go_highlight_functions = 1
+    let g:go_highlight_function_parameters = 1
+    let g:go_highlight_function_calls = 1
+    let g:go_highlight_types = 1
+    let g:go_highlight_fields = 1
+    let g:go_highlight_build_constraints = 1
+    let g:go_highlight_generate_tags = 1
+    let g:go_highlight_format_strings = 1
+endfunction
+
+
+
+function! kolkhis#SetLightlineOptions()
+    let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
+      \ }
+endfunction
+
+
+
 function! kolkhis#SetColors()
   syntax enable
   hi clear
   set background=dark
-
   " Basic txt/bg
   hi Normal guifg=#B0C4DE guibg=#090B10
   hi Cursor guifg=#FFCC00 guibg=#FFCC00
-
   " syntax
   hi Constant guifg=#BB80B3
   hi String guifg=#4DB6AC
@@ -32,12 +104,10 @@ function! kolkhis#SetColors()
   hi Comment guifg=#A1ACB3
   hi Type guifg=#FFCB6B
   hi PreProc guifg=#F07178
-
   " selection highlights
   hi Search guibg=#F07178 guifg=#000000
   hi Visual guifg=Black guibg=DarkRed
   hi IncSearch guifg=Black guibg=DarkRed
-
   " gutter/errors
   hi LineNr guifg=#546E7A
   hi Special guifg=#F78C6C
@@ -48,13 +118,10 @@ function! kolkhis#SetColors()
   hi link ALEWarningSign Error
   hi link ALEWarningLine WarningMsg
   hi link ALEWarningSignLineNr WarningMsg
-
   " XXX FIXME TODO
   hi TODO guifg=#19A7CE guibg=#27005D
   hi link FIXME TODO
   hi link XXX TODO
-
-
 
   " status line
   let s:active_font_color = '#7286D3'
@@ -69,19 +136,15 @@ function! kolkhis#SetColors()
   exe 'hi TabLine guifg=' . s:inactive_font_color . ' guibg=' . s:inactive_window
   exe 'hi TabLineFill guifg=' . s:inactive_window . ' guibg=' . s:active_font_color
   exe 'hi TabLineSel guifg=' . s:active_font_color . ' guibg=' . s:active_window
-
   " vsplit
   let s:split_color = "#2B3A55"
   exe 'hi VertSplit guifg=' . s:split_color . ' guibg=' . "NONE"
-
   " other stuff
   hi MatchParen guifg=#C792EA guibg=#000000
   hi NonText guifg=#546E7A
-
   " highlighting
   hi helpHyperTextJump guifg=#82AAFF guibg=NONE
   hi helpHyperTextEntry guifg=#89DDFF guibg=NONE
-
   " netrw
   hi netrwDir guifg=#82AAFF guibg=NONE
   hi netrwClassify guifg=#89DDFF guibg=NONE
@@ -97,13 +160,11 @@ function! kolkhis#SetColors()
   hi Folded guifg=#A1ACB3 guibg=#263238
   hi FoldColumn guifg=#80CBC4 guibg=#263238
   hi SignColumn guifg=NONE guibg=#263238
-
   " popup menu
   hi Pmenu guifg=#546E7A guibg=#121212
   hi PmenuSel guifg=#80CBC4 guibg=#121212
   hi PmenuSbar guifg=#A1ACB3 guibg=#263238
   hi PmenuThumb guifg=#80CBC4 guibg=#121212
-
   " misc
   hi ModeMsg guifg=#80CBC4 guibg=NONE
   hi MoreMsg guifg=#82AAFF guibg=NONE
@@ -112,6 +173,7 @@ function! kolkhis#SetColors()
   hi Title guifg=#80CBC4 guibg=NONE
   hi WarningMsg guifg=#F07178 guibg=NONE
 
+  " sh/bash highlights
   hi shTestOpr guifg=#FF6C22
   hi shDerefSimple guifg=#B15EFF
   hi shConditional guifg=#419197
@@ -126,7 +188,7 @@ function! kolkhis#SetColors()
   exe 'hi Comment guifg=' . s:comments
 
   let s:dark_ocean_bg = "#0a0c14"
-  " exe 'highlight Normal guifg=' . 'White' . ' guibg=' . s:dark_ocean_bg
+  " exe 'hi Normal guifg=' . 'White' . ' guibg=' . s:dark_ocean_bg
 
   let s:light_ocean_bg = "#0f111a"
   exe 'hi Normal guifg=' . 'White' . ' guibg=' . s:light_ocean_bg
@@ -134,7 +196,6 @@ function! kolkhis#SetColors()
 
   com! LightMode exe 'highlight Normal guifg=' . 'White' . ' guibg=' . s:light_ocean_bg
   com! DarkMode exe 'highlight Normal guifg=' . 'White' . ' guibg=' . s:dark_ocean_bg
-
   com! LM LightMode
   com! DM DarkMode
 endfunction
