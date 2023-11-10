@@ -15,20 +15,6 @@ function! kolkhis#ToggleCase()
 endfunction
 
 
-" function! kolkhis#ToggleCase()
-"   let cword = expand('<cword>')
-"   let lcase = cword =~ '^\l\+$'
-"   let ucase = cword =~ '^\u\+$'
-"   if lcase
-"     execute "normal! viwU"
-"   elseif ucase
-"     execute "normal! viwu"
-"   else 
-"     execute "normal! viwu"
-"   endif
-" endfunction
-
-
 function! kolkhis#SetColors()
   syntax enable
   hi clear
