@@ -133,6 +133,7 @@ set sts=4           " softtabstop=4
 set et              " expandtab
 set ai              " autoindent
 set sta             " smarttab - <Tab> inserts spaces
+set ls=2            " laststatus=2 - enable statusline
 
 augroup MarkdownAug
   autocmd!
@@ -193,6 +194,7 @@ endif
 
 if filereadable(expand("~/.vim/autoload/plug.vim"))
     call plug#begin('~/.local/share/vim/plugins')
+
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-commentary'
     Plug 'tpope/vim-repeat'
@@ -200,17 +202,21 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     Plug 'dense-analysis/ale'
     Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
     " Syntax
-    Plug 'joshdick/onedark.vim'
     Plug 'sheerun/vim-polyglot'
     " Colorscheme
-    " Plug 'challenger-deep-theme/vim', {'as': 'challenger-deep'}
+    Plug 'joshdick/onedark.vim'
+    " Status Line
+    Plug 'itchyny/lightline.vim'
+
     call plug#end()
 
-    call ale_config#SetAleOptions()
-    call vim_go_config#SetVimGoOptions()
+    " Configure ALE and vim-go
+    call kolkhis#SetAleOptions()
+    call kolkhis#SetVimGoOptions()
+    call kolkhis#SetLightlineOptions()
 endif
 
 " colo challenger_deep
 colorscheme onedark
 call kolkhis#SetColors()
-execute 'DarkMode'
+execute 'DM'
