@@ -2,7 +2,6 @@ set nocp            " nocompatible
 filetype plugin on  " enable netrw (technically a plugin)
 syntax on           " syntax highlighting
 
-colo ocean
 
 " TODO: Set directories to appropriate OS path: if has('linux') / if has('win32')
 " $HOME/vimfiles/undodir
@@ -88,25 +87,12 @@ nnoremap <leader>- :resize -5<CR>
 nnoremap <leader>+ :resize +5<CR>
 nnoremap <leader>= :resize +5<CR>
 
-function! ToggleCase()
-  let cword = expand('<cword>')
-  let lcase = cword =~ '^\l\+$'
-  let ucase = cword =~ '^\u\+$'
-  if lcase
-    execute "normal! viwU"
-  elseif ucase
-    execute "normal! viwu"
-  else 
-    execute "normal! viwu"
-  endif
-endfunction
-
 " nnoremap <C-c> :echo expand('<cword>')': Is Uppercase: ' match(expand('<cword>'), '[A-Z]*') '\rIs Lowercase: ' match(expand('<cword>'), '[a-z]*')
 " nnoremap <C-c> :echo expand('<cword>')': Is Uppercase: ' (expand('<cword>') =~ '^\u\+$') '\rIs Lowercase: ' (expand('<cword>') =~ '^\l\+$')
 " '\rIs Lowercase: ' match(expand(expr))
 
-inoremap <C-c> <Esc>:call ToggleCase()<CR>
-nnoremap <C-c> <Esc>:call ToggleCase()<CR>
+inoremap <C-c> <Esc>:call kolkhis#ToggleCase()<CR>
+nnoremap <C-c> <Esc>:call kolkhis#ToggleCase()<CR>
 
 " Options:
 set fdm=marker      " foldmethod
@@ -213,9 +199,18 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     Plug 'tpope/vim-fugitive'
     Plug 'dense-analysis/ale'
     Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+    " Syntax
+    Plug 'joshdick/onedark.vim'
+    Plug 'sheerun/vim-polyglot'
+    " Colorscheme
+    " Plug 'challenger-deep-theme/vim', {'as': 'challenger-deep'}
     call plug#end()
 
     call ale_config#SetAleOptions()
     call vim_go_config#SetVimGoOptions()
 endif
 
+" colo challenger_deep
+colorscheme onedark
+call kolkhis#SetColors()
+execute 'DarkMode'
