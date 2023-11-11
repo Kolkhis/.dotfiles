@@ -31,22 +31,22 @@ apt-mark showmanual
 * net-tools
 
 ## Programming
-* jq (jquery - install )
-* python3.10-venv
-* python3-pip
-* pyright (use npm - `sudo npm install -g pyright`)
-* gopls
+* `jq` (jquery - install )
+* `python3.10-venv`
+* `python3-pip`
+* `pyright` (use npm - `sudo npm install -g pyright`)
+* `gopls`
 
-Needed for compiling Vim:
-* clang
-* libtool-bin clang libpython3-dev
-* libpython3-dev (python support)
+Needed for compiling Vim from source:  
+* `clang`
+* `libtool-bin` 
+* `libpython3-dev` (python support)
 ```bash
 sudo apt-get update && sudo apt-get install clang libtool-bin libpython3-dev -y
 ```
 
 ## Other Packages
->> These are package either unavailable or not up-to-date on `apt`, or have extra requirements.
+>> *These are package either unavailable or not up-to-date on `apt`, or have extra requirements.*
 * nvim (latest neovim - see below)
 * nvm (node version manager - see below)
 * mods (charmbracelet/mods - see below)
@@ -91,10 +91,12 @@ sudo apt-get install neovim -y
 ```
 
 ### Tools to check out
-* parallel <- Check this out. It's apparently sick.
-* KeePassXC
-* traefik
-* vault
+* parallel (GNU Parallel) - Shell tool for executing jobs in parallel using one or more machines.
+    * A job is typically a inslge command or small script that has to be run for each line in the input.
+    * Typical input is a list of either files, hosts, users, or tables.
+* KeePassXC - Password manager or safe. Locked with one master key or key-disk.
+* traefik - HTTP reverse proxy and load balancer that makes deploying microservices easy.
+* vault - Product data management (PDM) tool. Integrates with CAD systems. Autodesk product.
 
 
 ### Totally unrelated things to check out
