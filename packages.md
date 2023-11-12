@@ -2,7 +2,7 @@
 
 ## Getting Explicitly Installed Packages
 ```bash
-apt-mark showmanual
+sudo apt-mark showmanual
 ```
 "Bootstrapping" script at the bottom.
 
@@ -29,6 +29,7 @@ apt-mark showmanual
 * youtube-dl
 * cmatrix
 * net-tools
+* network-manager (nmcli)
 
 ## Programming
 * `jq` (jquery - install )
@@ -64,7 +65,7 @@ sudo apt-get update && sudo apt-get upgrade
 sudo apt-get install stow gcc unzip tree entr w3m lolcat \
 lynx tmux screen tldr fzf shfmt ncal nodejs npm xterm visidata \
 python3.10-venv python3-pip gopls clang libtool-bin libpython3-dev \
-net-tools -y
+net-tools network-manager -y
 sudo npm install -g pyright
 ```
 
@@ -199,7 +200,7 @@ sudo apt-get update && sudo apt-get upgrade -y
 sudo apt-get install stow gcc unzip tree entr w3m lolcat \
 lynx tmux screen tldr fzf shfmt ncal nodejs npm xterm visidata \
 python3.10-venv python3-pip gopls clang libtool-bin libpython3-dev \
-net-tools -y
+net-tools network-manager -y
 
 install_nvm
 install_libssl1.1
