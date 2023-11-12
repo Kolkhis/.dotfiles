@@ -27,3 +27,18 @@ goto() {
     cd "$d" || exit
 }
 
+mc() {
+    declare OPENAI_API_KEY
+    OPENAI_API_KEY="$(head -1 "$HOME/.config/gpt/token")"
+    export OPENAI_API_KEY
+    if test -t 0; then
+      if _have glow; then
+        mods -C --status-text "Ummm" -f "$*" | glow
+      else
+        mods -C --status-text "Ummm" "$*"
+      fi
+    else
+      mods -C --quiet "$*" | sed 's,[?25l [0D[2K[?25h[?1002l[?1003l,,g'
+      # |sed 's/\x1B\[[0-9;\?]*[a-zA-Z]//g'
+    fi
+}
