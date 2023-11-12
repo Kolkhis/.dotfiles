@@ -55,27 +55,52 @@ set fo-=twa2vbB]p
 " Specify a register to delete/yank/etc into, e.g., `"a` for register a
 nnoremap <leader>dd "add 
 vnoremap <leader>d "ad 
+"
 " Don't overwrite current register when replacing a word with `p`
 vnoremap <leader>p "_dP
+" Get to netrw
 noremap <leader>pv :Ex<CR>
 noremap <leader>pV :Sex!<CR>
-" Copy to system clipboard
-noremap <leader>y "+y
-noremap <leader>Y "+Y
-noremap! zj <Esc>
+
+" TODO: Fix this
+if has('clipboard')
+" Copy to system clipboard (vim must be compiled with clipboard support)
+  nnoremap <silent> <leader>y <Cmd>"+y
+  nnoremap <silent> <leader>Y "+Y
+  vnoremap <silent> <leader>y "+y
+  vnoremap <silent> <leader>Y "+Y
+else
+  nnoremap <silent> <leader>y "*y
+  nnoremap <silent> <leader>Y <Cmd>"*Y<CR>
+  vnoremap <silent> <leader>y <Cmd>'<,'>y <CR>
+  vnoremap <silent> <leader>y <Cmd>'<,'>Y <CR>
+endif
+
+" Replace current selection with register without copying it
+xnoremap <silent> <leader>p "_dP
+
+" map zj to Esc
+nnoremap zj <Esc>
 vnoremap zj <Esc>
+
 " Awesome remap for moving lines around
-vnoremap K :m '<-2<CR>gv=gv
 vnoremap J :m '>+1<CR>gv=gv
-vnoremap X y/<C-R>"<CR>
+vnoremap K :m '<-2<CR>gv=gv
+
+" Go the next occurrence of selected text (Same as *)
+vnoremap X *
+
 " hot-reloading .vimrc
 nnoremap <leader>ar :source ~/.vimrc<CR>
-nnoremap <leader>gh :h ins-completion<CR> |"
+
+" Search help files for word under cursor
+nnoremap <leader>gh :call kolkhis#GetHelpCurrentWord()<CR>
+
 " Get the identifier needed for highlights
 nnoremap <leader>si :echo synIDattr(synID(line("."), col("."), 1), "name")<CR>
 " insert a capture group in command mode
 cnoremap <leader>\ \(\)<Left><Left>
-
+ 
 " Auto-center cursor on screen when jumping
 nnoremap <C-u> <C-u>zz
 vnoremap <C-u> <C-u>zz
@@ -87,9 +112,15 @@ nnoremap <leader>- :resize -5<CR>
 nnoremap <leader>+ :resize +5<CR>
 nnoremap <leader>= :resize +5<CR>
 
-" nnoremap <C-c> :echo expand('<cword>')': Is Uppercase: ' match(expand('<cword>'), '[A-Z]*') '\rIs Lowercase: ' match(expand('<cword>'), '[a-z]*')
-" nnoremap <C-c> :echo expand('<cword>')': Is Uppercase: ' (expand('<cword>') =~ '^\u\+$') '\rIs Lowercase: ' (expand('<cword>') =~ '^\l\+$')
-" '\rIs Lowercase: ' match(expand(expr))
+" Navigate line wraps normally
+nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
+nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+
+" Refactor current word (global substitution)
+nnoremap <silent> <leader>s :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>
+
+" Yank entire file
+nnoremap <silent> <leader>yf <Cmd>%y" <CR> 
 
 inoremap <C-c> <Esc>:call kolkhis#ToggleCase()<CR>
 nnoremap <C-c> <Esc>:call kolkhis#ToggleCase()<CR>
@@ -138,46 +169,16 @@ set ls=2            " laststatus=2 - enable statusline
 augroup MarkdownAug
   autocmd!
   autocmd BufEnter,BufWinEnter *.md :
-    nnoremap <buffer> ;td :call <SID>AddMarkdownCheckbox()<CR>
-    inoremap <buffer> ;td <Esc>:call <SID>AddMarkdownCheckbox()<CR>a
+    nnoremap <buffer> ;td :call kolkhis#AddMarkdownCheckbox()<CR>$
+    inoremap <buffer> ;td <Esc>:call kolkhis#AddMarkdownCheckbox()<CR>A
 augroup END
-
-function! s:AddMarkdownCheckbox()
-  call setline('.', '* [ ]')
-  call cursor(line('.'), col('.') + 1)
-endfunction
 
 " Highlight on yank:
 if v:version >= 801
     aug highlightYankedText
         au!
-        au TextYankPost * call YankHighlight()
+        au TextYankPost * call kolkhis#YankHighlight()
     aug end
-
-    fu! YankHighlight()
-        if v:event['operator'] == 'y'
-            if (!exists('g:yanked_text_matches'))
-                let g:yanked_text_matches = []
-            endif
-
-            let g:yank_match_id = matchadd('IncSearch', ".\\%>'\\[\\_.*\\%<']..")
-            let g:yank_window_id = winnr()
-            call add(g:yanked_text_matches, [g:yank_match_id, g:yank_window_id])
-            call timer_start(100, 'DelYankHighlight')
-        endif
-    endf
-
-    fu! DelYankHighlight(timer_id)
-        while !empty(g:yanked_text_matches)
-            let l:match = remove(g:yanked_text_matches, 0)
-            let l:match_id = l:match[0]
-            let l:window_id = l:match[1]
-            try
-                call matchdelete(l:match_id, l:window_id)
-            endtry
-        endwhile
-    endf
-
 endif
 
 
