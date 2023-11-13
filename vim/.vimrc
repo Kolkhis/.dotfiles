@@ -2,7 +2,6 @@ set nocp            " nocompatible
 filetype plugin on  " enable netrw (technically a plugin)
 syntax on           " syntax highlighting
 
-
 " TODO: Set directories to appropriate OS path: if has('linux') / if has('win32')
 " $HOME/vimfiles/undodir
 if isdirectory(expand("~/.vim/undodir/"))
@@ -32,9 +31,6 @@ set t_Co=256    " number of colors
 set path+=**
 command! MakeTags !ctags -R .
  
-let g:mapleader=" "
-let g:maplocalleader=" "
-
 " put that banner away, netrw. no one wants to see that.
 " let g:netrw_banner=0
 let g:netrw_alto=1        " split opens on bottom instead of top
@@ -52,6 +48,13 @@ set fo-=twa2vbB]p
 " Remaps:
 " :h :nme
 " :h mapmode
+
+" Set Space to do nothing, and set it as mapleader
+nnoremap <silent> <Space> <Nop>
+let g:mapleader=" "
+let g:maplocalleader=" "
+
+
 " Specify a register to delete/yank/etc into, e.g., `"a` for register a
 nnoremap <leader>dd "add 
 vnoremap <leader>d "ad 
@@ -62,18 +65,13 @@ vnoremap <leader>p "_dP
 noremap <leader>pv :Ex<CR>
 noremap <leader>pV :Sex!<CR>
 
-" TODO: Fix this
+" TODO: Fix this (compile with clipboard support)
 if has('clipboard')
 " Copy to system clipboard (vim must be compiled with clipboard support)
-  nnoremap <silent> <leader>y <Cmd>"+y
+  nnoremap <silent> <leader>y "+y
   nnoremap <silent> <leader>Y "+Y
   vnoremap <silent> <leader>y "+y
   vnoremap <silent> <leader>Y "+Y
-else
-  nnoremap <silent> <leader>y "*y
-  nnoremap <silent> <leader>Y <Cmd>"*Y<CR>
-  vnoremap <silent> <leader>y <Cmd>'<,'>y <CR>
-  vnoremap <silent> <leader>y <Cmd>'<,'>Y <CR>
 endif
 
 " Replace current selection with register without copying it
@@ -166,6 +164,7 @@ set ai              " autoindent
 set sta             " smarttab - <Tab> inserts spaces
 set ls=2            " laststatus=2 - enable statusline
 
+" Add '' to-do checkboxes in markdown files
 augroup MarkdownAug
   autocmd!
   autocmd BufEnter,BufWinEnter *.md :
@@ -175,10 +174,10 @@ augroup END
 
 " Highlight on yank:
 if v:version >= 801
-    aug highlightYankedText
-        au!
-        au TextYankPost * call kolkhis#YankHighlight()
-    aug end
+  aug highlightYankedText
+    au!
+    au TextYankPost * call kolkhis#YankHighlight()
+  aug end
 endif
 
 
@@ -195,29 +194,28 @@ endif
 
 if filereadable(expand("~/.vim/autoload/plug.vim"))
     call plug#begin('~/.local/share/vim/plugins')
-
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-commentary'
     Plug 'tpope/vim-repeat'
     Plug 'tpope/vim-fugitive'
     Plug 'dense-analysis/ale'
     Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+
     " Syntax
     Plug 'sheerun/vim-polyglot'
     " Colorscheme
     Plug 'joshdick/onedark.vim'
     " Status Line
     Plug 'itchyny/lightline.vim'
-
     call plug#end()
 
-    " Configure ALE and vim-go
+    " Configure plugin options
     call kolkhis#SetAleOptions()
     call kolkhis#SetVimGoOptions()
     call kolkhis#SetLightlineOptions()
 endif
 
-" colo challenger_deep
-colorscheme onedark
 call kolkhis#SetColors()
+colorscheme onedark
 execute 'DM'
+
