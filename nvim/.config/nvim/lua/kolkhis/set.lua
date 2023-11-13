@@ -6,6 +6,7 @@ vim.g.netrw_banner = false
 vim.g.netrw_alto = false
 vim.g.netrw_altv = true
 vim.g.netrw_preview = 1 -- open previews in vsplit
+vim.g.netrw_liststyle = 3
 
 -- Fix dumb python indenting
 vim.g.python_indent = {
