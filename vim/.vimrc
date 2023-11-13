@@ -37,6 +37,7 @@ let g:netrw_alto=1        " split opens on bottom instead of top
 let g:netrw_altv=1        " vsplit opens on right instead of left
 let g:netrw_preview=1     " open previews in vsplit
 let g:netrw_liststyle=3   " tree view
+let g:netrw_hide=0        " show all files (including hidden. default 1)
 
 
 " Format Options:
@@ -64,6 +65,9 @@ vnoremap <leader>p "_dP
 " Get to netrw
 noremap <leader>pv :Ex<CR>
 noremap <leader>pV :Sex!<CR>
+
+" Fix Y yanking
+nnoremap Y y$
 
 " TODO: Fix this (compile with clipboard support)
 if has('clipboard')
