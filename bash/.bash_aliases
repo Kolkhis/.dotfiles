@@ -12,6 +12,7 @@ alias "??"="gpt"
 alias py="python3"
 alias python="python3"
 alias vim="nvim"
+alias vl="vi -c \"normal '0\""
 alias clsa='printf "\e[H\e[2J"'
 
 # Auto-flags
