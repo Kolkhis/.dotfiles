@@ -5,13 +5,13 @@ fu! kolkhis#YankHighlight()
         if (!exists('g:yanked_text_matches'))
             let g:yanked_text_matches = []
         endif
-
         let g:yank_match_id = matchadd('IncSearch', ".\\%>'\\[\\_.*\\%<']..")
         let g:yank_window_id = winnr()
         call add(g:yanked_text_matches, [g:yank_match_id, g:yank_window_id])
         call timer_start(100, 'kolkhis#DelYankHighlight')
     endif
 endf
+
 
 fu! kolkhis#DelYankHighlight(timer_id)
     while !empty(g:yanked_text_matches)
@@ -30,7 +30,6 @@ function! kolkhis#ToggleCase()
   let cword = expand('<cword>')
   let lcase = cword =~? '\l'
   let ucase = cword =~? '\u'
-
   if lcase && !ucase
     execute "normal! viwU"
   elseif !lcase && ucase
@@ -42,10 +41,13 @@ function! kolkhis#ToggleCase()
   endif
 endfunction
 
+
+
 function! kolkhis#GetHelpCurrentWord()
   let l:cword = expand('<cword>')
   execute "help " . l:cword
 endfunction
+
 
 
 function! kolkhis#AddMarkdownCheckbox()
@@ -79,7 +81,6 @@ function! kolkhis#SetAleOptions()
                 \ 'python3': ['pyright']
                 \ }
 endfunction
-
 
 
 
@@ -127,7 +128,13 @@ function! kolkhis#SetLightlineOptions()
       \ }
 endfunction
 
+" Colors
+let s:comments = "#626983"
+let s:strings = "#b0d181"
+let s:dark_ocean_bg = "#0a0c14"
+" exe 'hi Normal guifg=' . 'White' . ' guibg=' . s:dark_ocean_bg
 
+let s:light_ocean_bg = "#0f111a"
 
 function! kolkhis#SetColors()
   syntax enable
@@ -158,7 +165,7 @@ function! kolkhis#SetColors()
   hi link ALEWarningSign Error
   hi link ALEWarningLine WarningMsg
   hi link ALEWarningSignLineNr WarningMsg
-  " XXX FIXME TODO
+  " highlights: XXX FIXME TODO
   hi TODO guifg=#19A7CE guibg=#27005D
   hi link FIXME TODO
   hi link XXX TODO
@@ -221,9 +228,11 @@ function! kolkhis#SetColors()
   hi link shFor shDerefSimple
   hi link shLoop shConditional
 
+  " Vimscript
+  hi link vimIsCommand vimVar
+
   let s:comments = "#626983"
   let s:strings = "#b0d181"
-
   exe 'hi String guifg=' . s:strings
   exe 'hi Comment guifg=' . s:comments
 
@@ -234,8 +243,50 @@ function! kolkhis#SetColors()
   exe 'hi Normal guifg=' . 'White' . ' guibg=' . s:light_ocean_bg
   exe 'hi SignColumn guifg=' . 'White' . ' guibg=' . s:light_ocean_bg
 
-  com! LightMode exe 'highlight Normal guifg=' . 'White' . ' guibg=' . s:light_ocean_bg
-  com! DarkMode exe 'highlight Normal guifg=' . 'White' . ' guibg=' . s:dark_ocean_bg
+
+  " com! LightMode exe 'highlight Normal guifg=' . 'White' . ' guibg=' . s:light_ocean_bg
+  " com! DarkMode exe 'highlight Normal guifg=' . 'White' . ' guibg=' . s:dark_ocean_bg
+  com! LightMode call kolkhis#LightMode()
+  com! DarkMode call kolkhis#DarkMode()
   com! LM LightMode
   com! DM DarkMode
 endfunction
+
+fu! kolkhis#LightMode()
+  exe 'hi String guifg=' . s:strings
+  exe 'hi Comment guifg=' . s:comments
+  exe 'hi Normal guifg=' . 'White' . ' guibg=' . s:light_ocean_bg
+  exe 'hi SignColumn guifg=' . 'White' . ' guibg=' . s:light_ocean_bg
+  exe 'highlight Normal guifg=' . 'White' . ' guibg=' . s:light_ocean_bg
+  " Vimscript
+  hi link vimIsCommand vimVar
+  " netrw
+  hi netrwDir guifg=#82AAFF guibg=NONE
+  hi netrwClassify guifg=#89DDFF guibg=NONE
+  hi netrwLink guifg=#F07178 guibg=NONE
+  hi netrwSymLink guifg=#F07178 guibg=NONE
+  hi netrwExe guifg=#C3E88D guibg=NONE
+  hi netrwComment guifg=#A1ACB3 guibg=NONE
+  hi netrwListstyle guifg=#BB80B3 guibg=NONE
+  hi netrwCmdSep guifg=#C792EA guibg=NONE
+  hi netrwVersion guifg=#80CBC4 guibg=NONE
+endfu
+
+fu! kolkhis#DarkMode()
+  exe 'hi Normal guifg=' . 'White' . ' guibg=' . s:dark_ocean_bg
+  exe 'hi SignColumn guifg=' . 'White' . ' guibg=' . s:dark_ocean_bg
+  exe 'hi String guifg=' . s:strings
+  exe 'hi Comment guifg=' . s:comments
+  " Vimscript
+  hi link vimIsCommand vimVar
+  " netrw
+  hi netrwDir guifg=#82AAFF guibg=NONE
+  hi netrwClassify guifg=#89DDFF guibg=NONE
+  hi netrwLink guifg=#F07178 guibg=NONE
+  hi netrwSymLink guifg=#F07178 guibg=NONE
+  hi netrwExe guifg=#C3E88D guibg=NONE
+  hi netrwComment guifg=#A1ACB3 guibg=NONE
+  hi netrwListstyle guifg=#BB80B3 guibg=NONE
+  hi netrwCmdSep guifg=#C792EA guibg=NONE
+  hi netrwVersion guifg=#80CBC4 guibg=NONE
+endfu
