@@ -33,6 +33,9 @@ alias rp="cd ~/Repos/github.com/kolkhis/"
 alias s="cd ~/.dotfiles/scripts/.local/bin/"
 alias n="cd ~/notes/"
 
+# Git aliases
+alias gits="git status"
+
 # Using vim/neovim as `less`
 export VRT="/usr/share/vim/vim82"
 alias vless="\${VRT}/macros/less.sh"
