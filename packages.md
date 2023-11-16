@@ -32,22 +32,36 @@ sudo apt-mark showmanual
 * network-manager (nmcli)
 
 ## Programming
-* `jq` (jquery - install )
-* `python3.10-venv`
-* `python3-pip`
-* `pyright` (use npm - `sudo npm install -g pyright`)
-* `gopls`
+* jq (jquery - install )
+* python3.10-venv
+* python3-pip
+* pyright (use npm - `sudo npm install -g pyright`)
+* gopls
 
-Needed for compiling Vim from source:  
-* `clang`
-* `libtool-bin` 
-* `libpython3-dev` (python support)
+### Needed for compiling Vim from source:  
+The default installation of Vim doesn't have Python3 support, at least on Ubuntu Server.  
+In addition, the latest available version from 'apt' is 8.2, so that's another reason to
+[build Vim from Source](https://github.com/vim/vim/blob/master/src/INSTALL).  
+(Also see `~/notes/vim_nvim/build_from_source.md`)  
+* clang
+* libtool-bin 
+* libpython3-dev (python support)
+* libxt-dev (clipboard support)
+* valgrind (debugging support)
 ```bash
-sudo apt-get update && sudo apt-get install clang libtool-bin libpython3-dev -y
+sudo apt-get update && sudo apt-get install -y \
+git \
+make \
+clang \
+libtool-bin \
+libxt-dev \
+libpython3-dev \
+libgtk-3-dev \
+libxt-dev
 ```
 
 ## Other Packages
->> *These are package either unavailable or not up-to-date on `apt`, or have extra requirements.*
+*These are package either unavailable, not up-to-date on`apt`, or have extra requirements.*
 * nvim (latest neovim - see below)
 * nvm (node version manager - see below)
 * mods (charmbracelet/mods - see below)
@@ -62,10 +76,34 @@ sudo apt-get update && sudo apt-get install clang libtool-bin libpython3-dev -y
 ### Basic Package Installation
 ```bash
 sudo apt-get update && sudo apt-get upgrade
-sudo apt-get install stow gcc unzip tree entr w3m lolcat \
-lynx tmux screen tldr fzf shfmt ncal nodejs npm xterm visidata \
-python3.10-venv python3-pip gopls clang libtool-bin libpython3-dev \
-net-tools network-manager -y
+sudo apt-get install -y \
+stow \
+gcc \
+unzip \
+tree \
+entr \
+w3m \
+lolcat \
+lynx \
+tmux \
+screen \
+tldr \
+fzf \
+shfmt \
+ncal \
+nodejs \
+npm \
+xterm \
+visidata \
+python3.10-venv \
+python3-pip \
+gopls \
+clang \
+libtool-bin \
+libpython3-dev \
+net-tools \
+network-manager \
+
 sudo npm install -g pyright
 ```
 
@@ -197,10 +235,33 @@ install_mods() {
 
 sudo apt-get update && sudo apt-get upgrade -y
 
-sudo apt-get install stow gcc unzip tree entr w3m lolcat \
-lynx tmux screen tldr fzf shfmt ncal nodejs npm xterm visidata \
-python3.10-venv python3-pip gopls clang libtool-bin libpython3-dev \
-net-tools network-manager -y
+sudo apt-get install -y \
+stow \
+gcc \
+unzip \
+tree \
+entr \
+w3m \
+lolcat \
+lynx \
+tmux \
+screen \
+tldr \
+fzf \
+shfmt \
+ncal \
+nodejs \
+npm \
+xterm \
+visidata \
+python3.10-venv \
+python3-pip \
+gopls \
+clang \
+libtool-bin \
+libpython3-dev \
+net-tools \
+network-manager \
 
 install_nvm
 install_libssl1.1
