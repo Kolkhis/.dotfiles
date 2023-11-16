@@ -32,6 +32,10 @@ vim.keymap.set(
 -- Enable streamer mode
 vim.keymap.set('n', '<leader>sm', '<cmd>SM<CR>', { silent = true, noremap = true })
 
+-- Easy resizing
+vim.keymap.set('n', '<leader>=', '<cmd>resize +5<CR>', { silent = true, noremap = true})
+vim.keymap.set('n', '<leader>-', '<cmd>resize -5<CR>', { silent = true, noremap = true})
+
 -- Get to netrw
 vim.keymap.set('n', '<leader>pv', '<cmd>Ex<CR>')
 vim.keymap.set('n', '<leader>pV', '<cmd>Sex!<CR>')

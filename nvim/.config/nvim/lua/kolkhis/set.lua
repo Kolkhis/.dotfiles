@@ -2,11 +2,14 @@ vim.cmd('colo material-deep-ocean')
 
 vim.api.nvim_set_hl(0, 'Cursor', { fg = 'White', bg = 'Red' })
 
+-- Netrw Options
 vim.g.netrw_banner = false
 vim.g.netrw_alto = false
 vim.g.netrw_altv = true
 vim.g.netrw_preview = 1 -- open previews in vsplit
-vim.g.netrw_liststyle = 3
+vim.g.netrw_liststyle = 0  -- 3 for tree view
+vim.g.netrw_bufsettings = "noma nomod nu nowrap ro nobl"
+
 
 -- Fix dumb python indenting
 vim.g.python_indent = {
@@ -16,8 +19,8 @@ vim.g.python_indent = {
     closed_paren_align_last_line = false
 }
 
--- Modify path for better find/completion
-vim.o.path = vim.o.path .. '**'
+-- Modify path for better find/completion (requires globstar??)
+vim.opt.path:append({ '**' })
 
 -- Stop persistent highlight after search
 vim.o.hlsearch = false
@@ -85,11 +88,26 @@ vim.o.matchtime = 1
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 -- vim.cmd('au! TextYankPost * silent! lua vim.highlight.on_yank()') -- vimscript+lua implementation
-local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
+local md_highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
+  pattern = '*',
+  group = md_highlight_group,
   callback = function()
     vim.highlight.on_yank()
   end,
-  group = highlight_group,
-  pattern = '*',
 })
+
+-- Start vim in netrw in the current directory 
+local vimstart_group = vim.api.nvim_create_augroup('VimStartup', { clear = true })
+vim.api.nvim_create_autocmd('VimEnter', {
+    pattern = '*',
+    group = vimstart_group,
+    callback = function ()
+        if vim.fn.expand('%') == '' then
+            vim.cmd.e('.')
+        end
+    end,
+    desc = "Open the current directory in netrw if no file is given when running vim.",
+})
+
+
