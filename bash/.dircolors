@@ -209,7 +209,8 @@ EXEC 01;32
 .md    00;38;5;173
 .py    00;38;5;011
 .txt   00;38;5;37
-.lua   00;38;5;042
+.vim   00;38;5;185
+.lua   00;38;5;062
 # 0   = default colour
 # 1   = bold
 # 4   = underlined
