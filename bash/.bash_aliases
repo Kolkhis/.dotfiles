@@ -57,15 +57,15 @@ shopt -s nocaseglob
 
 # set timezone
 export TZ="America/New_York"
-export VRT="/usr/share/vim/vim82"
+export TERM=xterm-256color
 export NOTES_HOME="/home/kolkhis/notes"
 export LC_ALL=C.UTF-8
 export EDITOR=nvim
 export PATH=~/bin:$PATH
+
 export PATH=$PATH:/usr/local/go/bin
 export CGO_ENABLED=0
 export GO111MODULE=on
-export TERM=xterm-256color
 COLUMNS=120
 LINES=30
 export COLUMNS LINES
