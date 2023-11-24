@@ -30,6 +30,7 @@ sudo apt-mark showmanual
 * cmatrix
 * net-tools
 * network-manager (nmcli)
+* nmap
 
 ## Programming
 * jq (jquery - install )
@@ -136,21 +137,17 @@ sudo apt-get install neovim -y
 * KeePassXC - Password manager or safe. Locked with one master key or key-disk.
 * traefik - HTTP reverse proxy and load balancer that makes deploying microservices easy.
 * vault - Product data management (PDM) tool. Integrates with CAD systems. Autodesk product.
+* Ncat - What's the difference between `netcat` and `Ncat`?
+
+### Static site generator (available on pip):
+* mkdocs 
+* mkdocs-material
+* mkdocs-awesome-pages-plugin
 
 
 ### Totally unrelated things to check out
 L3MON - [Android Hax](https://www.golinuxcloud.com/l3mon-hack-android-mobile-remotely/)
 JuiceSSH - [SSH client for Android](https://juicessh.com/)
-
-
-Static site generator (available on pip):
-mkdocs 
-mkdocs-material
-mkdocs-awesome-pages-plugin
-
-Learning hacking stuff:
-TryHackMe and pentesterlab
-When looking for XSS also look for SSTI or CSTI
 
 
 ## Package Install Script
