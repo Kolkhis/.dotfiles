@@ -1,3 +1,4 @@
+# shellcheck disable=SC2059,SC1091,SC1090
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -127,3 +128,73 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completio
 # cargo env
 [ -s "$HOME/.cargo/env" ] && \. "$HOME/.cargo/env"
+
+
+YELLOW='\[\e[38;5;214m\]'
+BURNT_ORANGE='\[\e[38;5;130m\]'
+DARK_YELLOW="\[\e[38;5;58m\]"
+GREY='\[\e[38;5;241m\]'
+MUTED_BLUEGREEN="\[\e[38;5;30m\]"
+RED_256="\[\e[38;5;160m\]"
+RESET="\[\e[0m\]"
+LIGHT_PURPLE="\[\e[38;5;99m\]"
+SOFT_PINK="\[\e[38;5;212m\]"
+# LIGHT_BLUE="\[\e[38;5;81m\]"
+# SOFT_BLUE="\[\e[38;5;111m\]"
+# BEIGE='\[\e[38;5;180m\]'
+
+DARK_RED="\[\e[38;5;88m\]"
+SEP_COLOR=${DARK_RED}
+FIRST_SEP="┎"   # ┎┏┍ ┏ ┒ ┒┎ ┏ ┍
+SECOND_SEP="┖"  # ┖┗┕ ┖ ┚ ┨┠ ┣ ┝ ┫┠
+                #         ┚┖ ┗ ┕
+
+case $USER in
+    (root)
+        NAME_COLOR=${RED_256};
+        HOST_COLOR=${BURNT_ORANGE};
+        PATH_COLOR=${LIGHT_PURPLE};
+        VENV_COLOR=${SOFT_PINK}
+	;;
+    (*)
+        NAME_COLOR=${DARK_YELLOW};
+        HOST_COLOR=${BURNT_ORANGE};
+        PATH_COLOR=${MUTED_BLUEGREEN};
+        VENV_COLOR=${YELLOW}
+	;;
+esac
+
+# Prevent default "(venv)" text
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+# different prompt for git bash
+case $(hostname) in
+    ("D01")
+        source /etc/profile.d/git-prompt.sh;
+        ;;
+    (*)
+        SEP_COLOR="\[\e[38;5;88m\]";
+        PS1=\
+"${SEP_COLOR}${FIRST_SEP} \
+${NAME_COLOR}\
+\u${GREY}@\
+${HOST_COLOR}\
+\h${GREY}:\
+${PATH_COLOR}\
+\w\
+${RED_256}\
+\$(get_git_branch)\
+\n${SEP_COLOR}${SECOND_SEP} \
+${VENV_COLOR}\$(check_venv)\
+${GREY}\\$ ${RESET}";
+        ;;
+esac
+
+export PS1
+export PS2="${GREY}~>${RESET} "
+
+# $(uptime | awk '{print $10}')
+# 2:03:58
+eval "$(dircolors -b ~/.dircolors)"
+
+

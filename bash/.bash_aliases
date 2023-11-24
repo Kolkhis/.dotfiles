@@ -1,5 +1,5 @@
 # shellcheck shell=bash
-# shellcheck disable=SC2059
+# shellcheck disable=SC2059,SC1091
 
 alias cls='printf "\e[H\e[2J"'
 alias c='clear'
@@ -11,14 +11,16 @@ alias "?"="duck"
 alias "??"="gpt"
 alias py="python3"
 alias python="python3"
+alias vi="/usr/local/bin/vim"
 alias vim="nvim"
+alias lv="vim -c \"normal '0\""
 alias vl="vi -c \"normal '0\""
 alias clsa='printf "\e[H\e[2J"'
 
 # Auto-flags
 alias ls='ls --color=auto --classify'
 alias ll='ls --color=auto --classify --almost-all -l --human-readable' # ls -CFAlh
-alias l='ll' # ls -CFAlh
+alias l='ll'
 alias cal="ncal -b"
 alias tree="tree -a"
 alias ip="ip -color"
@@ -32,6 +34,8 @@ alias boost="cd ~/notes/skilstak/"
 alias rp="cd ~/Repos/github.com/kolkhis/"
 alias s="cd ~/.dotfiles/scripts/.local/bin/"
 alias n="cd ~/notes/"
+alias ta="cd ~/Repos/github.com/kolkhis/taggart"
+alias tw="cd ~/Repos/github.com/kolkhis/twitch_chat_bot/"
 
 # Git aliases
 alias gits="git status"
@@ -45,7 +49,7 @@ alias nvl="\${NVRT}/macros/less.sh"
 # godmode
 set -o vi
 
-# Allow ** for recursive matches ('lib/**/*.rb' => 'lib/a/b/c.rb')
+# Allow ** for recursive searching and pattern matching
 shopt -s globstar
 
 # Include dotfiles in pathname expansion
@@ -62,70 +66,12 @@ export NOTES_HOME="/home/kolkhis/notes"
 export LC_ALL=C.UTF-8
 export EDITOR=nvim
 export PATH=~/bin:$PATH
+export force_color_prompt=yes
+export COLUMNS=120 LINES=30
+GPG_TTY=$(tty)
+export GPG_TTY
 
 export PATH=$PATH:/usr/local/go/bin
 export CGO_ENABLED=0
 export GO111MODULE=on
-COLUMNS=120
-LINES=30
-export COLUMNS LINES
-export force_color_prompt=yes
-GPG_TTY=$(tty)
-export GPG_TTY
-
-BURNT_ORANGE='\[\e[38;5;130m\]'
-DARK_YELLOW="\[\e[38;5;58m\]"
-GREY='\[\e[38;5;241m\]'
-MUTED_BLUEGREEN="\[\e[38;5;30m\]"
-RED_256="\[\e[38;5;160m\]"
-RESET="\[\e[0m\]"
-LIGHT_PURPLE="\[\e[38;5;99m\]"
-# SOFT_BLUE="\[\e[38;5;81m\]"
-
-DARK_RED="\[\e[38;5;88m\]"
-SEP_COLOR=${DARK_RED}
-FIRST_SEP="┎"   # ┎┏┍ ┏ ┒ ┒┎ ┏ ┍
-SECOND_SEP="┖"  # ┖┗┕ ┖ ┚ ┨┠ ┣ ┝ ┫┠
-                #         ┚┖ ┗ ┕
-
-case $USER in
-    (root)
-        NAME_COLOR=${RED_256};
-        HOST_COLOR=${BURNT_ORANGE};
-        PATH_COLOR=${LIGHT_PURPLE}
-	;;
-    (*)
-        NAME_COLOR=${DARK_YELLOW};
-        HOST_COLOR=${BURNT_ORANGE};
-        PATH_COLOR=${MUTED_BLUEGREEN}
-	;;
-esac
-
-# different prompt for git bash
-case $(hostname) in
-    ("D01")
-        source /etc/profile.d/git-prompt.sh;
-        ;;
-    (*)
-        SEP_COLOR="\[\e[38;5;88m\]";
-        export PS1=\
-"${SEP_COLOR}${FIRST_SEP} \
-${NAME_COLOR}\
-\u${GREY}@\
-${HOST_COLOR}\
-\h${GREY}:\
-${PATH_COLOR}\
-\w\
-${RED_256}\
-\$(get_git_branch)\
-\n${SEP_COLOR}${SECOND_SEP}\
-${GREY} \\$ ${RESET}";
-        ;;
-esac
-
-export PS2="${RED_256}~> "
-
-# $(uptime | awk '{print $10}')
-# 2:03:58
-eval "$(dircolors -b ~/.dircolors)"
 
