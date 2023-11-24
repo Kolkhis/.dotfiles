@@ -25,6 +25,14 @@ fu! kolkhis#DelYankHighlight(timer_id)
 endf
 
 
+fu! kolkhis#ToggleNetrw()
+  if &filetype ==# 'netrw'
+    execute 'Rex'
+  else
+    execute 'Ex'
+  endif
+endf
+
 
 function! kolkhis#ToggleCase()
   let cword = expand('<cword>')

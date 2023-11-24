@@ -32,12 +32,16 @@ set path+=**
 command! MakeTags !ctags -R .
  
 " put that banner away, netrw. no one wants to see that.
-" let g:netrw_banner=0
-let g:netrw_alto=1        " split opens on bottom instead of top
-let g:netrw_altv=1        " vsplit opens on right instead of left
-let g:netrw_preview=1     " open previews in vsplit
-let g:netrw_liststyle=3   " tree view
-let g:netrw_hide=0        " show all files (including hidden. default 1)
+let g:netrw_banner=0
+let g:netrw_alto=1              " split opens on bottom instead of top
+let g:netrw_altv=1              " vsplit opens on right instead of left
+let g:netrw_preview=1           " open previews in vsplit
+let g:netrw_liststyle=0         " tree view
+let g:netrw_hide=0              " show all files (including hidden. default 1)
+let g:netrw_usetab=1            " Tab mapping for shrinking/expanding Lexplore
+let g:netrw_bufsettings="noma nomod nowrap ro nobl nu rnu"
+let g:netrw_winsize=30
+let g:netrw_browse_split=4    " Select window 1 for the 'C' mapping (if set to '1C')
 
 
 " Format Options:
@@ -48,61 +52,56 @@ set fo-=twa2vbB]p
 
 " Remaps:
 " :h :nme
-" :h mapmode
+" :h map-table
 
 " Set Space to do nothing, and set it as mapleader
 nnoremap <silent> <Space> <Nop>
 let g:mapleader=" "
 let g:maplocalleader=" "
 
+" Toggle full-window netrw
+noremap <silent> <leader>pv :call kolkhis#ToggleNetrw()<CR>
+" Minimize/Maximize a :Lex netrw instance
+nnoremap  <leader>ns <Plug>NetrwShrink
 
-" Specify a register to delete/yank/etc into, e.g., `"a` for register a
-nnoremap <leader>dd "add 
-vnoremap <leader>d "ad 
-"
-" Don't overwrite current register when replacing a word with `p`
-vnoremap <leader>p "_dP
-" Get to netrw
-noremap <leader>pv :Ex<CR>
-noremap <leader>pV :Sex!<CR>
-
-" Fix Y yanking
-nnoremap Y y$
-
-" TODO: Fix this (compile with clipboard support)
 if has('clipboard')
 " Copy to system clipboard (vim must be compiled with clipboard support)
+  set clipboard=unnamedplus
   nnoremap <silent> <leader>y "+y
   nnoremap <silent> <leader>Y "+Y
   vnoremap <silent> <leader>y "+y
   vnoremap <silent> <leader>Y "+Y
+  nnoremap <silent> <leader>v "+p
 endif
+
+
+" Specify a register to delete/yank/etc into, e.g., `"a` for register a
+nnoremap <leader>dd "add 
+vnoremap <leader>d "ad 
+" Don't overwrite current register when replacing a word with `p`
+vnoremap <leader>p "_dP
+" Fix Y yanking
+nnoremap Y y$
 
 " Replace current selection with register without copying it
 xnoremap <silent> <leader>p "_dP
-
 " map zj to Esc
 nnoremap zj <Esc>
 vnoremap zj <Esc>
-
 " Awesome remap for moving lines around
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
 " Go the next occurrence of selected text (Same as *)
 vnoremap X *
-
 " hot-reloading .vimrc
 nnoremap <leader>ar :source ~/.vimrc<CR>
-
 " Search help files for word under cursor
 nnoremap <leader>gh :call kolkhis#GetHelpCurrentWord()<CR>
-
 " Get the identifier needed for highlights
 nnoremap <leader>si :echo synIDattr(synID(line("."), col("."), 1), "name")<CR>
 " insert a capture group in command mode
 cnoremap <leader>\ \(\)<Left><Left>
- 
 " Auto-center cursor on screen when jumping
 nnoremap <C-u> <C-u>zz
 vnoremap <C-u> <C-u>zz
@@ -113,17 +112,14 @@ vnoremap <C-d> <C-d>zz
 nnoremap <leader>- :resize -5<CR>
 nnoremap <leader>+ :resize +5<CR>
 nnoremap <leader>= :resize +5<CR>
-
 " Navigate line wraps normally
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
-
 " Refactor current word (global substitution)
 nnoremap <silent> <leader>s :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>
-
 " Yank entire file
 nnoremap <silent> <leader>yf <Cmd>%y" <CR> 
-
+" Toggle Case
 inoremap <C-c> <Esc>:call kolkhis#ToggleCase()<CR>
 nnoremap <C-c> <Esc>:call kolkhis#ToggleCase()<CR>
 
@@ -168,12 +164,17 @@ set ai              " autoindent
 set sta             " smarttab - <Tab> inserts spaces
 set ls=2            " laststatus=2 - enable statusline
 
+" Splitting:
+set sb              " Split below instead of above
+set spr             " Vsplit right instead of left
+
+
 " Add '' to-do checkboxes in markdown files
 augroup MarkdownAug
   autocmd!
   autocmd BufEnter,BufWinEnter *.md :
-    nnoremap <buffer> ;td :call kolkhis#AddMarkdownCheckbox()<CR>$
-    inoremap <buffer> ;td <Esc>:call kolkhis#AddMarkdownCheckbox()<CR>A
+    nnoremap <buffer> ,td :call kolkhis#AddMarkdownCheckbox()<CR>$
+    inoremap <buffer> ,td <Esc>:call kolkhis#AddMarkdownCheckbox()<CR>A
 augroup END
 
 " Highlight on yank:
