@@ -1,0 +1,32 @@
+# root marks the dir as  the top-most EditorConfig file. 
+# This will take precedence over default.
+# root = true
+
+[Makefile]
+indent_style = tab
+
+[*.lua]
+indent_size = 2
+align_table_field = true
+extra_sep_at_table_end = true
+keep_simple_function_one_line = true
+table_sep = ','
+
+# Matches exact files `package.json` or `.travis.yml`
+[{package.json,.travis.yml}]
+indent_style = space
+indent_size = 2
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+indent_style = space
+indent_size = 4
+align_args = true
+align_parameter = true
+
+
+
+
+
