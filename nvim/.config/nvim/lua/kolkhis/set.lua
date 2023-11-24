@@ -2,14 +2,18 @@ vim.cmd('colo material-deep-ocean')
 
 vim.api.nvim_set_hl(0, 'Cursor', { fg = 'White', bg = 'Red' })
 
--- Netrw Options
-vim.g.netrw_banner = false
-vim.g.netrw_alto = false
-vim.g.netrw_altv = true
-vim.g.netrw_preview = 1 -- open previews in vsplit
-vim.g.netrw_liststyle = 0  -- 3 for tree view
-vim.g.netrw_bufsettings = "noma nomod nu nowrap ro nobl"
 
+-- Netrw Options
+vim.g.netrw_banner = 0
+vim.g.netrw_alto = 0
+vim.g.netrw_altv = 0
+vim.g.netrw_preview = 1 -- open previews in vsplit
+vim.g.netrw_liststyle = 3  -- 3 for tree view
+vim.g.netrw_bufsettings = "noma nomod nu nowrap ro nobl"
+vim.g.netrw_hide = 0
+vim.g.netrw_usetab = 1
+vim.g.netrw_winsize = 20
+vim.g.netrw_browse_split = 0  -- default = 0
 
 -- Fix dumb python indenting
 vim.g.python_indent = {
@@ -45,7 +49,7 @@ vim.o.breakindent = true
 -- Save undo history
 vim.o.undofile = true
 
--- Case insensitive searching UNLESS /C or capital in search
+-- Case insensitive searching unless there's a capital in search
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
@@ -84,10 +88,14 @@ vim.o.updatetime = 200
 vim.o.showmatch = true
 vim.o.matchtime = 1
 
+-- Turn off visual bell
+vim.o.visualbell = false
+vim.o.errorbells = false
+
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
--- vim.cmd('au! TextYankPost * silent! lua vim.highlight.on_yank()') -- vimscript+lua implementation
+vim.cmd('au! TextYankPost * silent! lua vim.highlight.on_yank()') -- vimscript+lua implementation
 local md_highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
@@ -104,10 +112,10 @@ vim.api.nvim_create_autocmd('VimEnter', {
     group = vimstart_group,
     callback = function ()
         if vim.fn.expand('%') == '' then
-            vim.cmd.e('.')
+            vim.cmd.Lex()
         end
     end,
-    desc = "Open the current directory in netrw if no file is given when running vim.",
+    desc = "Open the current directory in netrw if no file or directory is given when running vim.",
 })
 
 

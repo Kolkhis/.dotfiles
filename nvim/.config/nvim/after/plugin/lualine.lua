@@ -1,3 +1,11 @@
+local check_venv = function ()
+    if vim.env['VIRTUAL_ENV'] then
+        return ("%s - (venv)"):format(vim.fs.basename(vim.env.PWD))
+    else
+        return ("%s"):format(vim.fs.basename(vim.env.PWD))
+    end
+end
+
 require('lualine').setup({
   options = {
     icons_enabled = true,
@@ -20,7 +28,7 @@ require('lualine').setup({
   sections = {
     lualine_a = { 'mode' },
     lualine_b = { 'branch', 'diff', 'diagnostics' },
-    lualine_c = { 'filename' },
+    lualine_c = { check_venv,  'filename', },
     lualine_x = { 'encoding', 'fileformat', 'filetype' },
     lualine_y = { 'progress' },
     lualine_z = { 'location' },

@@ -17,7 +17,6 @@ https://www.vimregex.com/
 -- Nightly repo for apt
 -- sudo add-apt-repository ppa:neovim-ppa/unstable -y
 
---]]
 
 
 -- `c/word` <- change to searched text
@@ -26,7 +25,6 @@ https://www.vimregex.com/
 
 --[=[ Regex with vim ]=]--
 
---[[
 			Pattern atom
 
     ^ start matching from beginning of a line
@@ -64,10 +62,8 @@ For more info,
 :h pattern-overview
 :h character-classes
 
-]]--
 
 
---[[  
 
 On Termux and WSL, comment out shell opts set.lua.
 
@@ -93,7 +89,6 @@ https://neovim.io/doc/user/usr_41.html#function-list
 
 
 
---]]
 
 --- Playing with the vim.api
 -- vim.keymap.set('n', '<leader>tk', function ()
@@ -121,8 +116,6 @@ anything in nvim/plugin will load/run at runtime.
 
 package.loaded has a table of loaded packages.
 vim.api.nvim_get_keymaps
-<<<<<<< HEAD
---]]
 
   --[[  Neo-Tree Setup  ]]
   -- Switching from neo-tree to harpoon
@@ -156,34 +149,17 @@ Window navigation:
 
 :e https://github.com/somefile.c -- this works
 
---]]
 
 --[=[ Refactoring tip ]=]--
---[=[ 
+
 >> Grep with Telescope, add to quickfix list
 >> Then, to apply a cmd to each thing:
 :cdo <cmd>
 
 :h cdo
 
---]=]
---[[
---
--- Disable LSP for current buffer
+
+Disable LSP for current buffer
 -- :lua vim.lsp.diagnostics.disable(vim.api.nvim_get_current_buf())
---]]
 
-
-
-
-
-
-
-
-<<<<<<< HEAD
->>>>>>> refs/rewritten/Merge
-
-=======
->>>>>>> bb809311f3ed94b45ffc87eb4058c9127dceefa2
-]=======]
->>>>>>> 3981dfa (fix: Fix python indentation madness)
+--]=======]
