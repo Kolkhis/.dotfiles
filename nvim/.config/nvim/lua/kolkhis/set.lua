@@ -8,7 +8,7 @@ vim.g.netrw_banner = 0
 vim.g.netrw_alto = 0
 vim.g.netrw_altv = 0
 vim.g.netrw_preview = 1 -- open previews in vsplit
-vim.g.netrw_liststyle = 3  -- 3 for tree view
+vim.g.netrw_liststyle = 0  -- 3 for tree view
 vim.g.netrw_bufsettings = "noma nomod nu nowrap ro nobl"
 vim.g.netrw_hide = 0
 vim.g.netrw_usetab = 1
@@ -25,6 +25,13 @@ vim.g.python_indent = {
 
 -- Modify path for better find/completion (requires globstar??)
 vim.opt.path:append({ '**' })
+
+-- Cursorline highlighting
+vim.opt.cursorlineopt = { "number" }
+vim.o.cursorline = true
+
+-- Set how autocompletion behaves
+vim.opt.completeopt = { 'menuone', 'noselect', 'preview' }
 
 -- Stop persistent highlight after search
 vim.o.hlsearch = false
@@ -59,9 +66,6 @@ vim.wo.signcolumn = 'yes'
 -- Timeout for hotkeys
 vim.o.timeout = true
 vim.o.timeoutlen = 350
-
--- Set completeopt to have a better completion experience
-vim.o.completeopt = 'menuone,noselect,' -- preview
 
 -- Enable 24-bit RGB
 vim.o.termguicolors = true
@@ -112,7 +116,8 @@ vim.api.nvim_create_autocmd('VimEnter', {
     group = vimstart_group,
     callback = function ()
         if vim.fn.expand('%') == '' then
-            vim.cmd.Lex()
+            -- vim.cmd.Lex()
+            vim.cmd.e('.')
         end
     end,
     desc = "Open the current directory in netrw if no file or directory is given when running vim.",

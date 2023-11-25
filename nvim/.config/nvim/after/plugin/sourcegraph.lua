@@ -54,17 +54,19 @@ if os.is_linux then
     end)
   end)
 
-  --   vim.keymap.set({ 'n', 'v' }, '<leader>cp', function()
-  --     local mode = vim.api.nvim_get_mode()
-  --     if mode == 'n' then
-  --       vim.ui.input({ prompt = 'Cody Task (global) > ' }, function(task)
-  --         vim.cmd((':0;$CodyTask %s'):format(task))
-  --       end)
-  --     else
-  --       vim.ui.input({ prompt = 'Cody Task > ' }, function(task)
-  --         vim.cmd((":'<,'>CodyTask %s"):format(task))
-  --       end)
-  --     end
-  --   end, { noremap = true, desc = 'Task [C]ody with a [P]rompt.' })
-  -- end
-end -- End of os.is_linux() check
+  vim.keymap.set({ 'n', 'v' }, '<leader>cp', function()
+    local mode = vim.api.nvim_get_mode()
+    if mode == 'n' then
+      vim.ui.input({ prompt = 'Cody Task (global) > ' }, function(task)
+        vim.cmd((':0;$CodyTask %s'):format(task))
+      end)
+    else
+      vim.ui.input({ prompt = 'Cody Task > ' }, function(task)
+        vim.cmd((":'<,'>CodyTask %s"):format(task))
+      end)
+    end
+  end, { noremap = true, desc = 'Task [C]ody with a [P]rompt.' })
+
+end
+
+-- End of os.is_linux() check
