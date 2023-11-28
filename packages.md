@@ -7,7 +7,7 @@ sudo apt-mark showmanual
 "Bootstrapping" script at the bottom.
 
 ## Basic Tools
-* stow
+* stow - dotfile management
 * gcc
 * unzip
 * tree
@@ -31,6 +31,7 @@ sudo apt-mark showmanual
 * net-tools
 * network-manager (nmcli)
 * nmap
+* sysstat - system tools
 
 ## Programming
 * jq (jquery - install )
@@ -109,6 +110,7 @@ sudo npm install -g pyright
 ```
 
 ### Installing Other Packages (packages not up-to-date or unavailable on `apt`)
+
 * charmbracelet/mods (ChatGPT from the command line)
 ```bash
 sudo mkdir -p /etc/apt/keyrings
@@ -117,11 +119,13 @@ echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *
 sudo apt-get update && sudo apt-get install mods
 ```
 
+
 * nvm (Node Version Manager)
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash )
 nvm install node
 ```
+
 
 * nvim
 ```bash
@@ -130,14 +134,17 @@ sudo apt-get update
 sudo apt-get install neovim -y
 ```
 
+
 ### Tools to check out
 * parallel (GNU Parallel) - Shell tool for executing jobs in parallel using one or more machines.
-    * A job is typically a inslge command or small script that has to be run for each line in the input.
+    * A job is typically a inslge command or small script that has to be run
+      for each line in the input.
     * Typical input is a list of either files, hosts, users, or tables.
-* KeePassXC - Password manager or safe. Locked with one master key or key-disk.
-* traefik - HTTP reverse proxy and load balancer that makes deploying microservices easy.
-* vault - Product data management (PDM) tool. Integrates with CAD systems. Autodesk product.
-* Ncat - What's the difference between `netcat` and `Ncat`?
+* KeePassXC - Password manager or safe. Locked with one master key or key-disk.  
+* traefik - HTTP reverse proxy and load balancer that makes deploying microservices easy.  
+* vault - Product data management (PDM) tool. Integrates with CAD systems. Autodesk product.  
+* Ncat - What's the difference between `netcat` and `Ncat`?  
+
 
 ### Static site generator (available on pip):
 * mkdocs 
@@ -146,8 +153,8 @@ sudo apt-get install neovim -y
 
 
 ### Totally unrelated things to check out
-L3MON - [Android Hax](https://www.golinuxcloud.com/l3mon-hack-android-mobile-remotely/)
-JuiceSSH - [SSH client for Android](https://juicessh.com/)
+* L3MON - [Android Hax](https://www.golinuxcloud.com/l3mon-hack-android-mobile-remotely/)  
+* JuiceSSH - [SSH client for Android](https://juicessh.com/)  
 
 
 ## Package Install Script
@@ -156,7 +163,8 @@ JuiceSSH - [SSH client for Android](https://juicessh.com/)
 
 
 install_libssl1.1() {
-    curl -fsSL -o /tmp/libssl1.1_1.1.0g-2ubuntu4_amd64.deb http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
+    curl -fsSL -o /tmp/libssl1.1_1.1.0g-2ubuntu4_amd64.deb \
+    http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
     if [[ -f /tmp/libssl1.1_1.1.0g-2ubuntu4_amd64.deb ]]; then
         printf "Download successful, attempting to install libssl1.1\n"
         if sudo dpkg -i /tmp/libssl1.1_1.1.0g-2ubuntu4_amd64.deb; then
@@ -167,7 +175,7 @@ install_libssl1.1() {
             return 1
         fi
     else
-        printf "There was a problem downloading libssl1.1"
+        printf "There was a problem downloading libssl1.1\n"
         return 1
     fi
     return 0
@@ -178,7 +186,11 @@ go_install() {
     mkdir -p ~/install/go
     cd ~/install/go || exit
     if [[ ! -f /tmp/go1.21.1.linux-amd64.tar.gz ]]; then
-        curl -fsSL -o /tmp/go1.21.1.linux-amd64.tar.gz https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
+        curl -fsSL -o /tmp/go1.21.1.linux-amd64.tar.gz \
+        https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
+    else
+        printf "There was a problem downloading Go.\n"
+        return 1
     fi
     if [[ -f /tmp/go1.21.1.linux-amd64.tar.gz ]]; then
         sudo tar -C /usr/local -xzf /tmp/go1.21.1.linux-amd64.tar.gz
@@ -192,12 +204,12 @@ go_install() {
             fi
         done
         if [[ ! $go_path_exists ]]; then
-            echo "export PATH=\$PATH:/usr/local/go/bin" >> ~/.bashrc
+            printf "export PATH=\$PATH:/usr/local/go/bin\n" >> ~/.bashrc
         fi
         source "$HOME/.bashrc"
         go version
     else
-        echo "There was a problem downloading Go."
+        printf "The Go tarball could not be found.\n"
     fi
     cd - || return 1
     return 0
