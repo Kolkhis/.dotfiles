@@ -4,9 +4,8 @@ vim.g.maplocalleader = ' '
 
 -- local opts = { silent = true, noremap = true }  -- Maybe streamline this stuff into a module/loop
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
-vim.keymap.set({ 'n', 'v' }, 'zp', '<C-u>zz', { silent = true, noremap = true }) -- jump up
-vim.keymap.set({ 'n', 'v' }, 'zn', '<C-d>zz', { silent = true, noremap = true }) -- jump down
 vim.keymap.set({ 'i', 'v' }, 'zj', '<Esc>', { silent = true, noremap = true }) -- remap escape key (for awful keyboards)
+
 -- Keep cursor centered
 vim.keymap.set({ 'n', 'v' }, '<C-u>', '<C-u>zz', { silent = true, noremap = true })
 vim.keymap.set({ 'n', 'v' }, '<C-d>', '<C-d>zz', { silent = true, noremap = true })
@@ -14,7 +13,9 @@ vim.keymap.set({ 'n', 'v' }, '<C-d>', '<C-d>zz', { silent = true, noremap = true
 -- hella sexy remap (by me). paste register in insert mode
 vim.keymap.set('i', '<C-Space>', function()
   local w = vim.fn.getreg('*')
+  print(('The register contents:\n%s'):format(w))
   vim.api.nvim_put({ w }, 'c', true, true) -- after, follow)
+  -- vim.cmd.normal('"*p')
 end, { silent = true, noremap = true })
 
 -- Navigate word wraps
@@ -35,12 +36,12 @@ vim.keymap.set('n', '<leader>=', '<cmd>resize +5<CR>', { silent = true, noremap 
 vim.keymap.set('n', '<leader>-', '<cmd>resize -5<CR>', { silent = true, noremap = true })
 
 -- Toggle fullscreen netrw
-vim.keymap.set('n', '<leader>pv', function ()
-    if vim.bo.filetype == 'netrw' then
-        vim.cmd.Rex()
-    else
-        vim.cmd.Ex()
-    end
+vim.keymap.set('n', '<leader>pv', function()
+  if vim.bo.filetype == 'netrw' then
+    vim.cmd.Rex()
+  else
+    vim.cmd.Ex()
+  end
 end)
 
 -- Clipboard integreity -- Copy to system clipboard
@@ -68,42 +69,64 @@ vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { silent = true, noremap = true })
 vim.keymap.set({ 'n', 'v' }, '<leader>yf', '<cmd>%y+<CR>', { silent = true, desc = 'Yank entire file', noremap = true })
 
 vim.keymap.set(
-  'c',
+  { 'c' },
   [[<leader>\]],
   [[\(\)<Left><Left>]],
-  { silent = false, desc = 'Put Capture Group in expression in command mode.', noremap = true }
+  { silent = true, noremap = true, desc = 'Put Capture Group in expression in command mode.' }
 )
 
--- Add a Markdown bullet point and checkbox "[ ]"
+vim.keymap.set({ 'c' }, '<leader>am', [[\@<=]], {
+  silent = true,
+  noremap = true,
+  desc = 'Put a "Match After" pattern in command mode.',
+})
+
+-- Toggle :Lexplore
+vim.keymap.set('n', '<leader>ns', '<Plug>NetrwShrink', { noremap = true, silent = true })
+
+local fns = require('kolkhis.functions')
+vim.keymap.set({ 'i', 'n' }, '<C-c>', fns.lower_upper_toggle, { noremap = true, silent = true })
+vim.keymap.set({ 'i', 'n' }, '<C-x>', fns.camel_snake_toggle, { noremap = true, silent = true })
+
+
+--[[ Markdown-Specific Keymaps ]]
 local md_aug_id = vim.api.nvim_create_augroup('MarkdownAug', { clear = false })
 vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
   pattern = { '*.md' },
   callback = function()
+    -- Add a Markdown bullet point and checkbox "[ ]"
     vim.keymap.set({ 'n', 'i' }, ',td', function()
       vim.api.nvim_put({ '* [ ]' }, 'c', true, true)
-    end, { silent = true, noremap = true })
+    end, { silent = true, noremap = true, buffer = true })
+
+    -- Put in two spaces at the end of lines (that don't end in 2 spaces, comma, or codeblock)
+    vim.keymap.set({ 'n', 'v', 'c' }, ',lb', function()
+      local mode = vim.api.nvim_get_mode().mode
+      if mode == 'n' then
+        vim.cmd([[%s/\([^,\| \{2}\|`\{3}]$\)/\1  /]])
+      elseif mode == 'v' then
+        vim.cmd([['<,'>s/\([^,\| \{2}\|`\{3}]$\)/\1  /]])
+      else
+        return [[%s/\([^,\| \{2}\|`\{3}]$\)/\1  /]]
+        -- vim.api.nvim_put({ [[%s/\([^,\| \{2}\|`\{3}]$\)/\1  /]] }, 'c', true, true)
+      end
+    end, { silent = true, noremap = true, buffer = true })
+
+    -- 'listify' the selection
+    vim.keymap.set({ 'v', 'n' }, ',ls', function()
+      local mode = vim.api.nvim_get_mode().mode
+      if mode == 'v' then
+        vim.cmd([['<,'>s/^/* /]])
+      elseif mode == 'n' then
+        vim.cmd([[s/^/* /]])
+      end
+    end, { silent = true, noremap = true, buffer = true })
+
+    -- Make the current line a bullet point
+    vim.keymap.set({ 'n' }, ',tt', function()
+      vim.cmd([[s/^/* /]])
+    end, { silent = true, noremap = true, buffer = true })
   end,
   group = md_aug_id,
-  desc = 'Add a keybinding (,td) to add a bullet point and TODO checkbox.',
+  desc = 'Add keybindings ( ,tt ,td ,lb ) to add bullet points, todo boxes, and linebreaks.',
 })
-
--- case toggling in insert mode
-vim.keymap.set({ 'i', 'n' }, '<C-c>', function()
-  local cword = vim.fn.expand('<cword>')
-  local lcase = cword:match('%l')
-  local ucase = cword:match('%u')
-  if lcase and not ucase then
-    vim.cmd('execute "normal! viwU"')
-  elseif not lcase and ucase then
-    vim.cmd('execute "normal! viwu"')
-  elseif lcase and ucase then
-    vim.cmd('execute "normal! viwU"')
-  else
-    return
-  end
-end)
-
--- Toggle :Lexplore 
-vim.keymap.set('n', '<leader>ns', '<Plug>NetrwShrink', { noremap = true, silent = true })
-
-
