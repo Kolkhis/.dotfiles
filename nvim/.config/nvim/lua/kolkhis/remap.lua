@@ -88,7 +88,6 @@ local fns = require('kolkhis.functions')
 vim.keymap.set({ 'i', 'n' }, '<C-c>', fns.lower_upper_toggle, { noremap = true, silent = true })
 vim.keymap.set({ 'i', 'n' }, '<C-x>', fns.camel_snake_toggle, { noremap = true, silent = true })
 
-
 --[[ Markdown-Specific Keymaps ]]
 local md_aug_id = vim.api.nvim_create_augroup('MarkdownAug', { clear = false })
 vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
@@ -115,11 +114,8 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
     -- 'listify' the selection
     vim.keymap.set({ 'v', 'n' }, ',ls', function()
       local mode = vim.api.nvim_get_mode().mode
-      if mode == 'v' then
+        vim.cmd([[norm! :'<,'>s/^/* /<CR>]])
         vim.cmd([['<,'>s/^/* /]])
-      elseif mode == 'n' then
-        vim.cmd([[s/^/* /]])
-      end
     end, { silent = true, noremap = true, buffer = true })
 
     -- Make the current line a bullet point
