@@ -167,21 +167,15 @@ esac
 # Prevent default "(venv)" text
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
-
-# different prompt for git bash
-case $(hostname) in
-    ("D01")
-        if echo "$ORIGINAL_PATH" | grep mingw; then
-            source /etc/profile.d/git-prompt.sh;
-        fi
-        ;;
-    (*)
-        if echo "$ORIGINAL_PATH" | grep 'cyg'; then
-            SEP_COLOR="\[\e[38;5;95m\]";
-        else
-            SEP_COLOR="\[\e[38;5;88m\]";
-        fi
-        PS1=\
+set_prompt() {
+    if echo "$ORIGINAL_PATH" | grep 'cyg'; then
+        SEP_COLOR="\[\e[38;5;95m\]";
+        NAME_COLOR="\[\e[38;5;61m\]";
+        PATH_COLOR="\[\e[38;5;24m\]";
+    else
+        SEP_COLOR="\[\e[38;5;88m\]";
+    fi
+    PS1=\
 "${SEP_COLOR}${FIRST_SEP} \
 ${NAME_COLOR}\
 \u${GREY}@\
@@ -193,7 +187,20 @@ ${RED_256}\
 \$(get_git_branch)\
 \n${SEP_COLOR}${SECOND_SEP} \
 ${VENV_COLOR}\$(check_venv)\
-${GREY}\\$ ${RESET}";
+${GREY}\\$ ${RESET}"
+}
+
+# different prompt for git bash
+case $(hostname) in
+    ("D01")
+        if echo "$ORIGINAL_PATH" | grep mingw; then
+            source /etc/profile.d/git-prompt.sh;
+        else
+            set_prompt;
+        fi
+        ;;
+    (*)
+        set_prompt;
         ;;
 esac
 
