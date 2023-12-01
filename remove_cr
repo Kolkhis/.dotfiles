@@ -1,0 +1,7 @@
+#!/bin/bash
+
+tr '\r' ' ' > ~/.bashrc < ~/.dotfiles/bash/.bashrc 
+tr '\r' ' ' > ~/.bash_aliases < ~/.dotfiles/bash/.bash_aliases 
+tr '\r' ' ' > ~/.bash_functions < ~/.dotfiles/bash/.bash_functions 
+tr '\r' ' ' > ~/.dircolors < ~/.dotfiles/bash/.dircolors 
+
