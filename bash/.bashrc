@@ -168,7 +168,7 @@ esac
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 set_prompt() {
-    if echo "$ORIGINAL_PATH" | grep 'cyg'; then
+    if echo "$ORIGINAL_PATH" | grep 'cyg' 2>&1 > /dev/null; then
         SEP_COLOR="\[\e[38;5;95m\]";
         NAME_COLOR="\[\e[38;5;61m\]";
         PATH_COLOR="\[\e[38;5;24m\]";
