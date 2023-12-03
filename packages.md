@@ -32,6 +32,7 @@ sudo apt-mark showmanual
 * network-manager (nmcli)
 * nmap
 * sysstat - system tools
+* whois - also contains mkpasswd
 
 ## Programming
 * jq (jquery - install )
@@ -105,6 +106,7 @@ libtool-bin \
 libpython3-dev \
 net-tools \
 network-manager \
+whois
 
 sudo npm install -g pyright
 ```
@@ -271,6 +273,7 @@ libtool-bin \
 libpython3-dev \
 net-tools \
 network-manager \
+whois
 
 install_nvm
 install_libssl1.1
