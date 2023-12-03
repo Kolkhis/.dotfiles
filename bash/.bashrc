@@ -77,8 +77,8 @@ esac
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
+    alias dir='dir --color=auto'
+    alias vdir='vdir --color=auto'
 
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
@@ -124,9 +124,10 @@ fi
 
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completio
-# cargo env
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" 
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" 
+
+# crabz
 [ -s "$HOME/.cargo/env" ] && \. "$HOME/.cargo/env"
 
 
@@ -163,12 +164,13 @@ case $USER in
         VENV_COLOR=${YELLOW}
 	;;
 esac
-
 # Prevent default "(venv)" text
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
+SCOLOR="\[\e[38;5;61m\]"
+
 set_prompt() {
-    if echo "$ORIGINAL_PATH" | grep 'cyg' 2>&1 > /dev/null; then
+    if echo "$ORIGINAL_PATH" | grep 'cyg' > /dev/null 2>&1; then
         SEP_COLOR="\[\e[38;5;95m\]";
         NAME_COLOR="\[\e[38;5;61m\]";
         PATH_COLOR="\[\e[38;5;24m\]";
@@ -182,7 +184,7 @@ ${NAME_COLOR}\
 ${HOST_COLOR}\
 \h${GREY}:\
 ${PATH_COLOR}\
-\w\
+\W\
 ${RED_256}\
 \$(get_git_branch)\
 \n${SEP_COLOR}${SECOND_SEP} \
