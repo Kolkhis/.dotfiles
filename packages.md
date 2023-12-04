@@ -136,6 +136,13 @@ sudo apt-get update
 sudo apt-get install neovim -y
 ```
 
+* vault
+```bash
+wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update && sudo apt install vault
+```
+
 
 ### Tools to check out
 * parallel (GNU Parallel) - Shell tool for executing jobs in parallel using one or more machines.
@@ -146,6 +153,7 @@ sudo apt-get install neovim -y
 * traefik - HTTP reverse proxy and load balancer that makes deploying microservices easy.  
 * vault - Product data management (PDM) tool. Integrates with CAD systems. Autodesk product.  
 * Ncat - What's the difference between `netcat` and `Ncat`?  
+* sleuthkit - File and filesystem analysis/forensics toolkit.
 
 
 ### Static site generator (available on pip):
