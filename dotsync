@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# TODO: Move away from relying on stow
+# ln -s -t ~ <dotfile>
 
 declare -a DIRS
 

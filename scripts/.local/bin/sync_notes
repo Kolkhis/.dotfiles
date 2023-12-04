@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# TODO: Finish this
+# Add headers (1s and 2s) sequentially underneath the filename.
+# Add empty lines between files and their headers
+# Add command line tool that auto-greps the specified term/phrase
+
+# In bashrc, add autocmd keybind for `contents.md` gf: `?/notes/<CR>gf`
+# au! BufEnter contents.md nnoremap gf ?/notes/<CR>gf 
+# ^ Try that?
+
+existing=0
+if [[ -z "$NOTES_HOME" ]]; then
+    echo "NOTES_HOME=\"${HOME}/notes\"" >> ~/.bash_aliases
+fi
+
+while read -r f; do
+    existing+=1
+    printf "File found: %s\n" "$f"
+    continue
+    # if grep -q "$f" "${NOTES_HOME}/contents.md"; then
+    # fi
+done < <(find ~/notes -name '*.md')
+        
+
