@@ -2,7 +2,20 @@
 
 
 getcolor() {
-    printf "\e[38;5;%smThis is the 255-color repr of $1\n" "$1" 
+    if [[ -z "$1" || "$1" -gt 255 || "$1" -lt 0 ]]; then
+        printf "You need to provide a number 0-255\n"
+        return
+    fi
+    black_text=$'\e[38;5;232m'
+    white_text=$'\e[38;5;255m'
+    black_bg=$'\e[48;5;232m'
+    white_bg=$'\e[48;5;255m'
+    r=$'\e[0m'
+    printf "\e[38;5;%smThis is the foreground 255-color repr of $1%s\n" "$1" "$r"
+    printf "%s\e[38;5;%smThis is the foreground 255-color repr of $1%s\n" "$black_bg" "$1" "$r"
+    printf "%s\e[38;5;%smThis is the foreground 255-color repr of $1%s\n" "$white_bg" "$1" "$r"
+    printf "%s\e[48;5;%smThis is the background 255-color repr of $1%s\n" "$black_text" "$1" "$r"
+    printf "%s\e[48;5;%smThis is the background 255-color repr of $1%s\n" "$white_text" "$1" "$r"
 }
 
 
