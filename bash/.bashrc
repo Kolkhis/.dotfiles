@@ -213,4 +213,9 @@ export PS2="${GREY}~>${RESET} "
 # 2:03:58
 eval "$(dircolors -b ~/.dircolors)"
 
+# * 38;5;0 to 38;5;255 for 88-color and 256-color modes foreground colors.  
+# * 48;5;0 to 48;5;255 for 88-color and 256-color modes background colors.  
+export GREP_COLORS=':ms=01;31:mc=01;31:sl=38;5;248:cx=38;5;244:fn=38;5;68:ln=38;5;81:bn=32:se=36' 
+
+
 
