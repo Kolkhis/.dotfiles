@@ -1,9 +1,20 @@
-local check_venv = function ()
-    if vim.env['VIRTUAL_ENV'] then
-        return ("%s - (venv)"):format(vim.fs.basename(vim.env.PWD))
+local os = require('kolkhis.detect_os')
+local check_venv = function()
+  if vim.env['VIRTUAL_ENV'] then
+    if os.is_linux then
+      local d = vim.fn.system([[pwd | sed 's;${HOME};~;' | sed -E 's;.*/(.*/.*/.*$);\1;' 2>/dev/null ]])
+      return ('%s - (venv)'):format(d):gsub('\n', '')
     else
-        return ("%s"):format(vim.fs.basename(vim.env.PWD))
+      return ('%s - (venv)'):format(vim.fs.basename(vim.env.PWD))
     end
+  else
+    if os.is_linux then
+      local d = vim.fn.system([[pwd | sed 's;${HOME};~;' | sed -E 's;.*/(.*/.*/.*$);\1;' 2>/dev/null ]])
+      return ('%s'):format(d):gsub('\n', '')
+    else
+      return ('%s'):format(vim.fs.basename(vim.env.PWD))
+    end
+  end
 end
 
 require('lualine').setup({
@@ -28,7 +39,7 @@ require('lualine').setup({
   sections = {
     lualine_a = { 'mode' },
     lualine_b = { 'branch', 'diff', 'diagnostics' },
-    lualine_c = { check_venv,  'filename', },
+    lualine_c = { check_venv, 'filename' },
     lualine_x = { 'encoding', 'fileformat', 'filetype' },
     lualine_y = { 'progress' },
     lualine_z = { 'location' },
@@ -44,5 +55,4 @@ require('lualine').setup({
   tabline = {},
   winbar = {},
   inactive_winbar = {},
-  extensions = {},
 })
