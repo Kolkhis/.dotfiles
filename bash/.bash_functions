@@ -69,4 +69,8 @@ mc() {
 }
 
 
+pwd_shortened() {
+    # pwd | sed -E 's/.*\/(.*\/.*$)/\1/' 2>/dev/null
+    pwd | sed -E "s;^$HOME;~;" 2>/dev/null | sed -E 's;.*/(.*/.*$);\1;' 2>/dev/null
+}
 

@@ -184,14 +184,16 @@ ${NAME_COLOR}\
 ${HOST_COLOR}\
 \h${GREY}:\
 ${PATH_COLOR}\
-\W\
+\$(pwd_shortened)\
 ${RED_256}\
 \$(get_git_branch)\
 \n${SEP_COLOR}${SECOND_SEP} \
 ${VENV_COLOR}\$(check_venv)\
 ${GREY}\\$ ${RESET}"
 }
+# \W\
 
+# pwd_shortened:  sed -E 's/.*\/(.*\/.*$)/\1/' 2>/dev/null
 # different prompt for git bash
 case $(hostname) in
     ("D01")
