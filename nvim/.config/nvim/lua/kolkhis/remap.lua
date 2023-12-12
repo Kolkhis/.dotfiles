@@ -93,35 +93,43 @@ local md_aug_id = vim.api.nvim_create_augroup('MarkdownAug', { clear = false })
 vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
   pattern = { '*.md' },
   callback = function()
-    -- Add a Markdown bullet point and checkbox "[ ]"
+    -- Add a Markdown bullet point and checkbox "* [ ]"
     vim.keymap.set({ 'n', 'i' }, ',td', function()
-      vim.api.nvim_put({ '* [ ]' }, 'c', true, true)
+      vim.cmd.norm('I* [ ] ')
     end, { silent = true, noremap = true, buffer = true })
 
     -- Put in two spaces at the end of lines (that don't end in 2 spaces, comma, or codeblock)
-    vim.keymap.set({ 'n', 'v', 'c' }, ',lb', function()
+    vim.keymap.set({ 'n', 'v' }, ',lb', function()
       local mode = vim.api.nvim_get_mode().mode
       if mode == 'n' then
         vim.cmd([[%s/\([^,\| \{2}\|`\{3}]$\)/\1  /]])
-      elseif mode == 'v' then
-        vim.cmd([['<,'>s/\([^,\| \{2}\|`\{3}]$\)/\1  /]])
       else
-        return [[%s/\([^,\| \{2}\|`\{3}]$\)/\1  /]]
-        -- vim.api.nvim_put({ [[%s/\([^,\| \{2}\|`\{3}]$\)/\1  /]] }, 'c', true, true)
+        vim.cmd([['<,'>s/\([^,\| \{2}\|`\{3}]$\)/\1  /]])
       end
     end, { silent = true, noremap = true, buffer = true })
 
     -- 'listify' the selection
     vim.keymap.set({ 'v', 'n' }, ',ls', function()
       local mode = vim.api.nvim_get_mode().mode
-        vim.cmd([[norm! :'<,'>s/^/* /<CR>]])
+      if mode == 'n' then
+        vim.cmd.norm('I* ')
+      else
+        vim.cmd.norm('I')
         vim.cmd([['<,'>s/^/* /]])
+      end
     end, { silent = true, noremap = true, buffer = true })
 
-    -- Make the current line a bullet point
-    vim.keymap.set({ 'n' }, ',tt', function()
-      vim.cmd([[s/^/* /]])
+    -- 'numbered-listify' the selection
+    vim.keymap.set({ 'v', 'n' }, ',lc', function()
+      local mode = vim.api.nvim_get_mode().mode
+      if mode == 'n' then
+        vim.cmd.norm('I1. ')
+      else
+        vim.cmd.norm('I')
+        vim.cmd([['<,'>s/^/1. /]])
+      end
     end, { silent = true, noremap = true, buffer = true })
+
   end,
   group = md_aug_id,
   desc = 'Add keybindings ( ,tt ,td ,lb ) to add bullet points, todo boxes, and linebreaks.',
