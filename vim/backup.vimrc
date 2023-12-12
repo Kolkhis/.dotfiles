@@ -1,3 +1,4 @@
+
 set nocp            " nocompatible
 filetype plugin on  " enable netrw (technically a plugin)
 syntax on           " syntax highlighting
@@ -23,6 +24,11 @@ else
 endif
 
 
+set viminfo='20,<1000,s1000         " Don't truncate yanks/deletes
+set cot=menuone,noselect,popup      " completeopt - autocompletion/omnicompletion settings
+set t_vb=       " visual bell output code
+set t_Co=256    " number of colors
+
 set path+=**
 command! MakeTags !ctags -R .
  
@@ -37,6 +43,12 @@ let g:netrw_usetab=1            " Tab mapping for shrinking/expanding Lexplore
 let g:netrw_bufsettings="noma nomod nowrap ro nobl nu rnu"
 let g:netrw_winsize=30          " 
 " let g:netrw_browse_split=4    " Select window 1 for the 'C' mapping (if set to '1C')
+
+
+" Format Options:
+" :h formatoptions
+set fo+=croqnlmM1j
+set fo-=twa2vbB]p
 
 
 " Remaps:
@@ -112,9 +124,35 @@ nnoremap <silent> <leader>yf <Cmd>%y" <CR>
 inoremap <C-c> <Esc>:call kolkhis#ToggleCase()<CR>
 nnoremap <C-c> <Esc>:call kolkhis#ToggleCase()<CR>
 
-" Switch between buffers
-nnoremap <leader>bn :bn<CR>
-nnoremap <leader>bp :bp<CR>
+
+" set number relativenumber 
+" termguicolors
+" set incsearch nohlsearch wrapscan 
+" ruler showmode linebreak showcmd hidden 
+" novisualbell noerrorbells " off by default
+" ignorecase smartcase
+" wildmenu 
+ 
+" ttyfast " on by default
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 " Options:
@@ -150,16 +188,13 @@ set fdm=marker      " foldmethod
 set ls=2            " laststatus=2 - enable statusline
 set icon
 
-set viminfo='20,<1000,s1000         " Don't truncate yanks/deletes
-set cot=menuone,noselect,popup      " completeopt - autocompletion/omnicompletion settings
-set t_vb=       " visual bell output code
-set t_Co=256    " number of colors
-
-" Format Options:
-" :h formatoptions
-set fo+=croqnlmM1j
-set fo-=twa2vbB]p
-
+" Indentation:
+set sw=4            " shiftwidth=4
+set ts=4            " tabstop=4
+set sts=4           " softtabstop=4
+set et              " expandtab
+set ai              " autoindent
+set sta             " smarttab - <Tab> inserts spaces
 
 " Splitting:
 " set sb              " Split below instead of above
@@ -167,12 +202,12 @@ set fo-=twa2vbB]p
 
 
 " Add '' to-do checkboxes in markdown files
-aug MarkdownAug
-  au!
-  au BufEnter,BufWinEnter *.md :
+augroup MarkdownAug
+  autocmd!
+  autocmd BufEnter,BufWinEnter *.md :
     nnoremap <buffer> ,td :call kolkhis#AddMarkdownCheckbox()<CR>$
     inoremap <buffer> ,td <Esc>:call kolkhis#AddMarkdownCheckbox()<CR>A
-aug END
+augroup END
 
 " Highlight on yank:
 if v:version >= 801
@@ -192,17 +227,6 @@ aug END
 if !exists(":Diff")
   command Diff lefta new | set bt=nofile | r ++edit # | 0d_ | diffthis
 		  \ | wincmd p | diffthis
-endif
-
-if !exists(":Q") || !exists(":W") ||
-      \ !exists(":Wq") || !exists(":Qw") ||
-      \ !exists(":WQ") || !exists(":QW")
-  command Qw wq
-  command QW wq
-  command Wq wq
-  command WQ wq
-  command Q q
-  command W w
 endif
 
 " Plugins:
@@ -242,3 +266,36 @@ endif
 call kolkhis#SetColors()
 colorscheme onedark
 execute 'DM'
+" Options:
+set nu              " number
+set rnu             " relativenumber
+set tgc             " termguicolors
+set ws              " wrapscan - Searches wrap around the file
+set is              " incsearch
+set nohls           " nohlsearch
+set noeb            " noerrorbells
+set novb            " novisualbell
+set ru              " ruler
+set smd             " showmode
+set lbr             " linebreak - only visually break lines
+set tf              " ttyfast
+set sc              " showcmd - show typed chars in the bottom right 
+set hid             " hidden - don't unload a buffer when it's 'abandoned'
+set ic              " ignorecase
+set scs             " smartcase
+set wmnu            " wildmenu - show matching files on tab complete
+set tm=274          " timeoutlen=500 - This is annoying
+set ttm=5           " ttimeoutlen=-1 
+set scl=number      " signcolumn
+set ut=400          " updatetime
+set spc=            " spellcapcheck
+set hi=200          " history - Command History
+set bo=all          " belloff=all
+set ww+=,~          " whichwrap+=,~  - Which movement keys can go to next line 
+set so=5            " scrolloff=5
+set siso=5          " sidescrolloff=5
+set enc=utf-8       " encoding=utf-8
+set fdm=marker      " foldmethod
+set ls=2            " laststatus=2 - enable statusline
+set icon
+

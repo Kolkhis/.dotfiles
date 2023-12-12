@@ -1,4 +1,10 @@
 
+fu! kolkhis#NetrwStartup()
+  if expand('%') ==# ''
+    exe 'e .'
+  endif
+endf
+
 
 fu! kolkhis#YankHighlight()
     if v:event['operator'] == 'y'
@@ -285,6 +291,7 @@ fu! kolkhis#DarkMode()
   exe 'hi SignColumn guifg=' . 'White' . ' guibg=' . s:dark_ocean_bg
   exe 'hi String guifg=' . s:strings
   exe 'hi Comment guifg=' . s:comments
+  hi TODO guifg=#19A7CE guibg=#27005D
   " Vimscript
   hi link vimIsCommand vimVar
   " netrw
