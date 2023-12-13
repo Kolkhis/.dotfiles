@@ -75,7 +75,9 @@ esac
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    if [ -r ~/.dircolors ]; then
+        eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    fi
     alias ls='ls --color=auto'
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
@@ -122,14 +124,22 @@ if ! shopt -oq posix; then
     fi
 fi
 
+################################## Env ################################## 
 
+# Node Version Manager 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" 
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" 
 
-# crabz
+# Crablang (Rust)
 [ -s "$HOME/.cargo/env" ] && \. "$HOME/.cargo/env"
 
+# Set XDG_CONFIG_HOME if it's unset
+[ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="${HOME}/.config"
+
+################################## PS1 ################################## 
+# Python: Prevent default "(venv)" text
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 YELLOW='\[\e[38;5;214m\]'
 BURNT_ORANGE='\[\e[38;5;130m\]'
@@ -143,12 +153,14 @@ SOFT_PINK="\[\e[38;5;212m\]"
 # LIGHT_BLUE="\[\e[38;5;81m\]"
 # SOFT_BLUE="\[\e[38;5;111m\]"
 # BEIGE='\[\e[38;5;180m\]'
+# SOFT_PURPLE="\[\e[38;5;61m\]"
 
 DARK_RED="\[\e[38;5;88m\]"
 SEP_COLOR=${DARK_RED}
 FIRST_SEP="┎"   # ┎┏┍ ┏ ┒ ┒┎ ┏ ┍
 SECOND_SEP="┖"  # ┖┗┕ ┖ ┚ ┨┠ ┣ ┝ ┫┠
                 #         ┚┖ ┗ ┕
+
 
 case $USER in
     (root)
@@ -164,10 +176,7 @@ case $USER in
         VENV_COLOR=${YELLOW}
 	;;
 esac
-# Prevent default "(venv)" text
-export VIRTUAL_ENV_DISABLE_PROMPT=1
 
-SCOLOR="\[\e[38;5;61m\]"
 
 set_prompt() {
     if echo "$ORIGINAL_PATH" | grep 'cyg' > /dev/null 2>&1; then
@@ -218,6 +227,7 @@ eval "$(dircolors -b ~/.dircolors)"
 # * 38;5;0 to 38;5;255 for 88-color and 256-color modes foreground colors.  
 # * 48;5;0 to 48;5;255 for 88-color and 256-color modes background colors.  
 export GREP_COLORS=':ms=01;31:mc=01;31:sl=38;5;248:cx=38;5;244:fn=38;5;68:ln=38;5;81:bn=32:se=36' 
+
 
 
 
