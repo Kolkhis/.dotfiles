@@ -24,6 +24,8 @@ alias l='ll'
 alias cal="ncal -b"
 alias tree="tree -a"
 alias ip="ip -color"
+# Make tmux use XDG_CONFIG_HOME
+alias tmux='tmux -f "${XDG_CONFIG_HOME}/tmux/.tmux.conf"'
 
 # Navigation
 alias dots="cd ~/.dotfiles/"
