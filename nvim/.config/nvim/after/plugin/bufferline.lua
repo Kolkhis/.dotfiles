@@ -28,3 +28,4 @@ bufferline.setup({
     show_tab_indicators = true,
   },
 })
+vim.o.showtabline = 1

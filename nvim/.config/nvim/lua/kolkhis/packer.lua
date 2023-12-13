@@ -59,25 +59,26 @@ return require('packer').startup(function(use)
     'williamboman/mason.nvim',
     run = function()
       local language_servers = {
+        'awk-language-server',
         'bash-language-server',
+        'black',
+        'clang-format',
+        'clangd',
+        'css-lsp',
+        'djlint',
+        'gopls',
+        'html-lsp',
+        'jq',
+        'lua-language-server',
+        'marksman',
+        'prettierd',
+        'pyright',
         'shellcheck',
         'shfmt',
-        'lua-language-server',
         'stylua',
-        'vim-language-server',
-        'gopls',
-        'clangd',
-        'clang-format',
-        'pyright',
-        'black',
-        'djlint',
-        'html-lsp',
-        'typescript-language-server',
         'tailwindcss-language-server',
-        'css-lsp',
-        'prettierd',
-        'awk-language-server',
-        'jq',
+        'typescript-language-server',
+        'vim-language-server',
       }
       local server_str = ''
       -- Check if servers are already installed
@@ -140,7 +141,6 @@ return require('packer').startup(function(use)
   -- use('HiPhish/nvim-tx-rainbow2')
 
   --[[  End of LSP stuff  ]]
-  --
 
   use({ 'nvim-lualine/lualine.nvim', requires = { 'nvim-tree/nvim-web-devicons', opt = true } }) -- LuaLine: sexy status line
 

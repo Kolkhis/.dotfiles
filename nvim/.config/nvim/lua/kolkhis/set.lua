@@ -2,32 +2,31 @@ vim.cmd('colo material-deep-ocean')
 
 vim.api.nvim_set_hl(0, 'Cursor', { fg = 'White', bg = 'Red' })
 
-
 -- Netrw Options
 vim.g.netrw_banner = 0
 vim.g.netrw_alto = 0
 vim.g.netrw_altv = 0
 vim.g.netrw_preview = 1 -- open previews in vsplit
-vim.g.netrw_liststyle = 0  -- 3 for tree view
-vim.g.netrw_bufsettings = "noma nomod nu nowrap ro nobl"
+vim.g.netrw_liststyle = 0 -- 3 for tree view
+vim.g.netrw_bufsettings = 'noma nomod nu nowrap ro nobl'
 vim.g.netrw_hide = 0
 vim.g.netrw_usetab = 1
 vim.g.netrw_winsize = 20
-vim.g.netrw_browse_split = 0  -- default = 0
+vim.g.netrw_browse_split = 0 -- default = 0
 
 -- Fix dumb python indenting
 vim.g.python_indent = {
-    open_paren = 4,
-    nested_paren = 4,
-    continue = 4,
-    closed_paren_align_last_line = false
+  open_paren = 4,
+  nested_paren = 4,
+  continue = 4,
+  closed_paren_align_last_line = false,
 }
 
 -- Modify path for better find/completion (requires globstar??)
 vim.opt.path:append({ '**' })
 
 -- Cursorline highlighting
-vim.opt.cursorlineopt = { "number" }
+vim.opt.cursorlineopt = { 'number' }
 vim.o.cursorline = true
 
 -- Set how autocompletion behaves
@@ -63,26 +62,29 @@ vim.o.smartcase = true
 -- Keep signcolumn on by default
 vim.wo.signcolumn = 'yes'
 
+-- Only show tab line if there's more than 1 tab
+vim.o.showtabline = 1
+
+vim.o.splitkeep = 'screen'
+
 -- Timeout for hotkeys
 vim.o.timeout = true
+vim.o.ttimeout = true
 vim.o.timeoutlen = 350
+vim.o.ttimeoutlen = 50
 
--- Enable 24-bit RGB
-vim.o.termguicolors = true
+vim.o.termguicolors = true -- Enable 24-bit RGB
 
 -- Indentation
-vim.o.smarttab = true -- Smart tabbing
+vim.o.smarttab = true     -- Smart tabbing
 vim.o.smartindent = false -- Smart indenting (for C-like programs?)
--- vim.o.tabstop = 4
-
 vim.o.softtabstop = 4
-vim.o.shiftwidth = 4 -- Set Tab to 4 spaces.
+vim.o.shiftwidth = 4      -- Set Tab to 4 spaces.
 vim.o.expandtab = true
 
 vim.o.showbreak = '> ' -- Show a > when lines wrap
-vim.o.autoread = true -- Automatically reload file when it was changed elsewhere.
-vim.o.textwidth = 100 -- cuz PEP8 lol
--- vim.o.wrapmargin = -1000 -- Attempt to make python format correctly with `gq`
+vim.o.autoread = true  -- Automatically reload file when it was changed elsewhere.
+vim.o.textwidth = 100
 
 -- Autosaving
 vim.o.updatecount = 50
@@ -96,7 +98,6 @@ vim.o.matchtime = 1
 vim.o.visualbell = false
 vim.o.errorbells = false
 
-
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 vim.cmd('au! TextYankPost * silent! lua vim.highlight.on_yank()') -- vimscript+lua implementation
@@ -109,18 +110,16 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
--- Start vim in netrw in the current directory 
+-- Start vim in netrw in the current directory
 local vimstart_group = vim.api.nvim_create_augroup('VimStartup', { clear = true })
 vim.api.nvim_create_autocmd('VimEnter', {
-    pattern = '*',
-    group = vimstart_group,
-    callback = function ()
-        if vim.fn.expand('%') == '' then
-            -- vim.cmd.Lex()
-            vim.cmd.e('.')
-        end
-    end,
-    desc = "Open the current directory in netrw if no file or directory is given when running vim.",
+  pattern = '*',
+  group = vimstart_group,
+  callback = function()
+    if vim.fn.expand('%') == '' then
+      -- vim.cmd.Lex()
+      vim.cmd.e('.')
+    end
+  end,
+  desc = 'Open the current directory in netrw if no file or directory is given when running vim.',
 })
-
-
