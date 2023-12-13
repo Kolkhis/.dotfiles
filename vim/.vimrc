@@ -4,26 +4,21 @@ syntax on           " syntax highlighting
 
 " TODO: Set directories to appropriate OS path: if has('linux') / if has('win32')
 " $HOME/vimfiles/undodir
-if isdirectory(expand("~/.vim/undodir/"))
-    set undodir=~/.vim/undodir
-    set undofile
-else
+if !isdirectory(expand("~/.vim/undodir/"))
     echo("No undo directory! Creating it...")
     silent !mkdir -p ~/.vim/undodir
-    set undodir=~/.vim/undodir
-    set undofile
 endif
+set undodir=~/.vim/undodir
+set undofile
+set undolevels=1500
 
-if isdirectory(expand("~/.vim/vimswap/"))
-    set dir=~/.vim/vimswap//
-else
+if !isdirectory(expand("~/.vim/vimswap/"))
     echo("There is no swap directory! Creating it...")
     silent !mkdir -p ~/.vim/vimswap
-    set dir=~/.vim/vimswap//
 endif
+set dir=~/.vim/vimswap//
 
 
-set path+=**
 command! MakeTags !ctags -R .
  
 " put that banner away, netrw. no one wants to see that.
@@ -148,8 +143,10 @@ set siso=5          " sidescrolloff=5
 set enc=utf-8       " encoding=utf-8
 set fdm=marker      " foldmethod
 set ls=2            " laststatus=2 - enable statusline
+set stal=1          " showtabline - 1 = Only when multiple tabs
 set icon
 
+set path+=**
 set viminfo='20,<1000,s1000         " Don't truncate yanks/deletes
 set cot=menuone,noselect,popup      " completeopt - autocompletion/omnicompletion settings
 set t_vb=       " visual bell output code
