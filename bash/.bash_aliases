@@ -38,6 +38,14 @@ alias s="cd ~/.dotfiles/scripts/.local/bin/"
 alias n="cd ~/notes/"
 alias ta="cd ~/Repos/github.com/kolkhis/taggart"
 alias tw="cd ~/Repos/github.com/kolkhis/twitch_chat_bot/"
+case $(hostname) in
+    ("D01")
+        alias nv="cd ~/AppData/Local/nvim";
+        ;;
+    (*)
+        alias nv="cd ~/.dotfiles/nvim/.config/nvim/";
+        ;;
+esac
 
 # Git aliases
 alias gits="git status"
