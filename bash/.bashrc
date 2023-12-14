@@ -206,7 +206,7 @@ ${GREY}\\$ ${RESET}"
 # different prompt for git bash
 case $(hostname) in
     ("D01")
-        if echo "$ORIGINAL_PATH" | grep mingw; then
+        if echo "$ORIGINAL_PATH" | grep mingw > /dev/null 2>&1; then
             source /etc/profile.d/git-prompt.sh;
         else
             set_prompt;
