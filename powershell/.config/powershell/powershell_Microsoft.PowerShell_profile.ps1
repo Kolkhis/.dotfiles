@@ -1,3 +1,4 @@
+
 if (!(Get-Module -Name PSReadline))
 {
     Install-Module PSReadline
@@ -23,46 +24,43 @@ Set-PSReadLineKeyHandler -Chord Ctrl+f ViSearchHistoryBackward
 Set-PSReadLineKeyHandler -Chord Ctrl+l ViNextWord
 Set-PSReadLineKeyHandler -Chord Ctrl+h ViBackwardWord
 Set-Alias -Name vim -Value nvim
+Set-Alias -Name vi  -Value nvim
 Set-PSReadLineOption -EditMode Vi
 if ($PSEdition -eq "Desktop") # Windows PowerShell(powershell.exe)
 {
+
     Set-PSReadLineKeyHandler -Chord Ctrl+[ -Function ViCommandMode
 
-    $Global:Black = "Black"
-    $Global:DarkBlue = "DarkBlue"
-    $Global:DarkGreen = "DarkGreen"
-    $Global:DarkCyan = "DarkCyan"
-    $Global:DarkRed = "DarkRed"
-    $Global:DarkMagenta = "DarkMagenta"
-    $Global:DarkYellow = "DarkYellow"
-    $Global:Gray = "Gray"
-    $Global:DarkGray = "DarkGray"
-    $Global:Blue = "Blue"
-    $Global:Green = "Green"
-    $Global:Cyan = "Cyan"
-    $Global:Red = "Red"
-    $Global:Magenta = "Magenta"
-    $Global:Yellow = "Yellow"
-    $Global:White = "White"
+    $BURNT_ORANGE="$([char]0x1b)[38;5;130m"
+    $DARK_YELLOW="$([char]0x1b)[38;5;58m"
+    $GREY="$([char]0x1b)[38;5;241m"
+    $MUTED_BLUEGREEN="$([char]0x1b)[38;5;30m"
+    $RED_256="$([char]0x1b)[38;5;160m"
+    $RESET="$([char]0x1b)[0m"
 
-    $Global:NameColor = "${Global:DarkRed}"
-    $Global:HostColor = "${Global:DarkMagenta}"
-    $Global:PathColor = "${Global:DarkCyan}"
-    $Global:GitBranchColor = "${DarkRed}"
-    $Global:SepColor = "${Global:DarkRed}"
-    $Global:VenvColor = "${Yellow}"
+    $DARK_RED="$([char]0x1b)[38;5;88m"
+    $SEP_COLOR=${DARK_RED}
+    
+    $NAME_COLOR=${DARK_YELLOW};
+    $HOST_COLOR=${BURNT_ORANGE};
+    $PATH_COLOR=${MUTED_BLUEGREEN};
+    # $YELLOW="$([char]0x1b)[38;5;214m"
+    # $VENV_COLOR=${YELLOW}
 
-    # Return a blank prompt to let Write-Host handle everything
     function prompt
     {
-        Write-Host "$env:USERNAME" -NoNewline  -ForegroundColor $Global:NameColor
-        Write-Host "@" -NoNewline  -ForegroundColor $Global:DarkGray
-        Write-Host "$(hostname)" -NoNewline  -ForegroundColor $Global:HostColor
-        Write-Host ":" -NoNewline  -ForegroundColor $Global:DarkGray
-        Write-Host "${PWD} " -NoNewline -ForegroundColor $Global:PathColor
-        Write-Host "$(Get-GitBranch)" -NoNewline -ForegroundColor $Global:GitBranchColor
-        Write-Host "$" -NoNewline -ForegroundColor $Global:DarkGray
-        return " "
+        # Return a blank prompt to let Write-Host handle everything
+        Write-Host "${SEP_COLOR}${FIRST_SEP} " -NoNewline 
+        Write-Host "${NAME_COLOR}$env:USERNAME" -NoNewline 
+        Write-Host "${GREY}@" -NoNewline 
+        Write-Host "${HOST_COLOR}$(hostname)" -NoNewline 
+        Write-Host "${GREY}:" -NoNewline 
+        Write-Host "${PATH_COLOR}${PWD} " -NoNewline
+        Write-Host "${RED_256}$(Get-GitBranch)" -NoNewline
+        # Write-Host "${SEP_COLOR}${SECOND_SEP} " -NoNewline 
+        Write-Host "${GREY}$" -NoNewline
+        return " ${RESET}"
+
     }
 
     # Logging

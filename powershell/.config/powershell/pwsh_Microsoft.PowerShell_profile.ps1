@@ -17,6 +17,7 @@ function Get-GitBranch
 # Set-PSReadLineKeyHandler -Chord Ctrl+n HistorySearchForward
 # Set-PSReadLineKeyHandler -Chord Ctrl+p HistorySearchBackward
 Set-Alias -Name vim -Value nvim
+Set-Alias -Name vi -Value nvim
 Set-PSReadLineOption -EditMode Vi
 Set-PSReadLineKeyHandler -Chord Ctrl+n ViTabCompleteNext
 Set-PSReadLineKeyHandler -Chord Ctrl+p ViTabCompletePrevious
@@ -25,26 +26,47 @@ Set-PSReadLineKeyHandler -Chord Ctrl+l ViNextWord
 Set-PSReadLineKeyHandler -Chord Ctrl+h ViBackwardWord
 Set-PSReadLineKeyHandler -Chord Ctrl+w BackwardDeleteWord
 
+
+
 if ($PSEdition -eq "Core") # PowerShell(pwsh.exe)
 {
+
+    $BURNT_ORANGE="`e[38;5;130m"
+    $DARK_YELLOW="`e[38;5;58m"
+    $GREY="`e[38;5;241m"
+    $MUTED_BLUEGREEN="`e[38;5;30m"
+    $RED_256="`e[38;5;160m"
+    $DARK_RED="`e[38;5;88m"
+    $RESET="`e[0m"
+    
+    $SEP_COLOR=${DARK_RED}
+    $NAME_COLOR=${DARK_YELLOW};
+    $HOST_COLOR=${BURNT_ORANGE};
+    $PATH_COLOR=${MUTED_BLUEGREEN};
+    # $YELLOW="`e[38;5;214m"
+    # $VENV_COLOR=${YELLOW}
+
+    $FIRST_SEP="┏"   # ┎┏┍ ┏ ┒ ┒┎ ┏ ┍
+    $SECOND_SEP="┗"  # ┖┗┕ ┖ ┚ ┨┠ ┣ ┝ ┫┠
+
     Set-PSReadLineKeyHandler -Chord Ctrl+Oem4 -Function ViCommandMode
 
-    $Global:FirstSep = "┎"
-    $Global:SecondSep = "┖"
+    # TODO: Get a Python (venv) prompt going.
     # Return a blank prompt and let Write-Host handle everything
     function prompt
     {
-        Write-Host "$($Global:PSStyle.Foreground.FromRgb(102, 0, 0))${FirstSep} " -NoNewline 
-        Write-Host "$($Global:PSStyle.Foreground.FromRgb(132, 65, 45))$env:USERNAME" -NoNewline  
-        Write-Host "$($Global:PSStyle.Foreground.FromRgb(64, 64, 64))@" -NoNewline  
-        Write-Host "$($Global:PSStyle.Foreground.FromRgb(128, 106, 0))$(hostname)" -NoNewline  
-        Write-Host "$($Global:PSStyle.Foreground.FromRgb(64, 64, 64)):" -NoNewline 
-        Write-Host "$($Global:PSStyle.Foreground.FromRgb(0,106,128))${PWD} " -NoNewline
-        Write-Host "$($Global:PSStyle.Foreground.FromRgb(204, 0, 0))$(Get-GitBranch)" 
-        Write-Host "$($Global:PSStyle.Foreground.FromRgb(102, 0, 0))${SecondSep}" -NoNewline 
-        Write-Host "$($Global:PSStyle.Foreground.FromRgb(64, 64, 64)) $" -NoNewline 
-        # return "$($Global:PSStyle.Foreground.FromRgb(102, 0, 0))┖$($Global:PSStyle.Foreground.FromRgb(64, 64, 64)) $ "
-        return "$($Global:PSStyle.Foreground.FromRgb(160, 160, 160)) "
+        # Return a blank prompt to let Write-Host handle everything
+        Write-Host "${SEP_COLOR}${FIRST_SEP} " -NoNewline 
+        Write-Host "${NAME_COLOR}$env:USERNAME" -NoNewline 
+        Write-Host "${GREY}@" -NoNewline 
+        Write-Host "${HOST_COLOR}$(hostname)" -NoNewline 
+        Write-Host "${GREY}:" -NoNewline 
+        Write-Host "${PATH_COLOR}${PWD}" -NoNewline
+        Write-Host "${RED_256}$(Get-GitBranch)"
+        Write-Host "${SEP_COLOR}${SECOND_SEP} " -NoNewline 
+        Write-Host "${GREY}$" -NoNewline
+        return " ${RESET}"
+
     }
 
     # Logging
@@ -65,7 +87,6 @@ if ($PSEdition -eq "Core") # PowerShell(pwsh.exe)
     $TranscriptPath = $TranscriptDir + $TranscriptLog
     Start-Transcript -LiteralPath $TranscriptPath -Append
 
-    ######################/* PSReadLineOption Color Tokens */######################
     # PSReadLineOption -Colors {Hash Table}. Escape with `e for pwsh, $([char]0x1b) for powershell.exe (5.x)
     $colors = @{
         "Number"                    = "`e[38;5;39m"     # The number token color.
