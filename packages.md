@@ -154,6 +154,7 @@ sudo apt update && sudo apt install vault
 * vault - Product data management (PDM) tool. Integrates with CAD systems. Autodesk product.  
 * Ncat - What's the difference between `netcat` and `Ncat`?  
 * sleuthkit - File and filesystem analysis/forensics toolkit.
+* ranger - a console file manager (vi hotkeys)
 
 
 ### Static site generator (available on pip):
