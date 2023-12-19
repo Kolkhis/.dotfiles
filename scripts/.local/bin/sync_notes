@@ -17,9 +17,13 @@ fi
 while read -r f; do
     existing+=1
     printf "File found: %s\n" "$f"
+    # headers=$(grep -i -E -A3 '^#+' "$f")
+    while read -r l; do
+        printf "Header: %s\n" " $l"
+    done < <(grep -i -E -n '^#+' "$f")
     continue
     # if grep -q "$f" "${NOTES_HOME}/contents.md"; then
     # fi
-done < <(find ~/notes -name '*.md')
+done < <(find "${NOTES_HOME}" -name '*.md')
         
 
