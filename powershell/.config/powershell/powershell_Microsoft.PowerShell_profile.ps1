@@ -17,9 +17,9 @@ function Get-GitBranch
 
 # Set-PSReadLineKeyHandler -Chord Ctrl+n HistorySearchForward
 # Set-PSReadLineKeyHandler -Chord Ctrl+p HistorySearchBackward
+Set-PSReadLineKeyHandler -Chord Ctrl+w BackwardDeleteWord
 Set-PSReadLineKeyHandler -Chord Ctrl+n ViTabCompleteNext
 Set-PSReadLineKeyHandler -Chord Ctrl+p ViTabCompletePrevious
-Set-PSReadLineKeyHandler -Chord Ctrl+w BackwardDeleteWord
 Set-PSReadLineKeyHandler -Chord Ctrl+f ViSearchHistoryBackward
 Set-PSReadLineKeyHandler -Chord Ctrl+l ViNextWord
 Set-PSReadLineKeyHandler -Chord Ctrl+h ViBackwardWord
@@ -55,10 +55,10 @@ if ($PSEdition -eq "Desktop") # Windows PowerShell(powershell.exe)
         Write-Host "${GREY}@" -NoNewline 
         Write-Host "${HOST_COLOR}$(hostname)" -NoNewline 
         Write-Host "${GREY}:" -NoNewline 
-        Write-Host "${PATH_COLOR}${PWD} " -NoNewline
+        Write-Host "${PATH_COLOR}${PWD}" -NoNewline
         Write-Host "${RED_256}$(Get-GitBranch)" -NoNewline
-        # Write-Host "${SEP_COLOR}${SECOND_SEP} " -NoNewline 
-        Write-Host "${GREY}$" -NoNewline
+        Write-Host "${SEP_COLOR}${SECOND_SEP}" -NoNewline 
+        Write-Host "${GREY} $" -NoNewline
         return " ${RESET}"
 
     }
