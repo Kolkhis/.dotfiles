@@ -1,12 +1,12 @@
 require('telescope').setup({
-  defaults = {
-    mappings = {
-      i = {
-        ['<C-u>'] = false,
-        ['<C-d>'] = false,
-      },
+    defaults = {
+        mappings = {
+            i = {
+                ['<C-u>'] = false,
+                ['<C-d>'] = false,
+            },
+        },
     },
-  },
 })
 local builtin = require('telescope.builtin')
 local themes = require('telescope.themes')
@@ -18,12 +18,10 @@ vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iag
 vim.keymap.set('n', '<leader>?', builtin.oldfiles, { desc = '[?] Find recently opened files' })
 vim.keymap.set('n', '<leader><space>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 vim.keymap.set('n', '<leader>/', function()
-  builtin.current_buffer_fuzzy_find(
-    require('telescope.themes').get_dropdown({ winblend = 5, previewer = false })
-  )
+    builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown({ winblend = 5, previewer = false }))
 end, { desc = '[/] Fuzzily search in current buffer' })
 vim.keymap.set('n', '<leader>rs', builtin.registers, { desc = 'Vim [R]egister [S]earch' })
-vim.keymap.set({'n', 'v'}, '<leader>ch', builtin.command_history, { desc = '[C]ommand [H]istory'})
+vim.keymap.set({ 'n', 'v' }, '<leader>ch', builtin.command_history, { desc = '[C]ommand [H]istory' })
 
 -- vim.keymap.set({'n'}, '<leader>qf', builtin.quickfix, { desc = '[Q]uick[f]ix'})
 -- vim.keymap.set('n', '<leader>ma', builtin.man_pages, { desc = '[Ma]n Pages'})
@@ -33,39 +31,36 @@ vim.keymap.set({'n', 'v'}, '<leader>ch', builtin.command_history, { desc = '[C]o
 --     vim.cmd('Telescope current_buffer_fuzzy_find')
 -- end, { desc = '[/] Fuzzily search in current buffer' })
 
-
-vim.keymap.set('n', '<leader>hw', function ()
-	vim.cmd('normal! yiw')
-	local word = vim.fn.expand('<cword>')
-	builtin.help_tags(themes.get_ivy({ winblend = 5, search = word }))
-	-- vim.cmd(('normal! i%s'):format(vim.fn.expand('<cword>')))  -- This successfully inputs text into the search bar, but only the literal '<cWORD> <Esc>)'
-	-- vim.api.nvim_put({word}, 'c', true, false)
-	-- vim.api.nvim_put
-end, {desc = 'Search [H]elp Tags for [W]ord'})
-
---------------------------
-
-vim.keymap.set('n', '<leader>sh', function ()
-	local word = vim.fn.expand('<cword>')
-	builtin.help_tags(themes.get_ivy({ winblend = 5, search = word }))
-end, {desc = '[S]earch [H]elp Tags'})
+vim.keymap.set('n', '<leader>hw', function()
+    vim.cmd('normal! yiw')
+    local word = vim.fn.expand('<cword>')
+    builtin.help_tags(themes.get_ivy({ winblend = 5, search = word }))
+    -- vim.cmd(('normal! i%s'):format(vim.fn.expand('<cword>')))  -- This successfully inputs text into the search bar, but only the literal '<cWORD> <Esc>)'
+    -- vim.api.nvim_put({word}, 'c', true, false)
+    -- vim.api.nvim_put
+end, { desc = 'Search [H]elp Tags for [W]ord' })
 
 --------------------------
 
-vim.keymap.set('n', '<leader>pw', function ()
-	builtin.grep_string( { search = vim.fn.expand('<cword>') } )
-	end,
-{ desc = 'Search [p]roject for [w]ord Under Cursor' })
+vim.keymap.set('n', '<leader>sh', function()
+    local word = vim.fn.expand('<cword>')
+    builtin.help_tags(themes.get_ivy({ winblend = 5, search = word }))
+end, { desc = '[S]earch [H]elp Tags' })
 
 --------------------------
 
-vim.keymap.set('n', '<leader>pW', function ()
-	builtin.grep_string( { search = vim.fn.expand('<cWORD>') } )
-	end,
-{ desc = 'Search [P]roject for Line Under Cursor' })
+vim.keymap.set('n', '<leader>pw', function()
+    builtin.grep_string({ search = vim.fn.expand('<cword>') })
+end, { desc = 'Search [p]roject for [w]ord Under Cursor' })
 
-vim.keymap.set({'n', 'v'}, '<leader>pc', builtin.command_history, { desc = '[P]roject [C]ommand history'})
-vim.keymap.set({'n'}, '<leader>pac', builtin.autocommands, {desc = '[A]uto [c]ommands'})
+--------------------------
+
+vim.keymap.set('n', '<leader>pW', function()
+    builtin.grep_string({ search = vim.fn.expand('<cWORD>') })
+end, { desc = 'Search [P]roject for Line Under Cursor' })
+
+vim.keymap.set({ 'n', 'v' }, '<leader>pc', builtin.command_history, { desc = '[P]roject [C]ommand history' })
+vim.keymap.set({ 'n' }, '<leader>pac', builtin.autocommands, { desc = '[A]uto [c]ommands' })
 -- vim.cmd('Telescope ')
 -- Telescop builtins:
 -- builtin.buffers 	Lists open buffers in current neovim instance
@@ -93,4 +88,3 @@ vim.keymap.set({'n'}, '<leader>pac', builtin.autocommands, {desc = '[A]uto [c]om
 -- builtin.current_buffer_tags 	Lists all of the tags for the currently open buffer, with a preview
 -- builtin.resume 	Lists the results incl. multi-selections of the previous picker  -- Buffer history?
 -- builtin.pickers 	Lists the previous pickers incl. multi-selections (see :h telescope.defaults.cache_picker)
-

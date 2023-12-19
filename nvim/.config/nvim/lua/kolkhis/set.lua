@@ -16,10 +16,10 @@ vim.g.netrw_browse_split = 0 -- default = 0
 
 -- Fix dumb python indenting
 vim.g.python_indent = {
-  open_paren = 4,
-  nested_paren = 4,
-  continue = 4,
-  closed_paren_align_last_line = false,
+    open_paren = 4,
+    nested_paren = 4,
+    continue = 4,
+    closed_paren_align_last_line = false,
 }
 
 -- Modify path for better find/completion (requires globstar??)
@@ -76,14 +76,14 @@ vim.o.ttimeoutlen = 50
 vim.o.termguicolors = true -- Enable 24-bit RGB
 
 -- Indentation
-vim.o.smarttab = true     -- Smart tabbing
+vim.o.smarttab = true -- Smart tabbing
 vim.o.smartindent = false -- Smart indenting (for C-like programs?)
 vim.o.softtabstop = 4
-vim.o.shiftwidth = 4      -- Set Tab to 4 spaces.
+vim.o.shiftwidth = 4 -- Set Tab to 4 spaces.
 vim.o.expandtab = true
 
 vim.o.showbreak = '> ' -- Show a > when lines wrap
-vim.o.autoread = true  -- Automatically reload file when it was changed elsewhere.
+vim.o.autoread = true -- Automatically reload file when it was changed elsewhere.
 vim.o.textwidth = 100
 
 -- Autosaving
@@ -103,23 +103,23 @@ vim.o.errorbells = false
 vim.cmd('au! TextYankPost * silent! lua vim.highlight.on_yank()') -- vimscript+lua implementation
 local md_highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
-  pattern = '*',
-  group = md_highlight_group,
-  callback = function()
-    vim.highlight.on_yank()
-  end,
+    pattern = '*',
+    group = md_highlight_group,
+    callback = function()
+        vim.highlight.on_yank()
+    end,
 })
 
 -- Start vim in netrw in the current directory
 local vimstart_group = vim.api.nvim_create_augroup('VimStartup', { clear = true })
 vim.api.nvim_create_autocmd('VimEnter', {
-  pattern = '*',
-  group = vimstart_group,
-  callback = function()
-    if vim.fn.expand('%') == '' then
-      -- vim.cmd.Lex()
-      vim.cmd.e('.')
-    end
-  end,
-  desc = 'Open the current directory in netrw if no file or directory is given when running vim.',
+    pattern = '*',
+    group = vimstart_group,
+    callback = function()
+        if vim.fn.expand('%') == '' then
+            -- vim.cmd.Lex()
+            vim.cmd.e('.')
+        end
+    end,
+    desc = 'Open the current directory in netrw if no file or directory is given when running vim.',
 })
