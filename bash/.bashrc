@@ -235,7 +235,6 @@ export FZF_DEFAULT_OPTS="\
 --bind 'ctrl-d:preview-page-down' \
 --bind 'ctrl-l:forward-char' \
 --bind 'ctrl-h:backward-char' \
---bind 'ctrl-/:enable-search' \
 --bind 'ctrl-f:preview-down' \
 --bind 'ctrl-b:preview-up' \
 --bind 'ctrl-u:clear-query' \
