@@ -220,13 +220,28 @@ esac
 export PS1
 export PS2="${GREY}~>${RESET} "
 
-# $(uptime | awk '{print $10}')
-# 2:03:58
 eval "$(dircolors -b ~/.dircolors)"
 
 # * 38;5;0 to 38;5;255 for 88-color and 256-color modes foreground colors.  
 # * 48;5;0 to 48;5;255 for 88-color and 256-color modes background colors.  
 export GREP_COLORS=':ms=01;31:mc=01;31:sl=38;5;248:cx=38;5;244:fn=38;5;68:ln=38;5;81:bn=32:se=36' 
+
+
+export FZF_DEFAULT_OPTS="\
+--preview 'cat {}' \
+--preview-window 'right,50%,border-vertical' \
+--bind 'change:first' \
+--bind 'enter:execute(nvim {})' \
+--bind 'ctrl-d:preview-page-down' \
+--bind 'ctrl-l:forward-char' \
+--bind 'ctrl-h:backward-char' \
+--bind 'ctrl-/:enable-search' \
+--bind 'ctrl-f:preview-down' \
+--bind 'ctrl-b:preview-up' \
+--bind 'ctrl-u:clear-query' \
+--bind 'ctrl-w:backward-kill-word' \
+--bind 'ctrl-\\:change-preview-window(right,70%,border-vertical|hidden|)' \
+"
 
 
 
