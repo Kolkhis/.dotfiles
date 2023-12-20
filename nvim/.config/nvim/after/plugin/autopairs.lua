@@ -10,15 +10,25 @@ cmp.event:on(
     cmp_autopairs.on_confirm_done({
         filetypes = {
             -- "*" is a alias to all filetypes
-            ['*'] = {
+            -- ['*'] = {
+            --     ['('] = {
+            --         kind = {
+            --             cmp.lsp.CompletionItemKind.Function,
+            --             cmp.lsp.CompletionItemKind.Method,
+            --         },
+            --         handler = handlers['*'],
+            --     },
+            -- },
+            python = {
                 ['('] = {
                     kind = {
                         cmp.lsp.CompletionItemKind.Function,
                         cmp.lsp.CompletionItemKind.Method,
                     },
-                    handler = handlers['*'],
+                    handler = function(char, item, bufnr, rules, commit_character)
+                        -- Your handler function. Inpect with print(vim.inspect{char, item, bufnr, rules, commit_character})
+                    end, },
                 },
-            },
             lua = {
                 ['('] = {
                     kind = {
@@ -35,8 +45,8 @@ cmp.event:on(
                     end,
                 },
             },
-            -- Disable for tex
             tex = false,
+            ['*'] = false,
         },
     })
 )
