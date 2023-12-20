@@ -11,6 +11,7 @@ alias "?"="duck"
 alias "??"="gpt"
 alias py="python3"
 alias python="python3"
+alias pythong="python3"
 alias vi="/usr/local/bin/vim"
 alias vim="nvim"
 alias lv="vim -c \"normal '0\""
@@ -26,11 +27,13 @@ alias tree="tree -a"
 alias ip="ip -color"
 # Make tmux use XDG_CONFIG_HOME
 alias tmux='tmux -f "${XDG_CONFIG_HOME}/tmux/.tmux.conf"'
+# Git aliases
+alias gits="git status"
 
 # Navigation
 alias dots="cd ~/.dotfiles/"
-alias aoc="cd ~/.dotfiles/coding/coding/advent_of_code/"
-alias nv="cd ~/.dotfiles/nvim/.config/nvim/"  
+alias aoc="cd ~/Repos/github.com/kolkhis/aoc-2023/"
+alias nv="cd ~/.dotfiles/nvim/.config/nvim/"
 alias v="cd ~/.dotfiles/vim"
 alias boost="cd ~/notes/skilstak/" 
 alias rp="cd ~/Repos/github.com/kolkhis/"
@@ -38,6 +41,7 @@ alias s="cd ~/.dotfiles/scripts/.local/bin/"
 alias n="cd ~/notes/"
 alias ta="cd ~/Repos/github.com/kolkhis/taggart"
 alias tw="cd ~/Repos/github.com/kolkhis/twitch_chat_bot/"
+alias gl="cd ~/Repos/github.com/kolkhis/go-fundamentals/"
 case $(hostname) in
     ("D01")
         alias nv="cd ~/AppData/Local/nvim";
@@ -47,8 +51,6 @@ case $(hostname) in
         ;;
 esac
 
-# Git aliases
-alias gits="git status"
 
 # Using vim/neovim as `less`
 export VRT="/usr/share/vim/vim82"
