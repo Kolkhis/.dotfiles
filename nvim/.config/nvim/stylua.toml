@@ -4,7 +4,6 @@ quote_style="AutoPreferSingle"
 call_parentheses="Always"
 line_endings="Unix"
 collapse_simple_statement = "Never"
-# align_assignments = true  # This makes lua indent 4 spaces
 
 [sort_requires]
 enabled = false
