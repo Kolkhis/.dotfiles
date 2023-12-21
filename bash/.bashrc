@@ -226,10 +226,13 @@ eval "$(dircolors -b ~/.dircolors)"
 # * 48;5;0 to 48;5;255 for 88-color and 256-color modes background colors.  
 export GREP_COLORS=':ms=01;31:mc=01;31:sl=38;5;248:cx=38;5;244:fn=38;5;68:ln=38;5;81:bn=32:se=36' 
 
+export FZF_DEFAULT_COMMAND='find . -type f ! -path "*/.git/*"'
 
 export FZF_DEFAULT_OPTS="\
+--tabstop=4 \
 --preview 'cat {}' \
---preview-window 'right,50%,border-vertical' \
+--preview-window 'right,50%,border-rounded' \
+--bind '?:preview:file {}' \
 --bind 'change:first' \
 --bind 'enter:execute(nvim {})' \
 --bind 'ctrl-d:preview-page-down' \
@@ -239,7 +242,7 @@ export FZF_DEFAULT_OPTS="\
 --bind 'ctrl-b:preview-up' \
 --bind 'ctrl-u:clear-query' \
 --bind 'ctrl-w:backward-kill-word' \
---bind 'ctrl-\\:change-preview-window(right,70%,border-vertical|hidden|)' \
+--bind 'ctrl-\\:change-preview-window(bottom,70%,border-rounded|hidden|)' \
 "
 
 
