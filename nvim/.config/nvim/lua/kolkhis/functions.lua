@@ -7,6 +7,10 @@ M.camel_snake_toggle = function()
     local snake_case = vim.regex([[^\w.*\(_\)]]):match_str(cword)
     local new_word = cword
     if snake_case then
+        local all_caps = vim.regex([[\([A-Z_]\+\)]]):match_str(cword)
+        if all_caps then
+            new_word = cword:lower()
+        end
         local index, _ = new_word:find('_')
         while index do
             local charToUpper = new_word:sub(index + 1, index + 1):upper()
@@ -28,6 +32,7 @@ M.camel_snake_toggle = function()
         return new_word
     end
 end
+
 
 M.lower_upper_toggle = function()
     local cword = vim.fn.expand('<cword>')

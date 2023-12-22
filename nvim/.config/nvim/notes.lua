@@ -25,7 +25,7 @@ https://www.vimregex.com/
 
 --[=[ Regex with vim ]=]--
 
-			Pattern atom
+            Pattern atom
 
     ^ start matching from beginning of a line
         /^This match This only at beginning of line
@@ -38,7 +38,7 @@ https://www.vimregex.com/
 For more info, :h pattern-atoms
 
 
-			Pattern Qualifiers
+            Pattern Qualifiers
 
     *greedy match preceding character 0 or more times
         /abc* match 'ab' or 'abc' or 'abccc' or 'abcccccc' etc
@@ -92,15 +92,15 @@ https://neovim.io/doc/user/usr_41.html#function-list
 
 --- Playing with the vim.api
 -- vim.keymap.set('n', '<leader>tk', function ()
--- 	-- vim.cmd('lua print("wowowow")')
--- 	-- local buf = vim.api.nvim_get_current_buf()
--- 	-- vim.api.nvim_set_current_buf(buffer)
--- 	-- vim.api.nvim_create_autocmd(event, opts?)
--- 	-- Trying to create a floating window
--- 	local buf = vim.api.nvim_create_buf(false, true)
--- 	vim.api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
--- 	-- vim.api.nvim_buf_set_text(buf, 1, 1, -1, -1, 'wowowowoowowow')
--- 	vim.api.nvim_buf_set_lines(buf, 0, 0, false, {'Wowowowowoowow'})
+--  -- vim.cmd('lua print("wowowow")')
+--  -- local buf = vim.api.nvim_get_current_buf()
+--  -- vim.api.nvim_set_current_buf(buffer)
+--  -- vim.api.nvim_create_autocmd(event, opts?)
+--  -- Trying to create a floating window
+--  local buf = vim.api.nvim_create_buf(false, true)
+--  vim.api.nvim_buf_set_option(buf, 'bufhidden', 'wipe')
+--  -- vim.api.nvim_buf_set_text(buf, 1, 1, -1, -1, 'wowowowoowowow')
+--  vim.api.nvim_buf_set_lines(buf, 0, 0, false, {'Wowowowowoowow'})
 -- end)
 -- local win = vim.api.nvim_get_current_win()
 
@@ -152,9 +152,21 @@ Window navigation:
 
 --[=[ Refactoring tip ]=]--
 
->> Grep with Telescope, add to quickfix list
+>> Grep with Telescope (or :vim[grep]), add to quickfix list
 >> Then, to apply a cmd to each thing:
 :cdo <cmd>
+:cfdo {cmd}     Execute {cmd} in each file in the quickfix list.
+            It works like doing this: >
+                :cfirst
+                :{cmd}
+                :cnfile
+                :{cmd}
+                etc.
+<           Otherwise it works the same as `:cdo`.
+
+Location list (do the same thing, but with :lvim[grep])
+:ldo {cmd}
+:lfdo {cmd} 
 
 :h cdo
 
@@ -163,3 +175,26 @@ Disable LSP for current buffer
 -- :lua vim.lsp.diagnostics.disable(vim.api.nvim_get_current_buf())
 
 --]=======]
+
+---Alternative pure-lua (no vim api) toggle case function
+---@param word string
+---@return string new_word
+M.lower_upper_tog = function(word)
+  local lcase = word:match('%l')
+  local ucase = word:match('%u')
+
+  local new_word = ""
+  for i=1, #word do
+    local char = word:sub(i,i)
+    if lcase and not ucase then
+      new_word = new_word .. char:upper()
+    elseif not lcase and ucase then
+      new_word = new_word .. char:lower()
+    elseif lcase and ucase then
+      new_word = new_word .. char:upper()
+    else
+      new_word = new_word .. char
+    end
+  end
+  return new_word
+end
