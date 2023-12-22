@@ -245,6 +245,9 @@ export FZF_DEFAULT_OPTS="\
 --bind 'ctrl-\\:change-preview-window(bottom,70%,border-rounded|hidden|)' \
 "
 
-
+export SRC_ENDPOINT="https://sourcegraph.com/"
+declare SRC_ACCESS_TOKEN
+SRC_ACCESS_TOKEN="$(head -1 "$HOME/.config/cody/token")"
+export SRC_ACCESS_TOKEN
 
 
