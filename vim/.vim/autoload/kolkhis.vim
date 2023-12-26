@@ -30,6 +30,33 @@ fu! kolkhis#DelYankHighlight(timer_id)
     endwhile
 endf
 
+fu! kolkhis#AddUListItem()
+    let l:mode = mode()
+    let l:line = getline('.')
+    if l:mode ==# "n"
+        if l:line =~? '^\(\s*\)\?\* ' 
+            exe 'norm! ^xx'
+        else
+            exe 'norm! I* '
+        endif
+    else
+        exe "'<,'>s/^/* /"
+    endif
+endf
+
+fu! kolkhis#AddOListItem()
+    let l:mode = mode()
+    let l:line = getline('.')
+    if l:mode ==# "n"
+        if l:line =~? '^\(\s*\)\?\d\. ' 
+            exe 'norm! ^xxx'
+        else
+            exe 'norm! I1. '
+        endif
+    else
+        exe "'<,'>s/^/1. /"
+    endif
+endf
 
 fu! kolkhis#ToggleNetrw()
   if &filetype ==# 'netrw'

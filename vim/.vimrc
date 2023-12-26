@@ -169,6 +169,10 @@ aug MarkdownAug
   au BufEnter,BufWinEnter *.md :
     nnoremap <buffer> ,td :call kolkhis#AddMarkdownCheckbox()<CR>$
     inoremap <buffer> ,td <Esc>:call kolkhis#AddMarkdownCheckbox()<CR>A
+    nnoremap <buffer> ,ls :call kolkhis#AddUListItem()<CR>
+    vnoremap <buffer> ,ls :call kolkhis#AddUListItem()<CR>
+    nnoremap <buffer> ,lc :call kolkhis#AddOListItem()<CR>
+    vnoremap <buffer> ,lc :call kolkhis#AddOListItem()<CR>
 aug END
 
 " Highlight on yank:
