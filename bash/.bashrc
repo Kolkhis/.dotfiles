@@ -87,8 +87,6 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-# colored GCC warnings and errors
-export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
 alias ll='ls -alF'
@@ -125,7 +123,6 @@ if ! shopt -oq posix; then
 fi
 
 ################################## Env ################################## 
-
 # Node Version Manager 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" 
@@ -134,13 +131,44 @@ export NVM_DIR="$HOME/.nvm"
 # Crablang (Rust)
 [ -s "$HOME/.cargo/env" ] && \. "$HOME/.cargo/env"
 
-# Set XDG_CONFIG_HOME if it's unset
+# Set XDG_CONFIG_HOME/DATA if it's unset
 [ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="${HOME}/.config"
+[ -z "$XDG_DATA_HOME" ] && export XDG_DATA_HOME="${HOME}/.local/share"
+
+export FZF_DEFAULT_COMMAND='find . -type f ! -path "*/.git/*"'
+export FZF_DEFAULT_OPTS="\
+--tabstop=4 \
+--preview 'cat {}' \
+--preview-window 'right,50%,border-rounded' \
+--bind '?:preview:file {}' \
+--bind 'change:first' \
+--bind 'enter:execute(nvim {})' \
+--bind 'ctrl-d:preview-page-down' \
+--bind 'ctrl-l:forward-char' \
+--bind 'ctrl-h:backward-char' \
+--bind 'ctrl-f:preview-down' \
+--bind 'ctrl-b:preview-up' \
+--bind 'ctrl-u:clear-query' \
+--bind 'ctrl-w:backward-kill-word' \
+--bind 'ctrl-\\:change-preview-window(bottom,70%,border-rounded|hidden|)' \
+"
+
+export SRC_ENDPOINT="https://sourcegraph.com/"
+declare SRC_ACCESS_TOKEN
+SRC_ACCESS_TOKEN="$(head -1 "$HOME/.config/cody/token")"
+export SRC_ACCESS_TOKEN
+
+# 38;5;0 - 255 : 88/256-color foreground colors.  
+# 48;5;0 - 255 : 88/256-color background colors.  
+# colored GCC warnings and errors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+export GREP_COLORS=':ms=01;31:mc=01;31:sl=38;5;248:cx=38;5;244:fn=38;5;68:ln=38;5;81:bn=32:se=36' 
+eval "$(dircolors -b ~/.dircolors)"
+
 
 ################################## PS1 ################################## 
 # Python: Prevent default "(venv)" text
 export VIRTUAL_ENV_DISABLE_PROMPT=1
-
 YELLOW='\[\e[38;5;214m\]'
 BURNT_ORANGE='\[\e[38;5;130m\]'
 DARK_YELLOW="\[\e[38;5;58m\]"
@@ -154,14 +182,11 @@ SOFT_PINK="\[\e[38;5;212m\]"
 # SOFT_BLUE="\[\e[38;5;111m\]"
 # BEIGE='\[\e[38;5;180m\]'
 # SOFT_PURPLE="\[\e[38;5;61m\]"
-
 DARK_RED="\[\e[38;5;88m\]"
 SEP_COLOR=${DARK_RED}
 FIRST_SEP="┎"   # ┎┏┍ ┏ ┒ ┒┎ ┏ ┍
 SECOND_SEP="┖"  # ┖┗┕ ┖ ┚ ┨┠ ┣ ┝ ┫┠
                 #         ┚┖ ┗ ┕
-
-
 case $USER in
     (root)
         NAME_COLOR=${RED_256};
@@ -176,7 +201,6 @@ case $USER in
         VENV_COLOR=${YELLOW}
 	;;
 esac
-
 
 set_prompt() {
     if echo "$ORIGINAL_PATH" | grep 'cyg' > /dev/null 2>&1; then
@@ -216,38 +240,5 @@ case $(hostname) in
         set_prompt;
         ;;
 esac
-
 export PS1
 export PS2="${GREY}~>${RESET} "
-
-eval "$(dircolors -b ~/.dircolors)"
-
-# * 38;5;0 to 38;5;255 for 88-color and 256-color modes foreground colors.  
-# * 48;5;0 to 48;5;255 for 88-color and 256-color modes background colors.  
-export GREP_COLORS=':ms=01;31:mc=01;31:sl=38;5;248:cx=38;5;244:fn=38;5;68:ln=38;5;81:bn=32:se=36' 
-
-export FZF_DEFAULT_COMMAND='find . -type f ! -path "*/.git/*"'
-
-export FZF_DEFAULT_OPTS="\
---tabstop=4 \
---preview 'cat {}' \
---preview-window 'right,50%,border-rounded' \
---bind '?:preview:file {}' \
---bind 'change:first' \
---bind 'enter:execute(nvim {})' \
---bind 'ctrl-d:preview-page-down' \
---bind 'ctrl-l:forward-char' \
---bind 'ctrl-h:backward-char' \
---bind 'ctrl-f:preview-down' \
---bind 'ctrl-b:preview-up' \
---bind 'ctrl-u:clear-query' \
---bind 'ctrl-w:backward-kill-word' \
---bind 'ctrl-\\:change-preview-window(bottom,70%,border-rounded|hidden|)' \
-"
-
-export SRC_ENDPOINT="https://sourcegraph.com/"
-declare SRC_ACCESS_TOKEN
-SRC_ACCESS_TOKEN="$(head -1 "$HOME/.config/cody/token")"
-export SRC_ACCESS_TOKEN
-
-
