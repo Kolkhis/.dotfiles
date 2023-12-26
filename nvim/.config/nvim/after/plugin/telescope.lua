@@ -130,17 +130,17 @@ end, { silent = true, noremap = true, desc = "[G]it [H]istory of Current Buffer"
 vim.keymap.set('n', '<leader>ps', function()
     builtin.live_grep(themes.get_dropdown({
         grep_open_files = false,
-        cwd = utils.buffer_dir(),
+        -- cwd = utils.buffer_dir(),
     }))
 end, { silent = true, noremap = true, desc = '[P]arse [S]tring by Grep' })
 
 --------------------------Grep String
-vim.keymap.set('n', '<leader>pw', function()
+vim.keymap.set('n', '<leader>gp', function()
     vim.ui.input({ prompt = 'Grep > ' }, function(q)
         builtin.grep_string(themes.get_dropdown({
             search = q,
             grep_open_files = false,
-            cwd = utils.buffer_dir(),
+            -- cwd = utils.buffer_dir(),
         }))
     end)
 end, { silent = true, noremap = true, desc = 'Search [P]roject with [G]rep Under Cursor' })
@@ -150,14 +150,15 @@ vim.keymap.set('n', '<leader>pW', function()
 end, { silent = true, noremap = true, desc = 'Search [P]roject for c[W]ORD Under Cursor' })
 
 --------------------------Find Files
-vim.keymap.set('n', '<leader>fi', function()
+vim.keymap.set('n', '<leader>pf', function()
     builtin.find_files(themes.get_dropdown({
         hidden = true,
+        layout_config = { prompt_position = 'bottom' },
     }))
 end, { silent = true, noremap = true, desc = '<leader>fi Search [Fi]les' })
 
 --------------------------Git Files
-vim.keymap.set('n', '<leader>pf', function()
+vim.keymap.set('n', '<leader>pg', function()
     builtin.git_files(themes.get_dropdown({
         cwd = utils.buffer_dir(),
         layout_config = { prompt_position = 'bottom' },

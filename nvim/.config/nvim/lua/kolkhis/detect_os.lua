@@ -35,7 +35,7 @@ end
 
 M.is_windows = (M.sysname == 'Windows_NT')
 M.is_linux = (M.sysname == 'Linux')
-M.is_phone = (M.machine == 'aarch64')
+M.is_termux = (M.machine == 'aarch64')
 M.is_neither = (M.sysname ~= 'Windows_NT' and M.sysname ~= 'Linux')
 
 return M

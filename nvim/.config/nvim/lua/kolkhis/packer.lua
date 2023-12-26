@@ -119,8 +119,13 @@ return require('packer').startup(function(use)
             { 'saadparwaiz1/cmp_luasnip' },
 
             -- snipsnip
-            { 'L3MON4D3/LuaSnip' }, -- Required
             { 'rafamadriz/friendly-snippets' },
+            {
+                'L3MON4D3/LuaSnip',
+                tag = 'v2.*',
+                after = 'nvim-cmp',
+                requires = { 'rafamadriz/friendly-snippets' },
+            }, -- Required
         },
     })
 
@@ -153,5 +158,4 @@ return require('packer').startup(function(use)
             vim.cmd('GoUpdateBinaries')
         end,
     })
-
 end)
