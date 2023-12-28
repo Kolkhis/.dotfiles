@@ -153,9 +153,11 @@ export FZF_DEFAULT_OPTS="\
 --bind 'ctrl-\\:change-preview-window(bottom,70%,border-rounded|hidden|)' \
 "
 
-export SRC_ENDPOINT="https://sourcegraph.com/"
+declare SRC_ENDPOINT
 declare SRC_ACCESS_TOKEN
+SRC_ENDPOINT="$(head -1 "$HOME/.config/cody/endpoint")"
 SRC_ACCESS_TOKEN="$(head -1 "$HOME/.config/cody/token")"
+export SRC_ENDPOINT
 export SRC_ACCESS_TOKEN
 
 # 38;5;0 - 255 : 88/256-color foreground colors.  
