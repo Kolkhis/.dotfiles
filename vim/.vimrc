@@ -167,12 +167,18 @@ set fo-=twa2vbB]p
 aug MarkdownAug
   au!
   au BufEnter,BufWinEnter *.md :
-    nnoremap <buffer> ,td :call kolkhis#AddMarkdownCheckbox()<CR>$
-    inoremap <buffer> ,td <Esc>:call kolkhis#AddMarkdownCheckbox()<CR>A
-    nnoremap <buffer> ,ls :call kolkhis#AddUListItem()<CR>
-    vnoremap <buffer> ,ls :call kolkhis#AddUListItem()<CR>
-    nnoremap <buffer> ,lc :call kolkhis#AddOListItem()<CR>
-    vnoremap <buffer> ,lc :call kolkhis#AddOListItem()<CR>
+    nnoremap ,lt :call kolkhis#AddMarkdownCheckbox('n')<CR>
+    vnoremap ,lt :call kolkhis#AddMarkdownCheckbox('v')<CR>
+    nnoremap ,ls :call kolkhis#AddUListItem('n')<CR>
+    vnoremap ,ls :call kolkhis#AddUListItem('v')<CR>
+    nnoremap ,lc :call kolkhis#AddOListItem('n')<CR>
+    vnoremap ,lc :call kolkhis#AddOListItem('v')<CR>
+    " nnoremap <buffer> ,lt :call kolkhis#AddMarkdownCheckbox()<CR>
+    " inoremap <buffer> ,lt :call kolkhis#AddMarkdownCheckbox()<CR>
+    " nnoremap <buffer> ,ls :call kolkhis#AddUListItem()<CR>
+    " vnoremap <buffer> ,ls :call kolkhis#AddUListItem()<CR>
+    " nnoremap <buffer> ,lc :call kolkhis#AddOListItem()<CR>
+    " vnoremap <buffer> ,lc :call kolkhis#AddOListItem()<CR>
 aug END
 
 " Highlight on yank:

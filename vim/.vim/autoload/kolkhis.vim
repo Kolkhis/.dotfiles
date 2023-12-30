@@ -30,33 +30,142 @@ fu! kolkhis#DelYankHighlight(timer_id)
     endwhile
 endf
 
-fu! kolkhis#AddUListItem()
-    let l:mode = mode()
-    let l:line = getline('.')
-    if l:mode ==# "n"
-        if l:line =~? '^\(\s*\)\?\* ' 
-            exe 'norm! ^xx'
-        else
-            exe 'norm! I* '
-        endif
-    else
-        exe "'<,'>s/^/* /"
-    endif
-endf
 
-fu! kolkhis#AddOListItem()
-    let l:mode = mode()
-    let l:line = getline('.')
-    if l:mode ==# "n"
-        if l:line =~? '^\(\s*\)\?\d\. ' 
-            exe 'norm! ^xxx'
+function! kolkhis#AddUListItem(mode)
+    " let mode = mode()
+    let mode = a:mode
+    let line = getline('.')
+    if mode ==# 'n'
+        if kolkhis#match_ul(line)
+            silent! exe "norm! ^2x" 
+        elseif kolkhis#match_ol(line)
+            silent! exe "norm! ^3xI* "
         else
-            exe 'norm! I1. '
+            norm! I* 
         endif
     else
-        exe "'<,'>s/^/1. /"
+        if kolkhis#match_todo(line)
+            norm! I
+            silent! exe "'<,'>s/^\\(\\s*\\)\\?\\(\\* \\|\\d\\{1,}\\. \\)\\[.\\] /\\1* /"
+        elseif kolkhis#match_ul(line)
+            norm! I
+            silent! exe "'<,'>s/^\\(\\s*\\)\\?\\* /\\1/"
+        elseif kolkhis#match_ol(line)
+            norm! I
+            silent! exe "'<,'>s/^\\(\\s*\\)\\?\\d\\. /\\1* /"
+        else
+            norm! I
+            silent! exe "'<,'>s/^\\(\\s*\\)\\?\\(\\w\\)/\\1* \\2/"
+        endif
     endif
-endf
+endfunction
+
+" fu! kolkhis#AddOListItem()
+"     let l:mode = mode()
+"     let l:line = getline('.')
+"     if l:mode ==# "n"
+"         if l:line =~? '^\(\s*\)\?\d\. ' 
+"             exe 'norm! ^xxx'
+"         else
+"             exe 'norm! I1. '
+"         endif
+"     else
+"         exe "'<,'>s/^/1. /"
+"     endif
+" endf
+
+function! kolkhis#AddOListItem(mode)
+    " let mode = mode()
+    let mode = a:mode
+    let line = getline('.')
+    if mode ==# 'n'
+        if kolkhis#match_ol(line)
+            silent! exe "norm! ^3x"
+        elseif kolkhis#match_ul(line)
+            silent! exe "norm! ^2xI1. "
+        else
+            norm! I1. 
+        endif
+    else
+        if kolkhis#match_todo(line)
+            silent! exe 's/^\(\s*\)\?\(\* \|\d\{1,}\. \)\[.\] /\11. /'
+        elseif kolkhis#match_ol(line)
+            norm! I
+            silent! exe "'<,'>s/\\d\\. //"
+        elseif kolkhis#match_ul(line)
+            norm! I
+            silent! exe "'<,'>s/^\\(\\s*\\)\\?\\* /\\11. /"
+        else
+            norm! I
+            silent! exe "'<,'>s/^\\(\\s*\\)\\?\\(\\w\\)/\\11. \\2/"
+        endif
+    endif
+endfunction
+
+" function! kolkhis#AddMarkdownCheckbox()
+"   call setline('.', '* [ ]')
+"   call cursor(line('.'), col('$'))
+" endfunction
+
+" Check current markdown line for a TODO item (`* [ ]`, `* [x]`, `* [_]`)
+" If the current line is an ordered list item, convert it into a TODO item.
+function! kolkhis#AddMarkdownCheckbox(mode)
+    let line = getline('.')
+    let mode = a:mode
+    if line ==# ''
+        echo 'Problem encountered when parsing line'
+        return
+    endif
+    if a:mode ==# 'n'
+        if kolkhis#match_todo(line)
+            silent! exe 's/^\(\s*\)\?\(\* \|\d\{1,}\. \)\[.\] /\1/'
+        elseif kolkhis#match_ul(line)
+        "     silent! norm! ^a [ ]
+            silent! exe 's/^\(\s*\)\?\(\*\) /\1\2 [ ] '
+        elseif kolkhis#match_ol(line)
+            silent! exe 's/^\(\s*\)\?\(\d\{1,}\.\) /\1\2 [ ] '
+        else
+            silent! norm! I* [ ] 
+        endif
+    else
+        echomsg("Visual mode")
+        if kolkhis#match_todo(line)
+            norm! I
+            " exe "'<,'>s/\(\*\|\d\{1,}\.\) \(\[ \]\|\[x\]\|\[_\]\) //"
+            " silent! exe "'<,'>s/\\(\\*\\|\\d\\{1,}\\.\\) \\(\\[ \\]\\|\\[x\\]\\|\\[_\\]\\) //"
+            silent! exe "'<,'>s/\\(\\*\\|\\d\\{1,}\\.\\) \\(\\[.\\]\\) //"
+        elseif kolkhis#match_ul(line)
+            echomsg("Unordered list matched.")
+            norm! I
+            silent! exe "'<,'>s/\\(\\s*\\)\\?\\* /* [ ] "
+        elseif kolkhis#match_ol(line)
+            norm! I
+            " silent! exe "'<,'>s/^\\(\\s*\\)\\?\\(\\d\\{1,}\\.\\) /\\1\\2 [ ] /"
+            silent! exe "'<,'>s/^\\(\\s*\\)\\?\\(\\d\\{1,}\\.\\) /\\1\\2 [ ] /"
+        else
+            norm! I
+            silent! exe "'<,'>s/^\\(\\s*\\)\\?/\\1* [ ] /"
+        endif
+    endif
+endfunction
+
+function! kolkhis#match_ol(line)
+    return match(a:line, '^\(\s*\)\?\d\{1,}\. ') != -1
+    " return match(a:line, '\d\{1,}\. ') != -1
+endfunction
+
+function! kolkhis#match_ul(line)
+    return match(a:line, '^\(\s*\)\?\* ') != -1
+    " return match(a:line, '\* ') != -1
+endfunction
+
+function! kolkhis#match_todo(line)
+    " return match(a:line, '^\(\s*\)\?\(\*\|\d\{1,}\.\) \(\[ \]\|\[x\]\|\[_\]\)') != -1
+    return match(a:line, '^\(\s*\)\?\(\*\|\d\{1,}\.\) \(\[.\]\)') != -1
+    " return match(a:line, '\(\*\|\d\{1,}\.\) \(\[.\]\)') != -1
+endfunction
+
+
 
 fu! kolkhis#ToggleNetrw()
   if &filetype ==# 'netrw'
@@ -87,13 +196,6 @@ endfunction
 function! kolkhis#GetHelpCurrentWord()
   let l:cword = expand('<cword>')
   execute "help " . l:cword
-endfunction
-
-
-
-function! kolkhis#AddMarkdownCheckbox()
-  call setline('.', '* [ ]')
-  call cursor(line('.'), col('$'))
 endfunction
 
 
