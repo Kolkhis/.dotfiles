@@ -42,6 +42,8 @@ alias n="cd ~/notes/"
 alias ta="cd ~/Repos/github.com/kolkhis/taggart"
 alias tw="cd ~/Repos/github.com/kolkhis/twitch_chat_bot/"
 alias gl="cd ~/Repos/github.com/kolkhis/go-fundamentals/"
+alias db="cd ~/Repos/github.com/kolkhis/discord_bot/"
+
 case $(hostname) in
     ("D01")
         alias nv="cd ~/AppData/Local/nvim";
