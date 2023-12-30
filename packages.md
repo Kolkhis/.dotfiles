@@ -167,6 +167,18 @@ sudo apt update && sudo apt install vault
 * L3MON - [Android Hax](https://www.golinuxcloud.com/l3mon-hack-android-mobile-remotely/)  
 * JuiceSSH - [SSH client for Android](https://juicessh.com/)  
 
+## Lavalink
+* Lavalink 
+    * [Lavalink.jar](https://github.com/lavalink-devs/Lavalink/releases)
+    * [Lavalink example application.yml](https://raw.githubusercontent.com/lavalink-devs/Lavalink/master/LavalinkServer/application.yml.example)
+    * [LavaSrc example application.yml](https://raw.githubusercontent.com/topi314/LavaSrc/master/application.example.yml)
+* Requires Java 17+ (not the default- apt packages):
+  ```bash
+  sudo apt install openjdk-17-jdk openjdk-17-jre
+  ```
+* Wrong Java version in `apt`:
+    * default-jre (v11)
+    * default-jdk (v11)
 
 ## Package Install Script
 ```bash
