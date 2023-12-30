@@ -1,26 +1,22 @@
--- set space to do nothing, then add it as map leader
+-- set space to do nothing
+vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- local opts = { silent = true, noremap = true }  -- Maybe streamline this stuff into a module/loop
-vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
-vim.keymap.set({ 'i', 'v' }, 'zj', '<Esc>', { silent = true, noremap = true }) -- remap escape key (for awful keyboards)
+vim.keymap.set({ 'i', 'v' }, 'xj', '<Esc>', { silent = true, noremap = true })
 
 -- Keep cursor centered
 vim.keymap.set({ 'n', 'v' }, '<C-u>', '<C-u>zz', { silent = true, noremap = true })
 vim.keymap.set({ 'n', 'v' }, '<C-d>', '<C-d>zz', { silent = true, noremap = true })
 
--- hella sexy remap (by me). paste register in insert mode
-vim.keymap.set('i', '<C-Space>', function()
-    local w = vim.fn.getreg('*')
-    print(('The register contents:\n%s'):format(w))
-    vim.api.nvim_put({ w }, 'c', true, true) -- after, follow)
-    -- vim.cmd.normal('"*p')
-end, { silent = true, noremap = true })
+-- paste register in insert mode (handle ^@ control sequence)
+vim.keymap.set('i', '<C-Space>', [[<Esc>"+p:s/<C-q><C-Enter>/\r/g<CR>]], { silent = true, noremap = true })
 
--- Navigate word wraps
+-- Navigate word wraps (swap j/k with gj/gk for wrapped lines)
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true, noremap = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true, noremap = true })
+vim.keymap.set('n', 'gj', "v:count == 0 ? 'j' : 'gj'", { expr = true, silent = true, noremap = true })
+vim.keymap.set('n', 'gk', "v:count == 0 ? 'k' : 'gk'", { expr = true, silent = true, noremap = true })
 
 -- Formatting
 vim.keymap.set({ 'n', 'v' }, '<leader>fm', function()
@@ -43,7 +39,6 @@ vim.keymap.set('n', '<leader>pv', function()
         vim.cmd.Ex()
     end
 end)
-
 -- Clipboard integreity -- Copy to system clipboard
 vim.keymap.set({ 'n', 'v' }, '<leader>y', '"+y', { silent = true, noremap = true })
 vim.keymap.set({ 'n', 'v' }, '<leader>Y', '"+Y', { silent = true, noremap = true })
@@ -57,12 +52,6 @@ vim.keymap.set(
     [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
     { silent = true, noremap = true }
 )
-
-local os = require('kolkhis.detect_os')
--- Give current file execute permissions
-if os.is_linux or os.is_termux then
-    vim.keymap.set('n', '<leader>x', '<cmd>!chmod +x %<CR>', { silent = true, noremap = true })
-end
 
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { silent = true, noremap = true })
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { silent = true, noremap = true })
@@ -94,44 +83,24 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
     pattern = { '*.md' },
     callback = function()
         -- Add a Markdown bullet point and checkbox "* [ ]"
-        vim.keymap.set({ 'n', 'i' }, ',td', function()
-            vim.cmd.norm('I* [ ] ')
+        vim.keymap.set({ 'n', 'i', 'v' }, ',lt', function()
+            fns:md_todo_handler()
         end, { silent = true, noremap = true, buffer = true })
 
-        -- Put in two spaces at the end of lines (that don't end in 2 spaces, comma, or codeblock)
+        -- Put in linebreaks (two spaces) at the end of lines that don't end in 2 spaces, comma, or codeblock
         vim.keymap.set({ 'n', 'v' }, ',lb', function()
-            local mode = vim.api.nvim_get_mode().mode
-            if mode == 'n' then
-                vim.cmd([[%s/\([^,\| \{2}\|`\{3}]$\)/\1  /]])
-            else
-                vim.cmd([['<,'>s/\([^,\| \{2}\|`\{3}]$\)/\1  /]])
-            end
+            fns:md_add_linebreaks()
         end, { silent = true, noremap = true, buffer = true })
 
-        -- 'listify' the selection
+        -- 'unordered-listify' the selection
         vim.keymap.set({ 'v', 'n' }, ',ls', function()
-            local mode = vim.api.nvim_get_mode().mode
-            if vim.regex([[^\(\s*\)\?\* .*]]):match_str((vim.fn.getline('.'))) then
-                vim.cmd.norm('^xx')
-            elseif mode == 'n' then
-                vim.cmd.norm('I* ')
-            else
-                vim.cmd.norm('I')
-                vim.cmd([['<,'>s/^/* /]])
-            end
+            fns:md_ul_handler()
         end, { silent = true, noremap = true, buffer = true })
 
-        -- 'numbered-listify' the selection
         vim.keymap.set({ 'v', 'n' }, ',lc', function()
-            local mode = vim.api.nvim_get_mode().mode
-            if mode == 'n' then
-                vim.cmd.norm('I1. ')
-            else
-                vim.cmd.norm('I')
-                vim.cmd([['<,'>s/^/1. /]])
-            end
+            fns:md_ol_handler()
         end, { silent = true, noremap = true, buffer = true })
     end,
     group = md_aug_id,
-    desc = 'Add keybindings ( ,lc ,tt ,td ,lb ) to add bullet points, todo boxes, and linebreaks.',
+    desc = 'Add keybindings ( ,ls ,lc ,lt ,lb ) to add list items, todo boxes, and linebreaks.',
 })
