@@ -1,7 +1,11 @@
 M = {}
 
---- Check current markdown line for a TODO item (`* [ ]`, `* [x]`, `* [_]`)
---- If the current line is an ordered list item, convert it into a TODO item.
+
+--- Makes the selected line(s) TODO items. 
+--- If the selected line(s) are already TODO items, they will be converted
+--- into normal list items. 
+--- If nothing is selected, the current line will be used.
+---@diagnostic disable:param-type-mismatch
 function M:md_todo_handler()
     local line = vim.fn.getline('.')
     local mode = vim.api.nvim_get_mode().mode
@@ -11,7 +15,7 @@ function M:md_todo_handler()
     end
     if mode == 'n' then
         if self.match_todo(line) then
-            vim.cmd([[s/\(\*\|\d\.\) \[.\] //]])
+            vim.cmd([[s/^\(\s*\)\?\(\* \|\d\{1,}\. \)\[.\] /\1\2/]])
         elseif self.match_ul(line) then
             vim.cmd.norm('^a [ ]')
         elseif self.match_ol(line) then
@@ -22,52 +26,93 @@ function M:md_todo_handler()
     else
         if self.match_todo(line) then
             vim.cmd.norm('I')
-            vim.cmd([['<,'>s/\(\*\|\d\.\) \(\[ \]\|\[x\]\|\[_\]\) //]])
+            vim.cmd([['<,'>s/^\(\s*\)\?\(\* \|\d\{1,}\. \)\?\[.\] /\1\2/]])
+            vim.cmd.norm('gv')
+            -- vim.cmd([['<,'>s/^\(\s*\)\?\(\* \|\d\{1,}\. \)\(\[.\]\) /\1\2/]])
         elseif self.match_ul(line) then
             vim.cmd.norm('I')
-            vim.cmd([['<,'>s/\* /* [ ] ]])
+            vim.cmd([['<,'>s/^\(\s*\)\?\* /\1* [ ] ]])
+            vim.cmd.norm('gv')
         elseif self.match_ol(line) then
             vim.cmd.norm('I')
-            vim.cmd([['<,'>s/\(\d\.\) /\1 [ ] ]])
+            vim.cmd([['<,'>s/^\(\s*\)\?\(\d\{1,}\)\. /\1\2. [ ] ]])
+            vim.cmd.norm('gv')
         else
             vim.cmd.norm('I')
-            vim.cmd([['<,'>s/^\(\s*\)\?\w/\1* [ ] \2/]])
+            vim.cmd([['<,'>s/^\(\s*\)\?/\1* [ ] /]])
+            vim.cmd.norm('gv')
         end
     end
-    vim.notify(vim.inspect(line))
 end
 
+--- Handler for unordered list items (`* `, `* [ ]`, `* [x]`)
+--- Makes the selected line(s) unordered list items.
+--- If the selected line(s) are already unordered list items, they will be
+--- converted to normal lines.
+--- If the selected line(s) are ordered list items, they will be converted to
+--- unordered list items.
+--- If nothing is selected, the current line will be used.
 function M:md_ul_handler()
     local mode = vim.api.nvim_get_mode().mode
     local line = vim.fn.getline('.')
+    if line == nil then
+        vim.notify('Problem encountered when parsing line')
+        return
+    end
+
     if mode == 'n' then
         if self.match_ul(line) then
-            vim.cmd.norm('^2x')
+            if self.match_todo(line) then
+                vim.cmd([[s/^\(\s*\)\?\* \[.\] \?/\1/]])
+            else
+                vim.cmd.norm('^2x')
+            end
         elseif self.match_ol(line) then
             vim.cmd.norm('^3xI* ')
         else
             vim.cmd.norm('I* ')
         end
     else
-        if self.match_ul(line) then
+        if self.match_todo(line) then
             vim.cmd.norm('I')
-            vim.cmd([['<,'>s/* //]])
+            vim.cmd([['<,'>s/^\(\s*\)\?\* \[.\]/\1/]])
+        elseif self.match_ul(line) then
+            vim.cmd.norm('I')
+            vim.cmd([['<,'>s/^\(\s*\)\?\* /\1/]])
         elseif self.match_ol(line) then
             vim.cmd.norm('I')
-            vim.cmd([['<,'>s/^\(\s*\)\?\d\. /\1* /]])
+            vim.cmd([['<,'>s/^\(\s*\)\?\d\{1,}\. /\1* /]])
         else
             vim.cmd.norm('I')
-            vim.cmd([['<,'>s/^\(\s*\)\?\(\w\)/\1* \2/]])
+            vim.cmd([['<,'>s/^\(\s*\)\?/\1* /]])
         end
     end
 end
 
+--- Handler for ordered list items (`1. `, `2. [ ]`, `3. [x]`)
+--- Makes the selected line(s) ordered list items.
+--- If the selected line(s) are already ordered list items, they will be
+--- converted to normal lines.
+--- If the selected line(s) are unordered list items, they will be converted to
+--- ordered list items.
+--- If the selected are both ordered list items and TODO items, they will be
+--- converted to normal lines.
+--- If nothing is selected, the current line will be used.
 function M:md_ol_handler()
     local mode = vim.api.nvim_get_mode().mode
     local line = vim.fn.getline('.')
+    if line == nil then
+        vim.notify('Problem encountered when parsing line')
+        return
+    end
+
     if mode == 'n' then
         if self.match_ol(line) then
-            vim.cmd.norm('^3x')
+            if self.match_todo(line) then
+                vim.cmd([[s/^\(\s*\)\?\(\d\{1,}\. \)\[.\] /\1/]])
+            else
+                vim.cmd.norm('^3x')
+            end
         elseif self.match_ul(line) then
             vim.cmd.norm('^2xI1. ')
         else
@@ -75,18 +120,28 @@ function M:md_ol_handler()
         end
     else
         if self.match_ol(line) then
-            vim.cmd.norm('I')
-            vim.cmd([['<,'>s/\d\. //]])
+            if self.match_todo(line) then
+                vim.cmd.norm('I')
+                vim.cmd([['<,'>s/^\(\s*\)\?\(\d\{1,}\. \)\[.\] /\1/]])
+            else
+                vim.cmd.norm('I')
+                vim.cmd([['<,'>s/\(\s*\)\?\d\{1,}\. /\1/]])
+            end
         elseif self.match_ul(line) then
             vim.cmd.norm('I')
             vim.cmd([['<,'>s/^\(\s*\)\?\* /\11. /]])
         else
             vim.cmd.norm('I')
-            vim.cmd([['<,'>s/^\(\s*\)\?\(\w\)/\11. \2/]])
+            vim.cmd([['<,'>s/^\(\s*\)\?/\11. /]])
+            if vim.fn.line("'<") ~= vim.fn.line("'>") then
+                vim.cmd([[norm! '<jV'>gk]]) -- Automatically number them 
+            end
         end
     end
 end
 
+--- Add linebreaks (two spaces) to the end of lines that don't end with
+--- a comma, two spaces, or three backticks (code blocks).
 function M:md_add_linebreaks()
     local mode = vim.api.nvim_get_mode().mode
     if mode == 'n' then
@@ -96,20 +151,44 @@ function M:md_add_linebreaks()
     end
 end
 
+--- Check if the line is an ordered list item (`1. `)
+---@param line string
+---@return nil
 function M.match_ol(line)
-    return vim.regex([[^\(\s*\)\?\d\+\. ]]):match_str(line)
+    return vim.fn.match(line, [[^\(\s*\)\?\d\+\. ]]) ~= -1
 end
 
+--- Check if the line is an unordered list item (`* `)
+---@param line string
+---@return boolean is_unordered_list: true if the line is an unordered list item
 function M.match_ul(line)
-    -- vim.fn.match(vim.fn.getline('.'), [[^\(\s*\)\?\* ]]) ~= -1
-    return vim.regex([[^\(\s*\)\?\* ]]):match_str(line)
+    return vim.fn.match(line, [[^\(\s*\)\?\* ]]) ~= -1
 end
 
+--- Check if line is a TODO item (`* [ ]`, `* [x]`, `1. [ ]`, `1. [x]`, etc)
+---@param line string
+---@return boolean is_todo_item: true if the line is a TODO item
 function M.match_todo(line)
-    return vim.regex([[^\(\s*\)\?\(\*\|\d\.\) \(\[ \]\|\[x\]\|\[_\]\) ]]):match_str(line)
+    return vim.fn.match(line, [[^\(\s*\)\?\(\*\|\d\.\) \(\[ \]\|\[x\]\|\[_\]\) ]]) ~= -1
 end
 
---- Turn camelCase to snake_case, and vice versa
+--- Check for incompleted TODO item (`[ ]`)
+---@param line string
+---@return boolean is_incompleted_todo: true if the line is an incompleted TODO item
+function M.match_incomplete_todo(line)
+    return vim.fn.match(line, [[^\(\s*\)\? \?\[ \] \?]]) ~= -1
+end
+
+--- Check for a completed TODO item (`[x]`)
+---@param line string
+---@return boolean: true if the line is an completed TODO item
+function M.match_complete_todo(line)
+    return vim.fn.match(line, [[^\(\s*\)\? \?\[x\] \?]]) ~= -1
+end
+
+
+--- Turn camelCase to snake_case, and visa versa
+---@diagnostic disable: param-type-mismatch
 M.camel_snake_toggle = function()
     local cword = vim.fn.expand('<cword>')
     local camelCase = vim.regex([[^\l.*\(\u\)]]):match_str(cword)
@@ -142,6 +221,7 @@ M.camel_snake_toggle = function()
     end
 end
 
+--- Toggle between all-caps and all-lowercase
 M.lower_upper_toggle = function()
     local cword = vim.fn.expand('<cword>')
     local lcase = cword:match('%l')
