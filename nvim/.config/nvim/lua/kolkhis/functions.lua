@@ -14,7 +14,7 @@ function M:md_todo_handler()
     end
     if mode == 'n' then
         if self.match_todo(line) then
-            vim.cmd([[s/^\(\s*\)\?\(\* \|\d\{1,}\. \)\[.\] /\1\2/]])
+            vim.cmd([[s/^\(\s*\)\?\(- \|\* \|\d\{1,}\. \)\[.\] /\1\2/]])
         elseif self.match_ul(line) then
             vim.cmd.norm('^a [ ]')
         elseif self.match_ol(line) then
@@ -25,7 +25,7 @@ function M:md_todo_handler()
     else
         if self.match_todo(line) then
             vim.cmd.norm('I')
-            vim.cmd([['<,'>s/^\(\s*\)\?\(\* \|\d\{1,}\. \)\?\[.\] /\1\2/]])
+            vim.cmd([['<,'>s/^\(\s*\)\?\(- \|\* \|\d\{1,}\. \)\?\[.\] /\1\2/]])
             vim.cmd.norm('gv')
         elseif self.match_ul(line) then
             vim.cmd.norm('I')
@@ -61,7 +61,7 @@ function M:md_ul_handler()
     if mode == 'n' then
         if self.match_ul(line) then
             if self.match_todo(line) then
-                vim.cmd([[s/^\(\s*\)\?\* \[.\] \?/\1/]])
+                vim.cmd([[s/^\(\s*\)\?\(-\|\*\) \[.\] \?/\1/]])
             else
                 vim.cmd.norm('^2x')
             end
@@ -159,10 +159,12 @@ end
 
 ---Take in a list of line numbers and makes each of them an unordered list item.
 ---@param line_numbers table
-function M.add_multiple_ul_items(line_numbers)
+function M:add_multiple_ul_items(line_numbers)
     vim.cmd.norm('I')
-    for _, line_number in ipairs(line_numbers) do
-        vim.cmd(([[%ds/^\(\s*\)\?/\1* /']]):format(line_number))
+    -- local selection = self.get_selection()
+    -- line_numbers = selection.line_numbers
+    for i = 1, #line_numbers do
+        vim.cmd(([[%ds/^\(\s*\)\?/\1* /']]):format(line_numbers[i]))
     end
 end
 
@@ -179,7 +181,7 @@ function M.add_multiple_ol_items(line_numbers)
     end
 end
 
-----------------[[ Matching Functions ]]----------------
+----------------[[ Pattern Matching Functions ]]----------------
 
 --- Check if the line is an ordered list item (`1. `)
 ---@param line string
@@ -192,14 +194,14 @@ end
 ---@param line string
 ---@return boolean is_unordered_list: true if the line is an unordered list item
 function M.match_ul(line)
-    return vim.fn.match(line, [[^\(\s*\)\?\* ]]) ~= -1
+    return vim.fn.match(line, [[^\(\s*\)\?\(-\|\*\) ]]) ~= -1
 end
 
 --- Check if line is a TODO item (`* [ ]`, `* [x]`, `1. [ ]`, `1. [x]`, etc)
 ---@param line string
 ---@return boolean is_todo_item: true if the line is a TODO item
 function M.match_todo(line)
-    return vim.fn.match(line, [[^\(\s*\)\?\(\*\|\d\{-1,}\.\) \(\[.\]\) ]]) ~= -1
+    return vim.fn.match(line, [[^\(\s*\)\?\(-\|\*\|\d\{-1,}\.\) \(\[.\]\) ]]) ~= -1
 end
 
 --- Check if the line is indented.
@@ -207,32 +209,42 @@ end
 ---@param line string
 ---@return boolean is_indented: true if the line is indented
 function M.match_indented(line)
-    return vim.fn.match(line, [[^\(\s*\)]]) ~= -1
+    return vim.fn.match(line, [[^\(\s\)\{1,}]]) ~= -1
 end
 
 --- Check for incompleted TODO item (`[ ]`)
 ---@param line string
 ---@return boolean is_incompleted_todo: true if the line is an incompleted TODO item
 function M.match_incomplete_todo(line)
-    return vim.fn.match(line, [[^\(\s*\)\? \?\[ \] \?]]) ~= -1
+    return vim.fn.match(line, [[^\(\s*\)\?\(- \|\* \|\d\{1,}\. \)\[ \] \?]]) ~= -1
 end
 
 --- Check for a completed TODO item (`[x]`)
 ---@param line string
 ---@return boolean is_completed_todo: true if the line is an completed TODO item
 function M.match_complete_todo(line)
-    return vim.fn.match(line, [[^\(\s*\)\? \?\[x\] \?]]) ~= -1
+    return vim.fn.match(line, [[^\(\s*\)\?\(- \|\* \|\d\{1,}\. \)\[x\] \?]]) ~= -1
 end
 
--- TODO: Add support for code blocks
-function M.match_code_block(line)
-    return vim.fn.match(line, [[^\(\s*\)\?\`\`\`]]) ~= -1
+-- TODO: Add keybindings for code blocks
+--- Check if the line is a code block start for any language. i.e., (```python)
+---@param line string
+---@return boolean is_code_block_start: true if the line is a code block start
+function M.match_code_block_start(line)
+    return vim.fn.match(line, [[^\(\s*\)\?[`]\{3}\(\w\)\{1,}]]) ~= -1
+end
+
+--- Check if the line is a code block end for any language. i.e., (```)
+---@param line string
+---@return boolean is_code_block_end: true if the line is a code block end
+function M.match_code_block_end(line)
+    return vim.fn.match(line, [[^\(\s*\)\?[`]\{3}$]]) ~= -1
 end
 
 ----------------[[ Case Toggle Functions ]]----------------
 
 --- Turn camelCase to snake_case, and visa versa
---- Modifies the current word if it is camelCase or snake_case.
+--- Modifies the current word under cursor if it is camelCase or snake_case.
 ---@diagnostic disable: param-type-mismatch
 M.camel_snake_toggle = function()
     local cword = vim.fn.expand('<cword>')
@@ -266,7 +278,7 @@ M.camel_snake_toggle = function()
     end
 end
 
---- Switch the current word between all-caps and all-lowercase
+--- Switch the current word under cursor between all-caps and all-lowercase
 M.lower_upper_toggle = function()
     local cword = vim.fn.expand('<cword>')
     local lcase = cword:match('%l')
@@ -293,7 +305,7 @@ end
 --- An example of looping over the returned selection: >
 ---
 ---     local selection = require('kolkhis.functions'):get_selection()
----     if  not selection.line_numbers then
+---     if not selection.line_numbers then
 ---         return vim.notify("no line numbers found")
 ---     end
 ---         local current_ln = selection[line_number]
@@ -313,7 +325,7 @@ function M.get_selection()
     local selection = {}
     selection.line_numbers = {}
     local ln_start, ln_end = vim.fn.line("'<"), vim.fn.line("'>")
-    if ln_start == ln_end and ln_start then
+    if ln_start and ln_start == ln_end then
         selection[ln_start] = { text = vim.fn.getline(ln_start) }
         selection.line_numbers = { ln_start }
         return selection
