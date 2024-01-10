@@ -1,11 +1,4 @@
 
-fu! kolkhis#NetrwStartup()
-  if expand('%') ==# ''
-    exe 'e .'
-  endif
-endf
-
-
 fu! kolkhis#YankHighlight()
     if v:event['operator'] == 'y'
         if (!exists('g:yanked_text_matches'))
@@ -30,6 +23,7 @@ fu! kolkhis#DelYankHighlight(timer_id)
     endwhile
 endf
 
+"""""""""""""""""" MARKDOWN """""""""""""""""
 
 function! kolkhis#AddUListItem(mode)
     " let mode = mode()
@@ -37,9 +31,17 @@ function! kolkhis#AddUListItem(mode)
     let line = getline('.')
     if mode ==# 'n'
         if kolkhis#match_ul(line)
-            silent! exe "norm! ^2x" 
+            if kolkhis#match_todo(line)
+                silent! exe 's/^\(\s*\)\?\(\* \|\d\{1,}\. \)\[.\] /\1'
+            else
+                silent! exe "norm! ^2x" 
+            endif
         elseif kolkhis#match_ol(line)
-            silent! exe "norm! ^3xI* "
+            if kolkhis#match_todo(line)
+                silent! exe 's/^\(\s*\)\?\(\* \|\d\{1,}\. \)\(\[.\]\) /\1* \3 '
+            else
+                silent! exe 's/^\(\s*\)\?\(\d\{1,}\. \)/\1* '
+            endif
         else
             norm! I* 
         endif
@@ -60,22 +62,7 @@ function! kolkhis#AddUListItem(mode)
     endif
 endfunction
 
-" fu! kolkhis#AddOListItem()
-"     let l:mode = mode()
-"     let l:line = getline('.')
-"     if l:mode ==# "n"
-"         if l:line =~? '^\(\s*\)\?\d\. ' 
-"             exe 'norm! ^xxx'
-"         else
-"             exe 'norm! I1. '
-"         endif
-"     else
-"         exe "'<,'>s/^/1. /"
-"     endif
-" endf
-
 function! kolkhis#AddOListItem(mode)
-    " let mode = mode()
     let mode = a:mode
     let line = getline('.')
     if mode ==# 'n'
@@ -87,17 +74,24 @@ function! kolkhis#AddOListItem(mode)
             norm! I1. 
         endif
     else
-        if kolkhis#match_todo(line)
-            silent! exe 's/^\(\s*\)\?\(\* \|\d\{1,}\. \)\[.\] /\11. /'
-        elseif kolkhis#match_ol(line)
-            norm! I
-            silent! exe "'<,'>s/\\d\\. //"
+        if kolkhis#match_ol(line)
+            if kolkhis#match_todo(line)
+                norm!  
+                silent! exe 's/^\(\s*\)\?\(\d\{1,}\. \)\(\[.\]\) /\1/'
+            else
+                norm!  
+                silent! exe "'<,'>s/^\\(\\s*\\)\\?\\d\\{1,}\\. /\\1/"
+            endif
         elseif kolkhis#match_ul(line)
-            norm! I
+            norm! 
             silent! exe "'<,'>s/^\\(\\s*\\)\\?\\* /\\11. /"
         else
-            norm! I
-            silent! exe "'<,'>s/^\\(\\s*\\)\\?\\(\\w\\)/\\11. \\2/"
+            norm! 
+            silent! exe "'<,'>s/^\\(\\s*\\)\\?/\\11. /"
+            if line("'<") != line("'>")
+                " Automatically number the list items
+                norm! '<jV'>gk
+            endif
         endif
     endif
 endfunction
@@ -118,9 +112,8 @@ function! kolkhis#AddMarkdownCheckbox(mode)
     endif
     if a:mode ==# 'n'
         if kolkhis#match_todo(line)
-            silent! exe 's/^\(\s*\)\?\(\* \|\d\{1,}\. \)\[.\] /\1/'
+            silent! exe 's/^\(\s*\)\?\(\* \|\d\{1,}\. \)\[.\] /\1\2/'
         elseif kolkhis#match_ul(line)
-        "     silent! norm! ^a [ ]
             silent! exe 's/^\(\s*\)\?\(\*\) /\1\2 [ ] '
         elseif kolkhis#match_ol(line)
             silent! exe 's/^\(\s*\)\?\(\d\{1,}\.\) /\1\2 [ ] '
@@ -128,20 +121,15 @@ function! kolkhis#AddMarkdownCheckbox(mode)
             silent! norm! I* [ ] 
         endif
     else
-        echomsg("Visual mode")
         if kolkhis#match_todo(line)
             norm! I
-            " exe "'<,'>s/\(\*\|\d\{1,}\.\) \(\[ \]\|\[x\]\|\[_\]\) //"
-            " silent! exe "'<,'>s/\\(\\*\\|\\d\\{1,}\\.\\) \\(\\[ \\]\\|\\[x\\]\\|\\[_\\]\\) //"
-            silent! exe "'<,'>s/\\(\\*\\|\\d\\{1,}\\.\\) \\(\\[.\\]\\) //"
+            silent! exe "'<,'>s/^\\(\\s*\\)\\?\\(\\* \\|\\d\\{1,}\\. \\)\\[.\\] /\\1\\2/"
         elseif kolkhis#match_ul(line)
-            echomsg("Unordered list matched.")
             norm! I
-            silent! exe "'<,'>s/\\(\\s*\\)\\?\\* /* [ ] "
+            silent! exe "'<,'>s/^\\(\\s*\\)\\?\\(\\*\\) /\\1\\2 [ ] "
         elseif kolkhis#match_ol(line)
             norm! I
-            " silent! exe "'<,'>s/^\\(\\s*\\)\\?\\(\\d\\{1,}\\.\\) /\\1\\2 [ ] /"
-            silent! exe "'<,'>s/^\\(\\s*\\)\\?\\(\\d\\{1,}\\.\\) /\\1\\2 [ ] /"
+            silent! exe "'<,'>s/^\\(\\s*\\)\\?\\(\\d\\{1,}\\.\\) /\\1\\2 [ ] "
         else
             norm! I
             silent! exe "'<,'>s/^\\(\\s*\\)\\?/\\1* [ ] /"
@@ -156,15 +144,19 @@ endfunction
 
 function! kolkhis#match_ul(line)
     return match(a:line, '^\(\s*\)\?\* ') != -1
-    " return match(a:line, '\* ') != -1
 endfunction
 
 function! kolkhis#match_todo(line)
-    " return match(a:line, '^\(\s*\)\?\(\*\|\d\{1,}\.\) \(\[ \]\|\[x\]\|\[_\]\)') != -1
     return match(a:line, '^\(\s*\)\?\(\*\|\d\{1,}\.\) \(\[.\]\)') != -1
-    " return match(a:line, '\(\*\|\d\{1,}\.\) \(\[.\]\)') != -1
 endfunction
 
+"""""""""""""""""" Netrw """""""""""""""""
+
+fu! kolkhis#NetrwStartup()
+  if expand('%') ==# ''
+    exe 'e .'
+  endif
+endf
 
 
 fu! kolkhis#ToggleNetrw()
@@ -226,6 +218,7 @@ function! kolkhis#SetAleOptions()
 endfunction
 
 
+"""""""""""""""""" Plugin Config """""""""""""""""
 
 function! kolkhis#SetVimGoOptions()
     " vim-go basic functionality
@@ -271,13 +264,12 @@ function! kolkhis#SetLightlineOptions()
       \ }
 endfunction
 
-" Colors
+"""""""""""""""""" Colors """""""""""""""""
 let s:comments = "#626983"
 let s:strings = "#b0d181"
 let s:dark_ocean_bg = "#0a0c14"
-" exe 'hi Normal guifg=' . 'White' . ' guibg=' . s:dark_ocean_bg
-
 let s:light_ocean_bg = "#0f111a"
+" exe 'hi Normal guifg=' . 'White' . ' guibg=' . s:dark_ocean_bg
 
 function! kolkhis#SetColors()
   syntax enable
@@ -380,15 +372,10 @@ function! kolkhis#SetColors()
   exe 'hi Comment guifg=' . s:comments
 
   let s:dark_ocean_bg = "#0a0c14"
-  " exe 'hi Normal guifg=' . 'White' . ' guibg=' . s:dark_ocean_bg
-
   let s:light_ocean_bg = "#0f111a"
   exe 'hi Normal guifg=' . 'White' . ' guibg=' . s:light_ocean_bg
   exe 'hi SignColumn guifg=' . 'White' . ' guibg=' . s:light_ocean_bg
 
-
-  " com! LightMode exe 'highlight Normal guifg=' . 'White' . ' guibg=' . s:light_ocean_bg
-  " com! DarkMode exe 'highlight Normal guifg=' . 'White' . ' guibg=' . s:dark_ocean_bg
   com! LightMode call kolkhis#LightMode()
   com! DarkMode call kolkhis#DarkMode()
   com! LM LightMode
@@ -403,6 +390,7 @@ fu! kolkhis#LightMode()
   exe 'highlight Normal guifg=' . 'White' . ' guibg=' . s:light_ocean_bg
   " Vimscript
   hi link vimIsCommand vimVar
+
   " netrw
   hi netrwDir guifg=#82AAFF guibg=NONE
   hi netrwClassify guifg=#89DDFF guibg=NONE
