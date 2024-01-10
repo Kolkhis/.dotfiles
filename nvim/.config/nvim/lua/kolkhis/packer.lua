@@ -154,8 +154,8 @@ return require('packer').startup(function(use)
     -- vim-go for sweet Go integration
     use({
         'fatih/vim-go',
-        run = function()
-            vim.cmd('GoUpdateBinaries')
-        end,
+        -- run = function()
+            -- vim.cmd('GoUpdateBinaries')
+        -- end,
     })
 end)

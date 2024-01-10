@@ -10,7 +10,7 @@ vim.keymap.set({ 'n', 'v' }, '<C-u>', '<C-u>zz', { silent = true, noremap = true
 vim.keymap.set({ 'n', 'v' }, '<C-d>', '<C-d>zz', { silent = true, noremap = true })
 
 -- paste register in insert mode (handle ^@ control sequence)
-vim.keymap.set('i', '<C-Space>', [[<Esc>"+p:s/<C-q><C-Enter>/\r/g<CR>]], { silent = true, noremap = true })
+vim.keymap.set({ 'i' }, '<C-Space>', [[<Esc>"+p:s/<C-q><C-Enter>/\r/g<CR>]], { silent = true, noremap = true })
 
 -- Navigate word wraps (swap j/k with gj/gk for wrapped lines)
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true, noremap = true })
@@ -25,14 +25,14 @@ vim.keymap.set({ 'n', 'v' }, '<leader>fm', function()
 end, { desc = 'LSP formatting', silent = true, noremap = true })
 
 -- Enable streamer mode
-vim.keymap.set('n', '<leader>sm', '<cmd>SM<CR>', { silent = true, noremap = true })
+vim.keymap.set({ 'n' }, '<leader>sm', '<cmd>SM<CR>', { silent = true, noremap = true })
 
 -- Easy resizing
-vim.keymap.set('n', '<leader>=', '<cmd>resize +5<CR>', { silent = true, noremap = true })
-vim.keymap.set('n', '<leader>-', '<cmd>resize -5<CR>', { silent = true, noremap = true })
+vim.keymap.set({ 'n' }, '<leader>=', '<cmd>resize +5<CR>', { silent = true, noremap = true })
+vim.keymap.set({ 'n' }, '<leader>-', '<cmd>resize -5<CR>', { silent = true, noremap = true })
 
 -- Toggle fullscreen netrw
-vim.keymap.set('n', '<leader>pv', function()
+vim.keymap.set({ 'n' }, '<leader>pv', function()
     if vim.bo.filetype == 'netrw' then
         vim.cmd.Rex()
     else
@@ -43,7 +43,7 @@ end)
 vim.keymap.set({ 'n', 'v' }, '<leader>y', '"+y', { silent = true, noremap = true })
 vim.keymap.set({ 'n', 'v' }, '<leader>Y', '"+Y', { silent = true, noremap = true })
 -- Replace in select mode without overwriting register/clipboard
-vim.keymap.set('x', '<leader>p', [["_dP]], { silent = true, noremap = true })
+vim.keymap.set({ 'x' }, '<leader>p', [["_dP]], { silent = true, noremap = true })
 
 -- Kinda like refactoring, start %s for current word
 vim.keymap.set(
@@ -53,8 +53,8 @@ vim.keymap.set(
     { silent = true, noremap = true }
 )
 
-vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { silent = true, noremap = true })
-vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { silent = true, noremap = true })
+vim.keymap.set({ 'v' }, 'J', ":m '>+1<CR>gv=gv", { silent = true, noremap = true })
+vim.keymap.set({ 'v' }, 'K', ":m '<-2<CR>gv=gv", { silent = true, noremap = true })
 vim.keymap.set({ 'n', 'v' }, '<leader>yf', '<cmd>%y+<CR>', { silent = true, desc = 'Yank entire file', noremap = true })
 
 vim.keymap.set(
@@ -71,7 +71,7 @@ vim.keymap.set({ 'c' }, '<leader>am', [[\@<=]], {
 })
 
 -- Toggle :Lexplore
-vim.keymap.set('n', '<leader>ns', '<Plug>NetrwShrink', { noremap = true, silent = true })
+vim.keymap.set({ 'n' }, '<leader>ns', '<Plug>NetrwShrink', { noremap = true, silent = true })
 
 local fns = require('kolkhis.functions')
 vim.keymap.set({ 'i', 'n' }, '<C-c>', fns.lower_upper_toggle, { noremap = true, silent = true })
@@ -87,16 +87,17 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
             fns:md_todo_handler()
         end, { silent = true, noremap = true, buffer = true })
 
-        -- Put in linebreaks (two spaces) at the end of lines that don't end in 2 spaces, comma, or codeblock
+        -- Put in linebreaks (two spaces)
         vim.keymap.set({ 'n', 'v' }, ',lb', function()
             fns:md_add_linebreaks()
         end, { silent = true, noremap = true, buffer = true })
 
-        -- 'unordered-listify' the selection
+        -- Toggle the selection/line between an unordered-list and normal line
         vim.keymap.set({ 'v', 'n' }, ',ls', function()
             fns:md_ul_handler()
         end, { silent = true, noremap = true, buffer = true })
 
+        -- Toggle the selection/line between an ordered-list and normal line
         vim.keymap.set({ 'v', 'n' }, ',lc', function()
             fns:md_ol_handler()
         end, { silent = true, noremap = true, buffer = true })
@@ -104,3 +105,25 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
     group = md_aug_id,
     desc = 'Add keybindings ( ,ls ,lc ,lt ,lb ) to add list items, todo boxes, and linebreaks.',
 })
+
+-- Test keybindings
+vim.keymap.set({ 'n', 'v' }, '<leader>as', function()
+    -- if vim.bo.filetype =='markdown' then
+    -- local line = vim.api.nvim_get_current_line()
+    -- fns:loop_selection()
+    -- local selection = fns.get_selection()
+    -- if not selection.line_numbers then
+    --     return vim.notify('no line numbers found')
+    -- end
+    -- for _, ln in ipairs(selection.line_numbers) do
+    --     local current_ln = selection[ln]
+    --     local line = current_ln.text
+    --     local line_number = current_ln.line_number
+    --     vim.notify(('Line number: %d\nLine: %s'):format(line_number, vim.inspect(line)))
+    -- end
+    vim.system({'ls'}, {
+    on_stdout = function(chan_id, data, name)
+        vim.notify(vim.inspect(data) .. '\n' .. vim.inspect(name) .. '\n' .. vim.inspect(chan_id))
+    end
+})
+end) --

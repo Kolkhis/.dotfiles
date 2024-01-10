@@ -4,5 +4,6 @@ termux_backup/
 lua/dev/
 sync_config
 .netrwhist
+.misc.lua
 
 

@@ -1,9 +1,8 @@
 M = {}
 
-
---- Makes the selected line(s) TODO items. 
+--- Makes the selected line(s) TODO items.
 --- If the selected line(s) are already TODO items, they will be converted
---- into normal list items. 
+--- into normal list items.
 --- If nothing is selected, the current line will be used.
 ---@diagnostic disable:param-type-mismatch
 function M:md_todo_handler()
@@ -28,7 +27,6 @@ function M:md_todo_handler()
             vim.cmd.norm('I')
             vim.cmd([['<,'>s/^\(\s*\)\?\(\* \|\d\{1,}\. \)\?\[.\] /\1\2/]])
             vim.cmd.norm('gv')
-            -- vim.cmd([['<,'>s/^\(\s*\)\?\(\* \|\d\{1,}\. \)\(\[.\]\) /\1\2/]])
         elseif self.match_ul(line) then
             vim.cmd.norm('I')
             vim.cmd([['<,'>s/^\(\s*\)\?\* /\1* [ ] ]])
@@ -134,7 +132,7 @@ function M:md_ol_handler()
             vim.cmd.norm('I')
             vim.cmd([['<,'>s/^\(\s*\)\?/\11. /]])
             if vim.fn.line("'<") ~= vim.fn.line("'>") then
-                vim.cmd([[norm! '<jV'>gk]]) -- Automatically number them 
+                vim.cmd([[norm! '<jV'>gk]]) -- Automatically number them
             end
         end
     end
@@ -151,11 +149,43 @@ function M:md_add_linebreaks()
     end
 end
 
+function M.add_single_ul_item(line_number)
+    vim.cmd.norm(('%dGI* '):format(line_number))
+end
+
+function M.add_single_ol_item(line_number)
+    vim.cmd.norm(('%dGI1. '):format(line_number))
+end
+
+---Take in a list of line numbers and makes each of them an unordered list item.
+---@param line_numbers table
+function M.add_multiple_ul_items(line_numbers)
+    vim.cmd.norm('I')
+    for _, line_number in ipairs(line_numbers) do
+        vim.cmd(([[%ds/^\(\s*\)\?/\1* /']]):format(line_number))
+    end
+end
+
+---Take in a list of line numbers and makes each of them an ordered list item.
+---@param line_numbers table
+function M.add_multiple_ol_items(line_numbers)
+    vim.cmd.norm('I')
+    for _, line_number in ipairs(line_numbers) do
+        vim.cmd(([[%ds/^\(\s*\)\?/\11. /']]):format(line_number))
+    end
+    if #line_numbers > 1 then
+        -- Automatically number them
+        vim.cmd(([[norm! %dGjV%dGgk]]):format(line_numbers[1], line_numbers[-1]))
+    end
+end
+
+----------------[[ Matching Functions ]]----------------
+
 --- Check if the line is an ordered list item (`1. `)
 ---@param line string
----@return nil
+---@return boolean is_ordered_list: true if the line is an ordered list item
 function M.match_ol(line)
-    return vim.fn.match(line, [[^\(\s*\)\?\d\+\. ]]) ~= -1
+    return vim.fn.match(line, [[^\(\s*\)\?\d\{1,}\. ]]) ~= -1
 end
 
 --- Check if the line is an unordered list item (`* `)
@@ -169,7 +199,15 @@ end
 ---@param line string
 ---@return boolean is_todo_item: true if the line is a TODO item
 function M.match_todo(line)
-    return vim.fn.match(line, [[^\(\s*\)\?\(\*\|\d\.\) \(\[ \]\|\[x\]\|\[_\]\) ]]) ~= -1
+    return vim.fn.match(line, [[^\(\s*\)\?\(\*\|\d\{-1,}\.\) \(\[.\]\) ]]) ~= -1
+end
+
+--- Check if the line is indented.
+--- Indentation is defined as any number of spaces or tabs.
+---@param line string
+---@return boolean is_indented: true if the line is indented
+function M.match_indented(line)
+    return vim.fn.match(line, [[^\(\s*\)]]) ~= -1
 end
 
 --- Check for incompleted TODO item (`[ ]`)
@@ -181,13 +219,20 @@ end
 
 --- Check for a completed TODO item (`[x]`)
 ---@param line string
----@return boolean: true if the line is an completed TODO item
+---@return boolean is_completed_todo: true if the line is an completed TODO item
 function M.match_complete_todo(line)
     return vim.fn.match(line, [[^\(\s*\)\? \?\[x\] \?]]) ~= -1
 end
 
+-- TODO: Add support for code blocks
+function M.match_code_block(line)
+    return vim.fn.match(line, [[^\(\s*\)\?\`\`\`]]) ~= -1
+end
+
+----------------[[ Case Toggle Functions ]]----------------
 
 --- Turn camelCase to snake_case, and visa versa
+--- Modifies the current word if it is camelCase or snake_case.
 ---@diagnostic disable: param-type-mismatch
 M.camel_snake_toggle = function()
     local cword = vim.fn.expand('<cword>')
@@ -221,7 +266,7 @@ M.camel_snake_toggle = function()
     end
 end
 
---- Toggle between all-caps and all-lowercase
+--- Switch the current word between all-caps and all-lowercase
 M.lower_upper_toggle = function()
     local cword = vim.fn.expand('<cword>')
     local lcase = cword:match('%l')
@@ -235,6 +280,70 @@ M.lower_upper_toggle = function()
     else
         return
     end
+end
+
+----------------[[ Visual Selection Functions ]]----------------
+
+--- Gets the current visual selection.
+--- Saves it into a table, with the line numbers as the keys, and
+--- the text as the values.
+--- The selection contains a list (selection.line_numbers) of
+--- the sorted line numbers, sorted in ascending order (lowest to highest)
+--- for easier processing.
+--- An example of looping over the returned selection: >
+---
+---     local selection = require('kolkhis.functions'):get_selection()
+---     if  not selection.line_numbers then
+---         return vim.notify("no line numbers found")
+---     end
+---         local current_ln = selection[line_number]
+---         local current_line_contents = current_ln.text
+---         local current_line_number = current_ln.line_number
+---         vim.notify(
+---         ("Line number: %d \nLine text: %s"):format(
+---             current_line_number, vim.inspect(current_line_contents)
+---         ))
+---     end
+---@return table selection: A table containing the current visual selection.
+function M.get_selection()
+    if vim.api.nvim_get_mode().mode ~= 'n' then
+        vim.cmd.norm('I') -- Set visual marks
+    end
+
+    local selection = {}
+    selection.line_numbers = {}
+    local ln_start, ln_end = vim.fn.line("'<"), vim.fn.line("'>")
+    if ln_start == ln_end and ln_start then
+        selection[ln_start] = { text = vim.fn.getline(ln_start) }
+        selection.line_numbers = { ln_start }
+        return selection
+    end
+    for i = vim.fn.line("'<"), vim.fn.line("'>") do
+        table.insert(selection.line_numbers, i)
+        selection[i] = { text = vim.fn.getline(i), line_number = i }
+    end
+    table.sort(selection.line_numbers)
+    selection.number_of_lines = table.maxn(selection.line_numbers)
+    vim.cmd.norm('gv') -- Preserve selection
+    return selection
+end
+
+---Work in progress. Not yet implemented.
+--- Loops over the current visual selection and performs 
+--- all check functions on each line.
+--- Saves the results into the line items of the `selection` table.
+function M:loop_selection()
+    local selection = self.get_selection()
+    for _, ln_num in ipairs(selection.line_numbers) do
+        local line = selection[ln_num].text
+        -- TODO: Add handling for these cases
+        selection[ln_num].is_todo = self.match_todo(line)
+        selection[ln_num].is_ordered_list = self.match_ol(line)
+        selection[ln_num].is_unordered_list = self.match_ul(line)
+        selection[ln_num].is_incompleted_todo = self.match_incomplete_todo(line)
+        selection[ln_num].is_completed_todo = self.match_complete_todo(line)
+    end
+    vim.cmd.norm('gv')
 end
 
 return M
