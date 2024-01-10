@@ -167,6 +167,8 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 export GREP_COLORS=':ms=01;31:mc=01;31:sl=38;5;248:cx=38;5;244:fn=38;5;68:ln=38;5;81:bn=32:se=36' 
 eval "$(dircolors -b ~/.dircolors)"
 
+export CDPATH='.:~:/usr:/etc:~/Documents:~/Downloads:~/Pictures:~/notes:~/Repos/github.com:~/notes/linux:~/notes/python:~/notes/c:~/Repos/github.com/kolkhis:~/.dotfiles:~/.dotfiles/tmux:~/.dotfiles/bash:~/.dotfiles/vim:~/.dotfiles/nvim/'
+
 export NVIMRC="$HOME/.dotfiles/nvim/.config/nvim/"
 
 ################################## PS1 ################################## 
