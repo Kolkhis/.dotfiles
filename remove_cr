@@ -1,7 +1,10 @@
 #!/bin/bash
+# shellcheck disable=SC2094
 
-tr '\r' ' ' > ~/.bashrc < ~/.dotfiles/bash/.bashrc 
-tr '\r' ' ' > ~/.bash_aliases < ~/.dotfiles/bash/.bash_aliases 
-tr '\r' ' ' > ~/.bash_functions < ~/.dotfiles/bash/.bash_functions 
-tr '\r' ' ' > ~/.dircolors < ~/.dotfiles/bash/.dircolors 
+while read -r file; do
+  if [[ -f "$file" ]]; then
+    echo "$file"
+    tr '\r' ' ' < "$file" > "$HOME/$(basename "$file")" 
+  fi
+done < <(find ~/.dotfiles/bash -type f)
 
