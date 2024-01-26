@@ -1,10 +1,11 @@
 #!/bin/bash
-# shellcheck disable=SC2094
+
 
 while read -r file; do
-  if [[ -f "$file" ]]; then
-    echo "$file"
-    tr '\r' ' ' < "$file" > "$HOME/$(basename "$file")" 
-  fi
+    if [[ -f "$file" ]]; then
+        sed 's/\r$//' "$file" > "$HOME/$(basename "$file")"
+    fi
 done < <(find ~/.dotfiles/bash -type f)
+
+
 
