@@ -1,34 +1,89 @@
 #!/bin/bash
+### Replacement script for GNU Stow to manage dotfiles.
+
+# TODO: Check for user flags. 
+#   -f, --force : then force overwrite any existing files.
+#   -s, --skip-existing : skip any existing files.
+#   -r, --remove : remove any existing files.
+#   -v, --verbose : print verbose output.
+# TODO: Verbosity levels
+# TODO: Write to a file to remember which files were managed by this script.
+#   * IN PROGRESS
 
 
-while read -r dotfile_directory; do
-    echo "${dotfile_directory//.dotfiles\//}"
-    final_destination="${dotfile_directory/#$HOME\/.dotfiles/}"
-    # final_destination="${final_destination//$dotfile_directory/}"
-    printf "Dotfile Directory: %s\nFinal Destination:%s\n" "$dotfile_directory" "$final_destination"
-done < <(find ~/.dotfiles/ -mindepth 1 -maxdepth 1 -type d ! -name '.git')
+
+declare -a MANAGED_FILES
+if [[ -f /tmp/FILES ]]; then
+    IFS=$'\n' read -r -d '' -a TF < /tmp/FILES
+    for f in "${TF[@]}"; do
+        printf "\e[38;5;82mManaged file\e[0m: %s\n" "$f"
+    done
+fi
+
+file_managed() {
+    if [[ -z ${MANAGED_FILES[0]} ]]; then
+        printf "\e[38;5;196mNo managed files\e[0m\n"
+        return 1
+    fi
+    for f in "${MANAGED_FILES[@]}"; do
+        if [[ "$f" == "$1" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
 
 declare -a DIRS
-IFS=$'\n' read -d '' -r -a DIRS < <(find ~/.dotfiles/ -mindepth 1 -maxdepth 1 -type d ! -name '.git')
+IFS=$'\n' read -d '' -r -a DIRS < \
+    <(find ~/.dotfiles/ -mindepth 1 -maxdepth 1 -type d ! -name '.git')
+
 
 for d in "${DIRS[@]}"; do
-    declare -a SUBDIRS
-    IFS=$'\n' read -d '' -r -a SUBDIRS < <(find "$d" -mindepth 1 -maxdepth 1 -type d)
-
     declare -a FILES
-    # find "$d" -mindepth 1 -type f -exec ln -sf '{}' "${HOME}/${}" \;
     IFS=$'\n' read -d '' -r -a FILES < <(find "$d" -mindepth 1 -type f)
     for f in "${FILES[@]}"; do
-        printf "Looking at file: %s\n" "$(basename "$f")"
-        final_destination="${d/#$HOME\/.dotfiles/$HOME}"
-        printf "Final destination: %s\n" "$final_destination"
-        # ln -s "$f" "$HOME"
+
+        ### POSIX-compliant way to remove the leading path: ###
+        # pattern="s/.dotfiles\/$(basename "$d")\///"
+        # final_destination=$(echo "$f" | sed -E "$pattern")
+
+        final_destination="${f//".dotfiles/$(basename "$d")/"/}"
+        if [[ ! -d "$(dirname "$final_destination")" ]]; then
+            if ! mkdir -p "$(dirname "$final_destination")"; then
+                printf "\e[38;5;196mFailed to create directory: Directory doesn't exist\e[0m: %s \n" "$(dirname "$final_destination")"
+            fi
+        fi
+
+        # printf "Debug: Location of file: %s\n" "$(dirname "$f")"
+        # printf "Debug: Final destination: %s\n" "$final_destination"
+
+        if [[ -f "$final_destination" ]]; then
+            printf "\e[38;5;82mFile exists\e[0m: %s \n\t\e[38;5;33m%s\e[0m\n" "$final_destination" "$(file "$final_destination")"
+            ln -sf "$f" "$final_destination" && MANAGED_FILES+=("$final_destination")
+        fi
+        if [[ ! -f "$final_destination" ]]; then
+            printf "\e[38;5;196mFile doesn't exist\e[0m: %s \n\t\e[38;5;33m%s\e[0m\n" "$final_destination" "$(file "$final_destination")"
+            if ! ln -sf "$f" "$final_destination" && MANAGED_FILES+=("$final_destination"); then
+                printf "\e[38;5;196mFailed to create symlink: File doesn't exist\e[0m: %s" "$final_destination"
+            fi
+        fi
     done
 done
 
+# TODO: Write MANAGED_FILES to a files.
+if ! printf "\n%s" "${MANAGED_FILES[@]}" > /tmp/FILES; then
+    printf "\e[38;5;196mFailed to write to file: %s\e[0m\n" "/tmp/FILES"
+fi
 
 
 
 
 
 
+
+# while read -r dotfile_directory; do
+#     final_destination=$(echo "$dotfile_directory" | sed 's;/home/'+"$USER"+'/.dotfiles/'+"$dotfile_directory"+'/;/home/'+"${USER}/"+';')
+#     ln -s "$dotfile_directory" "$final_destination"
+# done < <(find ~/.dotfiles/ -maxdepth 1 -type d)
+# sed "s;/home/$USER/"
