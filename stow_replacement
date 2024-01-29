@@ -81,7 +81,6 @@ for d in "${DIRS[@]}"; do
                 printf "\e[38;5;196mFailed to create symlink for %s: \e[0m: %s\n" \
                     "$(basename "$f")" "$final_destination"
             fi
-            MANAGED_FILES+=("$final_destination")
         elif [[ ! -f "$final_destination" ]]; then  #  && ! file_is_managed "$final_destination"
             printf "\e[38;5;196mFile doesn't exist, creating link.\e[0m: %s \n\t\e[38;5;33m%s\e[0m\n" \
                 "$final_destination" "$(file "$final_destination")"
