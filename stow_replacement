@@ -13,42 +13,48 @@
 
 
 declare -a MANAGED_FILES
-if [[ -f /tmp/FILES ]]; then
-    IFS=$'\n' read -r -d '' -a TF < /tmp/FILES
-    for f in "${TF[@]}"; do
-        printf "\e[38;5;82mManaged file\e[0m: %s\n" "$f"
-    done
-fi
 
-file_managed() {
-    if [[ -z ${MANAGED_FILES[0]} ]]; then
+# if [[ -f /tmp/FILES ]]; then
+#     IFS=$'\n' read -r -d '' -a MANAGED_FILES < /tmp/FILES
+#     for f in "${MANAGED_FILES[@]}"; do
+#         printf "\e[38;5;82mManaged file\e[0m: %s\n" "$f"
+#     done
+# fi
+
+file_is_managed() {
+    printf "Debug: Checking if file is managed: %s\n" "$1"
+    if [[ ${#MANAGED_FILES[@]} == 0 ]]; then
         printf "\e[38;5;196mNo managed files\e[0m\n"
         return 1
     fi
     for f in "${MANAGED_FILES[@]}"; do
         if [[ "$f" == "$1" ]]; then
+            printf "Debug: File found in MANAGED_FILES: \e[38;5;82m%s\e[0m\n" "$1"
             return 0
         fi
     done
+    printf "Debug: File NOT found in MANAGED_FILES: \e[38;5;196m%s\e[0m\n" "$1"
     return 1
 }
 
 
 declare -a DIRS
-IFS=$'\n' read -d '' -r -a DIRS < \
+IFS=$'\n' read -r -d '' -a DIRS < \
     <(find ~/.dotfiles/ -mindepth 1 -maxdepth 1 -type d ! -name '.git')
 
 
 for d in "${DIRS[@]}"; do
     declare -a FILES
-    IFS=$'\n' read -d '' -r -a FILES < <(find "$d" -mindepth 1 -type f)
+    IFS=$'\n' read -r -d '' -a FILES < <(find "$d" -mindepth 1 -type f)
     for f in "${FILES[@]}"; do
 
-        ### POSIX-compliant way to remove the leading path: ###
+        ### POSIX-compliant way to remove the leading path for final_destination ###
         # pattern="s/.dotfiles\/$(basename "$d")\///"
         # final_destination=$(echo "$f" | sed -E "$pattern")
+        ### or, oneline:
+        final_destination=$(printf "%s" "$f" | sed -E "s/.dotfiles\/$(basename "$d")\///")
 
-        final_destination="${f//".dotfiles/$(basename "$d")/"/}"
+        # final_destination="${f//".dotfiles/$(basename "$d")/"/}"
         if [[ ! -d "$(dirname "$final_destination")" ]]; then
             if ! mkdir -p "$(dirname "$final_destination")"; then
                 printf "\e[38;5;196mFailed to create directory: Directory doesn't exist\e[0m: %s \n" "$(dirname "$final_destination")"
@@ -56,34 +62,39 @@ for d in "${DIRS[@]}"; do
         fi
 
         # printf "Debug: Location of file: %s\n" "$(dirname "$f")"
-        # printf "Debug: Final destination: %s\n" "$final_destination"
+        printf "Debug: Final destination: %s\n" "$final_destination"
 
-        if [[ -f "$final_destination" ]]; then
-            printf "\e[38;5;82mFile exists\e[0m: %s \n\t\e[38;5;33m%s\e[0m\n" "$final_destination" "$(file "$final_destination")"
-            ln -sf "$f" "$final_destination" && MANAGED_FILES+=("$final_destination")
-        fi
-        if [[ ! -f "$final_destination" ]]; then
-            printf "\e[38;5;196mFile doesn't exist\e[0m: %s \n\t\e[38;5;33m%s\e[0m\n" "$final_destination" "$(file "$final_destination")"
+        # Check if file exists and is managed. If both, link.
+        # If file exists, but is not managed, then don't link and output error.
+        # If file doesn't exist, link it.
+        if [[ -f "$final_destination" ]] && file_is_managed "$final_destination"; then
+            printf "\e[38;5;82mManaged file being updated\e[0m: %s\n" "$final_destination"
             if ! ln -sf "$f" "$final_destination" && MANAGED_FILES+=("$final_destination"); then
-                printf "\e[38;5;196mFailed to create symlink: File doesn't exist\e[0m: %s" "$final_destination"
+                printf "\e[38;5;196mFailed to create symlink for %s: \e[0m: %s\n" \
+                    "$(basename "$f")" "$final_destination"
+            fi
+        elif [[ -f "$final_destination" ]] && ! file_is_managed "$final_destination"; then
+            printf "\e[38;5;196mFile already exists\e[0m: %s \n\t\e[38;5;33m%s\e[0m\
+                \nDelete file to manage it.\n" \
+                "$final_destination" "$(file "$final_destination")"
+            if ! ln -sf "$f" "$final_destination" && MANAGED_FILES+=("$final_destination"); then
+                printf "\e[38;5;196mFailed to create symlink for %s: \e[0m: %s\n" \
+                    "$(basename "$f")" "$final_destination"
+            fi
+            MANAGED_FILES+=("$final_destination")
+        elif [[ ! -f "$final_destination" ]]; then  #  && ! file_is_managed "$final_destination"
+            printf "\e[38;5;196mFile doesn't exist, creating link.\e[0m: %s \n\t\e[38;5;33m%s\e[0m\n" \
+                "$final_destination" "$(file "$final_destination")"
+            if ! ln -s "$f" "$final_destination" && MANAGED_FILES+=("$final_destination"); then
+                printf "\e[38;5;196mFailed to create symlink for %s: \e[0m: %s" \
+                    "$(basename "$f")" "$final_destination"
             fi
         fi
     done
 done
 
-# TODO: Write MANAGED_FILES to a files.
-if ! printf "\n%s" "${MANAGED_FILES[@]}" > /tmp/FILES; then
+# Write MANAGED_FILES to a file.
+if ! printf "%s\n" "${MANAGED_FILES[@]}" > /tmp/FILES; then
     printf "\e[38;5;196mFailed to write to file: %s\e[0m\n" "/tmp/FILES"
 fi
 
-
-
-
-
-
-
-# while read -r dotfile_directory; do
-#     final_destination=$(echo "$dotfile_directory" | sed 's;/home/'+"$USER"+'/.dotfiles/'+"$dotfile_directory"+'/;/home/'+"${USER}/"+';')
-#     ln -s "$dotfile_directory" "$final_destination"
-# done < <(find ~/.dotfiles/ -maxdepth 1 -type d)
-# sed "s;/home/$USER/"
