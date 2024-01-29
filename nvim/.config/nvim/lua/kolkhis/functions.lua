@@ -73,10 +73,10 @@ function M:md_ul_handler()
     else
         if self.match_todo(line) then
             vim.cmd.norm('I')
-            vim.cmd([['<,'>s/^\(\s*\)\?\* \[.\]/\1/]])
+            vim.cmd([['<,'>s/^\(\s*\)\?\(\*\|-\) \[.\]/\1/]])
         elseif self.match_ul(line) then
             vim.cmd.norm('I')
-            vim.cmd([['<,'>s/^\(\s*\)\?\* /\1/]])
+            vim.cmd([['<,'>s/^\(\s*\)\?\(\*\|-\) /\1/]])
         elseif self.match_ol(line) then
             vim.cmd.norm('I')
             vim.cmd([['<,'>s/^\(\s*\)\?\d\{1,}\. /\1* /]])
