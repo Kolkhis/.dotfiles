@@ -30,6 +30,8 @@ vim.keymap.set({ 'n' }, '<leader>sm', '<cmd>SM<CR>', { silent = true, noremap = 
 -- Easy resizing
 vim.keymap.set({ 'n' }, '<leader>=', '<cmd>resize +5<CR>', { silent = true, noremap = true })
 vim.keymap.set({ 'n' }, '<leader>-', '<cmd>resize -5<CR>', { silent = true, noremap = true })
+vim.keymap.set({ 'n' }, '<leader>0', '<cmd>wincmd 5><CR>')
+vim.keymap.set({ 'n' }, '<leader>9', '<cmd>wincmd 5<<CR>')
 
 -- Toggle fullscreen netrw
 vim.keymap.set({ 'n' }, '<leader>pv', function()
