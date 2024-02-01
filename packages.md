@@ -155,6 +155,7 @@ sudo apt update && sudo apt install vault
 * Ncat - What's the difference between `netcat` and `Ncat`?  
 * sleuthkit - File and filesystem analysis/forensics toolkit.
 * ranger - a console file manager (vi hotkeys)
+* btop - Customizable TUI Resource monitor. See the [github](https://github.com/aristocratos/btop) page
 
 
 ### Static site generator (available on pip):
