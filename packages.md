@@ -156,6 +156,8 @@ sudo apt update && sudo apt install vault
 * sleuthkit - File and filesystem analysis/forensics toolkit.
 * ranger - a console file manager (vi hotkeys)
 * btop - Customizable TUI Resource monitor. See the [github](https://github.com/aristocratos/btop) page
+    * See [example btop.conf](https://github.com/aristocratos/btop?tab=readme-ov-file#configurability)
+    * Goes in `$XDG_CONFIG_HOME/btop/btop.conf` or `$HOME/.config/btop/btop.conf`
 
 
 ### Static site generator (available on pip):
