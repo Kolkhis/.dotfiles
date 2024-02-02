@@ -20,7 +20,6 @@ vim.keymap.set('n', 'gk', "v:count == 0 ? 'k' : 'gk'", { expr = true, silent = t
 
 -- Formatting
 vim.keymap.set({ 'n', 'v' }, '<leader>fm', function()
-    -- TODO: Make command to get range if in visual mode
     vim.lsp.buf.format({ async = false })
 end, { desc = 'LSP formatting', silent = true, noremap = true })
 
@@ -28,8 +27,8 @@ end, { desc = 'LSP formatting', silent = true, noremap = true })
 vim.keymap.set({ 'n' }, '<leader>sm', '<cmd>SM<CR>', { silent = true, noremap = true })
 
 -- Easy resizing
-vim.keymap.set({ 'n' }, '<leader>=', '<cmd>resize +5<CR>', { silent = true, noremap = true })
-vim.keymap.set({ 'n' }, '<leader>-', '<cmd>resize -5<CR>', { silent = true, noremap = true })
+vim.keymap.set({ 'n' }, '<leader>=', '<cmd>wincmd 5+<CR>', { silent = true, noremap = true })
+vim.keymap.set({ 'n' }, '<leader>-', '<cmd>wincmd 5-<CR>', { silent = true, noremap = true })
 vim.keymap.set({ 'n' }, '<leader>0', '<cmd>wincmd 5><CR>')
 vim.keymap.set({ 'n' }, '<leader>9', '<cmd>wincmd 5<<CR>')
 
@@ -41,9 +40,11 @@ vim.keymap.set({ 'n' }, '<leader>pv', function()
         vim.cmd.Ex()
     end
 end)
+
 -- Clipboard integreity -- Copy to system clipboard
 vim.keymap.set({ 'n', 'v' }, '<leader>y', '"+y', { silent = true, noremap = true })
 vim.keymap.set({ 'n', 'v' }, '<leader>Y', '"+Y', { silent = true, noremap = true })
+
 -- Replace in select mode without overwriting register/clipboard
 vim.keymap.set({ 'x' }, '<leader>p', [["_dP]], { silent = true, noremap = true })
 
