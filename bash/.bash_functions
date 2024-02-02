@@ -44,11 +44,16 @@ shopts() {
 }
 
 
+standardcolor() {
+    for i in {0..7}; do
+        c=$'\e[3'${i}'m'
+        printf "%sColor Code: %s\n" "$c" "$i"
+    done
+}
+
 goto() {
-    p=$(which "$1")
-    d=$(dirname "$p")
-    printf "Going to %s. \n" "$d"
-    cd "$d" || exit
+    d="$(dirname "$(which "$1")")"
+    printf "Going to %s. \n" "$d" && cd "$d" || return 1
 }
 
 
