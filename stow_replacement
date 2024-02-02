@@ -14,19 +14,26 @@
 
 declare -a MANAGED_FILES
 
-# if [[ -f /tmp/FILES ]]; then
-#     IFS=$'\n' read -r -d '' -a MANAGED_FILES < /tmp/FILES
-#     for f in "${MANAGED_FILES[@]}"; do
-#         printf "\e[38;5;82mManaged file\e[0m: %s\n" "$f"
-#     done
-# fi
+if [[ -f /tmp/FILES ]]; then
+    declare -a SAVED_MANAGED_FILES
+    IFS=$'\n' read -r -d '' -a SAVED_MANAGED_FILES < /tmp/FILES
+    for f in "${SAVED_MANAGED_FILES[@]}"; do
+        printf "\e[38;5;82mManaged file\e[0m: %s\n" "$f"
+    done
+fi
 
 file_is_managed() {
     printf "Debug: Checking if file is managed: %s\n" "$1"
-    if [[ ${#MANAGED_FILES[@]} == 0 ]]; then
+    if [[ ${#MANAGED_FILES[@]} -eq 0 ]] && [[ ${#SAVED_MANAGED_FILES} -eq 0 ]]; then
         printf "\e[38;5;196mNo managed files\e[0m\n"
         return 1
     fi
+    for f in "${SAVED_MANAGED_FILES[@]}"; do
+        if [[ "$f" == "$1" ]]; then
+            printf "Debug: File found in MANAGED_FILES: \e[38;5;82m%s\e[0m\n" "$1"
+            return 0
+        fi
+    done
     for f in "${MANAGED_FILES[@]}"; do
         if [[ "$f" == "$1" ]]; then
             printf "Debug: File found in MANAGED_FILES: \e[38;5;82m%s\e[0m\n" "$1"
@@ -37,6 +44,11 @@ file_is_managed() {
     return 1
 }
 
+BLUE=$'\e[38;5;33m'
+LAVENDER=$'\e[38;5;99m'
+RED=$'\e[38;5;196m'
+GREEN=$'\e[38;5;82m'
+RESET=$'\e[0m'
 
 declare -a DIRS
 IFS=$'\n' read -r -d '' -a DIRS < \
@@ -49,51 +61,58 @@ for d in "${DIRS[@]}"; do
     for f in "${FILES[@]}"; do
 
         ### POSIX-compliant way to remove the leading path for final_destination ###
-        # pattern="s/.dotfiles\/$(basename "$d")\///"
-        # final_destination=$(echo "$f" | sed -E "$pattern")
-        ### or, oneline:
         final_destination=$(printf "%s" "$f" | sed -E "s/.dotfiles\/$(basename "$d")\///")
 
+        ### Using Parameter Expansion (Bash 4.0+) ###
         # final_destination="${f//".dotfiles/$(basename "$d")/"/}"
+        printf "FILE:              %s\n" "${BLUE}${f}${RESET}"
+        printf "FINAL DESTINATION: %s\n" "${LAVENDER}${final_destination}${RESET}"
+
         if [[ ! -d "$(dirname "$final_destination")" ]]; then
             if ! mkdir -p "$(dirname "$final_destination")"; then
                 printf "\e[38;5;196mFailed to create directory: Directory doesn't exist\e[0m: %s \n" "$(dirname "$final_destination")"
             fi
         fi
 
-        # printf "Debug: Location of file: %s\n" "$(dirname "$f")"
-        printf "Debug: Final destination: %s\n" "$final_destination"
 
-        # Check if file exists and is managed. If both, link.
-        # If file exists, but is not managed, then don't link and output error.
-        # If file doesn't exist, link it.
+        ### TODO:
+        ### Logic for Handling Files / Symlinks ###
+        # * Something is breaking here. 
+        # * I think it's got somthing to do with lynx/.config/lynx/lynx.lss
+        #     * It seems to be getting stuck on that file and symlinking all the files to it.
+
+        # If file exists and is managed, update it.
         if [[ -f "$final_destination" ]] && file_is_managed "$final_destination"; then
-            printf "\e[38;5;82mManaged file being updated\e[0m: %s\n" "$final_destination"
-            if ! ln -sf "$f" "$final_destination" && MANAGED_FILES+=("$final_destination"); then
-                printf "\e[38;5;196mFailed to create symlink for %s: \e[0m: %s\n" \
-                    "$(basename "$f")" "$final_destination"
+            printf "%sManaged file being updated\e[0m: %s\n" "${GREEN}" "$final_destination"
+            if ! ln -sf "$f" "$final_destination"; then
+                printf "%sFailed to create symlink for %s: \e[0m: %s\n" \
+                    "${RED}" "$(basename "$f")" "$final_destination"
+            else
+                MANAGED_FILES+=("$final_destination")
             fi
+        # If file exists, but isn't managed, skip it.
         elif [[ -f "$final_destination" ]] && ! file_is_managed "$final_destination"; then
-            printf "\e[38;5;196mFile already exists\e[0m: %s \n\t\e[38;5;33m%s\e[0m\
+            printf "%sFile already exists: %s \n\t%s\
                 \nDelete file to manage it.\n" \
-                "$final_destination" "$(file "$final_destination")"
-            if ! ln -sf "$f" "$final_destination" && MANAGED_FILES+=("$final_destination"); then
-                printf "\e[38;5;196mFailed to create symlink for %s: \e[0m: %s\n" \
-                    "$(basename "$f")" "$final_destination"
-            fi
+                "${RED}" "${RESET}${final_destination}" \
+                "${BLUE}$(file "$final_destination")${RESET}"
+        # If file doesn't exist, link it.
         elif [[ ! -f "$final_destination" ]]; then  #  && ! file_is_managed "$final_destination"
-            printf "\e[38;5;196mFile doesn't exist, creating link.\e[0m: %s \n\t\e[38;5;33m%s\e[0m\n" \
-                "$final_destination" "$(file "$final_destination")"
-            if ! ln -s "$f" "$final_destination" && MANAGED_FILES+=("$final_destination"); then
-                printf "\e[38;5;196mFailed to create symlink for %s: \e[0m: %s" \
-                    "$(basename "$f")" "$final_destination"
+            printf "%sFile doesn't exist, creating link.\e[0m: %s \n\t%s%s\e[0m\n" \
+                "${GREEN}" "$final_destination" "${BLUE}" "$(file "$final_destination")"
+            if ! ln -s "$f" "$final_destination"; then
+                printf "%sFailed to create symlink for %s: \e[0m: %s" \
+                    "${RED}" "$(basename "$f")" "$final_destination"
+            else
+                MANAGED_FILES+=("$final_destination")
             fi
         fi
+
     done
 done
 
-# Write MANAGED_FILES to a file.
-if ! printf "%s\n" "${MANAGED_FILES[@]}" > /tmp/FILES; then
-    printf "\e[38;5;196mFailed to write to file: %s\e[0m\n" "/tmp/FILES"
-fi
+# # Write MANAGED_FILES to a file.
+# if ! printf "%s\n" "${MANAGED_FILES[@]}" > /tmp/FILES; then
+#     printf "\e[38;5;196mFailed to write to file: %s\e[0m\n" "/tmp/FILES"
+# fi
 
