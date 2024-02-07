@@ -104,6 +104,11 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
         vim.keymap.set({ 'v', 'n' }, ',lc', function()
             fns:md_ol_handler()
         end, { silent = true, noremap = true, buffer = true })
+
+        -- Reformat weirdly formatted markdown
+        vim.keymap.set({ 'v' }, ',le', function()
+            fns:strip_nonsense()
+        end, { silent = true, noremap = true, buffer = true })
     end,
     group = md_aug_id,
     desc = 'Add keybindings ( ,ls ,lc ,lt ,lb ) to add list items, todo boxes, and linebreaks.',
@@ -111,19 +116,6 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
 
 -- Test keybindings
 vim.keymap.set({ 'n', 'v' }, '<leader>as', function()
-    -- if vim.bo.filetype =='markdown' then
-    -- local line = vim.api.nvim_get_current_line()
-    -- fns:loop_selection()
-    -- local selection = fns.get_selection()
-    -- if not selection.line_numbers then
-    --     return vim.notify('no line numbers found')
-    -- end
-    -- for _, ln in ipairs(selection.line_numbers) do
-    --     local current_ln = selection[ln]
-    --     local line = current_ln.text
-    --     local line_number = current_ln.line_number
-    --     vim.notify(('Line number: %d\nLine: %s'):format(line_number, vim.inspect(line)))
-    -- end
     vim.system({'ls'}, {
     on_stdout = function(chan_id, data, name)
         vim.notify(vim.inspect(data) .. '\n' .. vim.inspect(name) .. '\n' .. vim.inspect(chan_id))

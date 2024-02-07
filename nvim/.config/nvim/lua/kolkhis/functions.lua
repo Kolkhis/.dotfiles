@@ -294,6 +294,20 @@ M.lower_upper_toggle = function()
     end
 end
 
+--- Strip out all of the weird markdown formatting from the current visual selection.
+function M.strip_nonsense()
+    if vim.api.nvim_get_mode().mode == 'n' then
+        return
+    end
+    vim.cmd.norm('I')
+    local line = vim.fn.getline("'<")
+    if vim.regex([[^\*]]):match_str(line) then
+        vim.cmd([['<,'>s/^\(\* \)\s\+/\1/]])
+        vim.cmd([['<,'>s/\*\{2,}//g]])
+        vim.cmd([['<,'>s/\. /\.  \r    * /g]])
+    end
+end
+
 ----------------[[ Visual Selection Functions ]]----------------
 
 --- Gets the current visual selection.
@@ -341,7 +355,7 @@ function M.get_selection()
 end
 
 ---Work in progress. Not yet implemented.
---- Loops over the current visual selection and performs 
+--- Loops over the current visual selection and performs
 --- all check functions on each line.
 --- Saves the results into the line items of the `selection` table.
 function M:loop_selection()
