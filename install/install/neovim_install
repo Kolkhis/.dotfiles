@@ -1,0 +1,22 @@
+#!/bin/bash
+
+install_neovim() {
+    if ! \
+    sudo add-apt-repository ppa:neovim-ppa/unstable -y &&
+    sudo apt-get update &&
+    sudo apt-get install neovim -y;
+    then
+        printf "There was a problem installing neovim.\n"
+        return 1
+    fi
+    return 0
+}
+
+
+if ! install_neovim; then
+    printf "Couldn't install neovim. Exiting.\n"
+    return 1
+fi
+
+
+

@@ -1,16 +1,31 @@
 #!/bin/bash
 
-
+GREEN=$'\e[32m'
+RED=$'\e[31m'
+RESET=$'\e[0m'
 install_libssl1.1() {
-    curl -fsSL -o /tmp/libssl1.1_1.1.0g-2ubuntu4_amd64.deb http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
+    if ! curl -fsSL -o /tmp/libssl1.1_1.1.0g-2ubuntu4_amd64.deb \
+        http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb; then
+        {
+            printf "%sDownload failed for libssl1.1%s" "${RED}" "${RESET}" >&2;
+            return 1;
+        }
+    fi
+
     if [[ -f /tmp/libssl1.1_1.1.0g-2ubuntu4_amd64.deb ]]; then
         printf "Download successful, attempting to install libssl1.1\n"
-        if sudo dpkg -i /tmp/libssl1.1_1.1.0g-2ubuntu4_amd64.deb; then
-            printf "Install was successful.\n"
-        fi
-    else
-        printf "There was a problem downloading libssl1.1"
+    fi
+
+    if ! sudo dpkg -i /tmp/libssl1.1_1.1.0g-2ubuntu4_amd64.deb && printf "Install was successful.\n"; then
+        {
+            printf "%sThere was a problem installing libssl1.1%s" "${RED}" "${RESET}" >&2;
+            return 1;
+        }
     fi
 }
 
-install_libssl1.1
+if ! install_libssl1.1; then
+    printf "%sCould not install libssl1.1\n%s" "${RED}" "${RESET}"
+    exit 1
+fi
+printf "%sSuccessfully installed libssl1.1\n%s" "${GREEN}" "${RESET}"

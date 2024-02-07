@@ -1,11 +1,41 @@
 #!/bin/bash
 
-mods_install(){
-    sudo mkdir -p /etc/apt/keyrings
-    curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
-    echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
-    sudo apt-get update && sudo apt-get install mods
+mods_install() {
+    if ! sudo mkdir -p /etc/apt/keyrings; then
+        printf "\e[32mFailed to create apt keyring.\e[0m\n" >&2;
+        return 1
+    fi
+
+    if ! {
+        curl -fsSL https://repo.charm.sh/apt/gpg.key |
+        sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg;
+    }; then 
+        printf "\e[31mFailed to download charm gpg key.\e[0m\n" >&2;
+        return 1
+    fi
+
+    if ! {
+        printf "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *\n" |
+        sudo tee /etc/apt/sources.list.d/charm.list; 
+    }; then
+        printf "\e[31mFailed to save charm gpg key.\e[0m\n" >&2;
+        return 1
+    fi
+
+    if ! { sudo apt-get update && sudo apt-get install mods -y -qq; }; then
+        printf "\e[31mFailed to download and install mods from apt.\e[0m\n" >&2;
+        return 1
+    fi
+
+    printf "Successfully installed mods.\n"
+    return 0
 }
-mods_install
+
+
+if ! mods_install; then
+    printf "\e[31mFailed to install mods.\e[0m\n"
+    exit 1
+fi
+
 
 
