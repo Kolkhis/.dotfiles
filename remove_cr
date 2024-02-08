@@ -1,11 +1,10 @@
 #!/bin/bash
 
+declare -a FILES
+IFS=$'\n' read -r -d '' -a FILES < <(find ~/.dotfiles/ -type f ! -path '*.git*')
 
-while read -r file; do
-    if [[ -f "$file" ]]; then
-        sed 's/\r$//' "$file" > "$HOME/$(basename "$file")"
-    fi
-done < <(find ~/.dotfiles/bash -type f)
-
-
+for f in "${FILES[@]}"; do
+    tr -d '\r' < "$f" > "${f}_lf"
+    mv "${f}_lf" "$f"
+done
 
