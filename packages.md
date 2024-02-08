@@ -211,13 +211,13 @@ install_libssl1.1() {
 go_install() {
     mkdir -p ~/install/go
     cd ~/install/go || exit
-    if [[ ! -f /tmp/go1.21.1.linux-amd64.tar.gz ]]; then
-        curl -fsSL -o /tmp/go1.21.1.linux-amd64.tar.gz \
-        https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
-    else
+    if ! curl -fsSL -o /tmp/go1.21.1.linux-amd64.tar.gz \
+         https://go.dev/dl/go1.21.1.linux-amd64.tar.gz; 
+    then
         printf "There was a problem downloading Go.\n"
         return 1
     fi
+
     if [[ -f /tmp/go1.21.1.linux-amd64.tar.gz ]]; then
         sudo tar -C /usr/local -xzf /tmp/go1.21.1.linux-amd64.tar.gz
         go_path_exists=false
@@ -242,62 +242,39 @@ go_install() {
 }
 
 
-install_nvm() {
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    nvm install node
-    return 0
-}
-
-
-install_neovim() {
-    sudo add-apt-repository ppa:neovim-ppa/unstable -y
-    sudo apt-get update
-    sudo apt-get install neovim -y
-    return 0
-}
-
-
-install_mods() {
-    sudo mkdir -p /etc/apt/keyrings
-    curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
-    echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
-    sudo apt-get install mods
-    return 0
-}
-
-
 sudo apt-get update && sudo apt-get upgrade -y
 
-sudo apt-get install -y \
-stow \
-gcc \
-unzip \
-tree \
-entr \
-w3m \
-lolcat \
-lynx \
-tmux \
-screen \
-tldr \
-fzf \
-shfmt \
-ncal \
-nodejs \
-npm \
-xterm \
-visidata \
-python3.10-venv \
-python3-pip \
-gopls \
-clang \
-libtool-bin \
-libpython3-dev \
-net-tools \
-network-manager \
-whois
+PACKAGES=(
+    "stow"
+    "gcc"
+    "unzip"
+    "tree"
+    "entr"
+    "w3m"
+    "lolcat"
+    "lynx"
+    "tmux"
+    "screen"
+    "tldr"
+    "fzf"
+    "shfmt"
+    "ncal"
+    "nodejs"
+    "npm"
+    "xterm"
+    "visidata"
+    "python3.10-venv"
+    "python3-pip"
+    "gopls"
+    "clang"
+    "libtool-bin"
+    "libpython3-dev"
+    "net-tools"
+    "network-manager"
+    "whois"
+)
+
+sudo apt-get install -y "$(printf "%s " "${PACKAGES[@]}")"
 
 install_nvm
 install_libssl1.1
