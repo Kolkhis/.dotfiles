@@ -1,14 +1,37 @@
 #!/bin/bash
 ### Replacement script for GNU Stow to manage dotfiles.
-
+#   *****  IN PROGRESS  ***** 
+#   If you run this right now, it'll overwrite all of your dotfiles.
+#
+#   TODO: Create an isolated environment for testing.
+#
+# Feature TODOs:
 # TODO: Check for user flags. 
 #   -f, --force : then force overwrite any existing files.
 #   -s, --skip-existing : skip any existing files.
 #   -r, --remove : remove any existing files.
 #   -v, --verbose : print verbose output.
-# TODO: Verbosity levels
+# TODO: Add verbosity levels
 # TODO: Write to a file to remember which files were managed by this script.
-#   * IN PROGRESS
+
+
+
+# Check if the terminal supports 256 colors.
+case "$TERM" in
+    (*256*)
+        BLUE=$'\e[38;5;33m';
+        LAVENDER=$'\e[38;5;99m';
+        RED=$'\e[38;5;196m';
+        GREEN=$'\e[38;5;82m';
+        ;;
+    (*)
+        BLUE=$'\e[34m';
+        LAVENDER=$'\e[35m';
+        RED=$'\e[31m';
+        GREEN=$'\e[32m';
+        ;;
+esac
+RESET=$'\e[0m';
 
 
 
@@ -18,37 +41,31 @@ if [[ -f /tmp/FILES ]]; then
     declare -a SAVED_MANAGED_FILES
     IFS=$'\n' read -r -d '' -a SAVED_MANAGED_FILES < /tmp/FILES
     for f in "${SAVED_MANAGED_FILES[@]}"; do
-        printf "\e[38;5;82mManaged file\e[0m: %s\n" "$f"
+        printf "%sManaged file: %s\n" "${GREEN}" "${RESET}$f"
     done
 fi
 
 file_is_managed() {
     printf "Debug: Checking if file is managed: %s\n" "$1"
     if [[ ${#MANAGED_FILES[@]} -eq 0 ]] && [[ ${#SAVED_MANAGED_FILES} -eq 0 ]]; then
-        printf "\e[38;5;196mNo managed files\e[0m\n"
+        printf "%sNo managed files were found.%s\n" "${RED}" "${RESET}"
         return 1
     fi
     for f in "${SAVED_MANAGED_FILES[@]}"; do
         if [[ "$f" == "$1" ]]; then
-            printf "Debug: File found in MANAGED_FILES: \e[38;5;82m%s\e[0m\n" "$1"
+            printf "Debug: File found in MANAGED_FILES: %s\n" "${GREEN}$1${RESET}"
             return 0
         fi
     done
     for f in "${MANAGED_FILES[@]}"; do
         if [[ "$f" == "$1" ]]; then
-            printf "Debug: File found in MANAGED_FILES: \e[38;5;82m%s\e[0m\n" "$1"
+            printf "Debug: File found in MANAGED_FILES: %s\n" "${GREEN}$1${RESET}"
             return 0
         fi
     done
-    printf "Debug: File NOT found in MANAGED_FILES: \e[38;5;196m%s\e[0m\n" "$1"
+    printf "Debug: File NOT found in MANAGED_FILES: %s\n" "${RED}$1${RESET}"
     return 1
 }
-
-BLUE=$'\e[38;5;33m'
-LAVENDER=$'\e[38;5;99m'
-RED=$'\e[38;5;196m'
-GREEN=$'\e[38;5;82m'
-RESET=$'\e[0m'
 
 declare -a DIRS
 IFS=$'\n' read -r -d '' -a DIRS < \
@@ -111,8 +128,9 @@ for d in "${DIRS[@]}"; do
     done
 done
 
-# # Write MANAGED_FILES to a file.
-# if ! printf "%s\n" "${MANAGED_FILES[@]}" > /tmp/FILES; then
-#     printf "\e[38;5;196mFailed to write to file: %s\e[0m\n" "/tmp/FILES"
-# fi
+# Write MANAGED_FILES to a file.
+if ! printf "%s\n" "${MANAGED_FILES[@]}" > /tmp/FILES; then
+    printf "%sFailed to write to file: %s\n" "${RED}" "/tmp/FILES${RESET}"
+fi
+
 
