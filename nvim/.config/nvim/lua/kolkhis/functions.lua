@@ -294,17 +294,31 @@ M.lower_upper_toggle = function()
     end
 end
 
---- Strip out all of the weird markdown formatting from the current visual selection.
+--- Strip out all of the weird markdown formatting from the current visual selection or current line.
 function M.strip_nonsense()
-    if vim.api.nvim_get_mode().mode == 'n' then
-        return
-    end
     vim.cmd.norm('I')
-    local line = vim.fn.getline("'<")
-    if vim.regex([[^\*]]):match_str(line) then
-        vim.cmd([['<,'>s/^\(\* \)\s\+/\1/]])
-        vim.cmd([['<,'>s/\*\{2,}//g]])
-        vim.cmd([['<,'>s/\. /\.  \r    * /g]])
+    local mode = vim.api.nvim_get_mode().mode
+    local range, line = "'<,'>", vim.fn.getline("'<")
+    if mode == 'n' then
+        range = tostring(vim.fn.line('.'))
+        line = vim.fn.getline('.')
+    end
+    if vim.regex([[\(^[*-]\)]]):match_str(line) then
+        if vim.regex([[^\(\s*\)\(\* \|- \)\s\+]]):match_str(line) then
+            vim.cmd(([[%ss/^\(\s*\)\(\* \|- \)\s\+/\1\* /]]):format(range))
+        end
+        if vim.regex([[\. ]]):match_str(line) then
+            vim.cmd(([[%ss/[^0-9]\zs\. /\.  \r    * /g]]):format(range))
+        end
+        if vim.regex([[^-]]):match_str(line) then
+            vim.cmd(([[%ss/^-/\*/g]]):format(range))
+        end
+    end
+    if vim.regex([[\. ]]):match_str(line) then
+        vim.cmd(([[%ss/[^0-9]\zs\. /\.  \r/g]]):format(range))
+    end
+    if vim.regex([[\*\{2,}]]):match_str(line) then
+        vim.cmd(([[%ss/\*\{2}//g]]):format(range))
     end
 end
 

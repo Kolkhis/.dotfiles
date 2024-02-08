@@ -106,7 +106,7 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
         end, { silent = true, noremap = true, buffer = true })
 
         -- Reformat weirdly formatted markdown
-        vim.keymap.set({ 'v' }, ',le', function()
+        vim.keymap.set({ 'v', 'n' }, ',le', function()
             fns:strip_nonsense()
         end, { silent = true, noremap = true, buffer = true })
     end,
