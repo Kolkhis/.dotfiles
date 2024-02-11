@@ -373,15 +373,6 @@ end
 --     end
 -- end
 
-M.special_chars_table = {
-    [':'] = '',
-    ['.'] = '',
-    ['-'] = '',
-    ['('] = '',
-    [')'] = '',
-    ['`'] = '',
-}
-
 function M.generate_toc()
     local toc = {}
     local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
@@ -398,12 +389,8 @@ function M.generate_toc()
     table.insert(toc_lines, '## Table of Contents')
     for _, header in ipairs(toc) do
         local spacing = string.rep('    ', header.level - 2)
-        local link_dest = header.title:lower():gsub('([,.{}:^$])', '')
-        -- link_dest = link_dest:gsub('%s+$', '')
+        local link_dest = header.title:lower():gsub('([,`{}:^$])', '')
         link_dest = link_dest:gsub('%s', '-')
-        -- link_dest = link_dest:gsub(':$', '')
-        -- link_dest = header.title:lower():gsub(' ', '-')
-        -- link_dest = link_dest:gsub([[([.,{}:])]], '')
         local link = ([[%s* [%s](#%s) ]]):format(spacing, header.title:gsub(':$', ''), link_dest)
         table.insert(toc_lines, link)
     end
