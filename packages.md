@@ -187,61 +187,6 @@ sudo apt update && sudo apt install vault
 ```bash
 #!/bin/bash
 
-
-install_libssl1.1() {
-    curl -fsSL -o /tmp/libssl1.1_1.1.0g-2ubuntu4_amd64.deb \
-    http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
-    if [[ -f /tmp/libssl1.1_1.1.0g-2ubuntu4_amd64.deb ]]; then
-        printf "Download successful, attempting to install libssl1.1\n"
-        if sudo dpkg -i /tmp/libssl1.1_1.1.0g-2ubuntu4_amd64.deb; then
-            printf "Install was successful.\n"
-            return 0
-        else
-            printf "There was an issue with the libssl1.1 installation.\n"
-            return 1
-        fi
-    else
-        printf "There was a problem downloading libssl1.1\n"
-        return 1
-    fi
-    return 0
-}
-
-
-go_install() {
-    mkdir -p ~/install/go
-    cd ~/install/go || exit
-    if ! curl -fsSL -o /tmp/go1.21.1.linux-amd64.tar.gz \
-         https://go.dev/dl/go1.21.1.linux-amd64.tar.gz; 
-    then
-        printf "There was a problem downloading Go.\n"
-        return 1
-    fi
-
-    if [[ -f /tmp/go1.21.1.linux-amd64.tar.gz ]]; then
-        sudo tar -C /usr/local -xzf /tmp/go1.21.1.linux-amd64.tar.gz
-        go_path_exists=false
-        for file in ~/.bash*; do
-            if [[ $file == "$HOME/.bash_history" ]] || [[ $file == "$HOME/.bash_logout" ]]; then
-                continue
-            fi
-            if grep -q "export PATH=\$PATH:/usr/local/go/bin" "$file"; then
-                go_path_exists=true
-            fi
-        done
-        if [[ ! $go_path_exists ]]; then
-            printf "export PATH=\$PATH:/usr/local/go/bin\n" >> ~/.bashrc
-        fi
-        source "$HOME/.bashrc"
-        go version
-    else
-        printf "The Go tarball could not be found.\n"
-    fi
-    cd - || return 1
-    return 0
-}
-
-
 sudo apt-get update && sudo apt-get upgrade -y
 
 PACKAGES=(
@@ -275,11 +220,5 @@ PACKAGES=(
 )
 
 sudo apt-get install -y "$(printf "%s " "${PACKAGES[@]}")"
-
-install_nvm
-install_libssl1.1
-go_install
-install_neovim
-install_mods
 sudo npm install -g pyright
 ```
