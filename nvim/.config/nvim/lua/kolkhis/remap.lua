@@ -109,6 +109,11 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
         vim.keymap.set({ 'v', 'n' }, ',le', function()
             fns:strip_nonsense()
         end, { silent = true, noremap = true, buffer = true })
+
+        -- TEST: Generate table of contents
+        vim.keymap.set({ 'n' }, ',lw', function ()
+            fns:generate_toc()
+        end)
     end,
     group = md_aug_id,
     desc = 'Add keybindings ( ,ls ,lc ,lt ,lb ) to add list items, todo boxes, and linebreaks.',
