@@ -170,6 +170,7 @@ eval "$(dircolors -b ~/.dircolors)"
 export CDPATH='.:~:/usr:~/Documents:~/Downloads:~/Pictures:~/notes:~/Repos/github.com:~/notes/linux:~/notes/python:~/notes/c:~/Repos/github.com/kolkhis:~/.dotfiles:~/.dotfiles/tmux:~/.dotfiles/bash:~/.dotfiles/vim:~/.dotfiles/nvim/'
 
 export NVIMRC="$HOME/.dotfiles/nvim/.config/nvim/"
+export SCREENRC="$HOME/.config/.screenrc"
 
 ################################## PS1 ################################## 
 # Python: Prevent default "(venv)" text

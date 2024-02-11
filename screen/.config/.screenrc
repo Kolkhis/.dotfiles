@@ -1,0 +1,6 @@
+
+bind k focus up
+bind j focus down
+bind h focus left
+bind l focus right
+
