@@ -327,13 +327,13 @@ function M.strip_nonsense()
             if vim.regex([[^\(\s*\)\([*-]\)\s*]]):match_str(line) then
                 vim.cmd(([[%ss/^\(\s*\)[*-]\s*/\1\* /]]):format(range))
             end
-            if vim.regex([[[^0-9]\. \([\w`]\)]]):match_str(line) then
+            if vim.regex([[[^0-9]\. \([A-Za-z`]\)]]):match_str(line) then
                 vim.cmd(([[%ss/\([^0-9]\)\. \([A-Za-z`]\)/\1\.  \r    * \2/g]]):format(range))
             end
-        end
-
-        if vim.regex([[[^0-9]\zs\. \([\w`]\)]]):match_str(line) then
-            vim.cmd(([[%ss/[^0-9]\zs\. \([\w`]\)/\.  \r\1/g]]):format(range))
+        else
+            if vim.regex([[[^0-9]\zs\. \([A-Za-z`]\)]]):match_str(line) then
+                vim.cmd(([[%ss/[^0-9]\zs\. \([A-Za-z`]\)/\.  \r\1/g]]):format(range))
+            end
         end
         if vim.regex([[\*\{2,}]]):match_str(line) then
             vim.cmd(([[%ss/\*\{2}//g]]):format(range))
@@ -341,47 +341,33 @@ function M.strip_nonsense()
     end
 end
 
--- --- Strip out all of the weird markdown formatting from the current visual selection or current line.
--- function M.strip_nonsense()
---     local mode = vim.api.nvim_get_mode().mode
---     local range, line = '', ''
---     if mode == 'n' then
---         range, line = tostring(vim.fn.line('.')), vim.fn.getline('.')
---     else
---         vim.cmd.norm('I')
---         range, line = "'<,'>", vim.fn.getline("'<")
---     end
---     if vim.regex([[\(^\s*[*|-]\)]]):match_str(line) then
---         if vim.regex([[^\(\s*\)\?-\s*]]):match_str(line) then
---             vim.cmd(([[%ss/^\(\s*\)\?-\s*/\1\* /]]):format(range))
---         end
---         if vim.regex([[^\(\s*\)\([*-]\)\s*]]):match_str(line) then
---             vim.cmd(([[%ss/^\(\s*\)[*-]\s*/\1\* /]]):format(range))
---         end
---         if vim.regex([[\. ]]):match_str(line) then
---             vim.cmd(([[%ss/[^0-9]\zs\. /\.  \r    * /g]]):format(range))
---         end
---         if vim.regex([[^-]]):match_str(line) then
---             vim.cmd(([[%ss/^-/\*/g]]):format(range))
---         end
---     end
---     if vim.regex([[\. ]]):match_str(line) then
---         vim.cmd(([[%ss/[^0-9]\zs\. /\.  \r/g]]):format(range))
---     end
---     if vim.regex([[\*\{2,}]]):match_str(line) then
---         vim.cmd(([[%ss/\*\{2}//g]]):format(range))
---     end
--- end
+--- Use syntax ID to determine if the line is a header or not
+function M.match_markdown_header(ln_num)
+    local syntax_id = vim.fn.synID(ln_num, vim.fn.col('.'), 1)
+    local synid_name = vim.fn.synIDattr(syntax_id, 'name')
+    if not synid_name then
+        return false
+    end
+    if synid_name and synid_name:match('markdownH.*') then
+        return true
+    end
+    return false
+end
 
-function M.generate_toc()
+--- Inserts a Markdown table of contents into the current buffer, at the cursor.
+function M:generate_toc()
     local toc = {}
     local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    for _, line in ipairs(lines) do
+    for i, line in ipairs(lines) do
         if line:match('^#+ .+') then
-            line = line:gsub('(.*)%s+$', '%1')  -- :gsub('(.*):$', '%1')
-            local level = line:match('^(#+)')
-            local title = line:match('^#+ (.+)'):gsub('%s+$', '')
-            table.insert(toc, { level = #level, title = title })
+            if self.match_markdown_header(i) then
+                line = line:gsub('(.*)%s+$', '%1')
+                local level = line:match('^(#+)')
+                local title = line:match('^#+ (.+)'):gsub('%s+$', '')
+                if #level < 5 then
+                    table.insert(toc, { level = #level, title = title })
+                end
+            end
         end
     end
 
