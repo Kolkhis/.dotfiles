@@ -4,3 +4,12 @@ bind j focus down
 bind h focus left
 bind l focus right
 
+# allow bold colors - necessary for some reason
+color b ".I"
+
+# tell screen how to set colors. AB = backgro
+termcapinfo xterm 'Co#256:AB=\e[48;5;%dm:AF=\e[38;5;%dm'  
+
+# use current bg color for erased chars
+defbce on    
+
