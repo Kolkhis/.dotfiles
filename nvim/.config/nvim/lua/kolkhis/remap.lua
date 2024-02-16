@@ -76,6 +76,24 @@ vim.keymap.set({ 'c' }, '<leader>am', [[\@<=]], {
 -- Toggle :Lexplore
 vim.keymap.set({ 'n' }, '<leader>ns', '<Plug>NetrwShrink', { noremap = true, silent = true })
 
+-- LSP
+vim.keymap.set({ 'n' }, '<leader>rn', function ()
+    vim.lsp.buf.rename()
+end)
+
+vim.keymap.set({ 'n' }, '<leader>rh', function ()
+    vim.lsp.buf.hover()
+end)
+
+vim.keymap.set({ 'n' }, '<leader>ri', function()
+    vim.lsp.buf.implmentations()
+end)
+
+vim.keymap.set({ 'n' }, '<leader>ho', function()
+    vim.lsp.buf.signature_help()
+end)
+
+
 local fns = require('kolkhis.functions')
 vim.keymap.set({ 'i', 'n' }, '<C-c>', fns.lower_upper_toggle, { noremap = true, silent = true })
 vim.keymap.set({ 'i', 'n' }, '<C-x>', fns.camel_snake_toggle, { noremap = true, silent = true })
@@ -111,7 +129,7 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
         end, { silent = true, noremap = true, buffer = true })
 
         -- TEST: Generate table of contents
-        vim.keymap.set({ 'n' }, ',lw', function ()
+        vim.keymap.set({ 'n' }, ',lw', function()
             fns:generate_toc()
         end)
     end,
@@ -119,11 +137,8 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
     desc = 'Add keybindings ( ,ls ,lc ,lt ,lb ) to add list items, todo boxes, and linebreaks.',
 })
 
--- Test keybindings
+-- Test keybinding
 vim.keymap.set({ 'n', 'v' }, '<leader>as', function()
-    vim.system({'ls'}, {
-    on_stdout = function(chan_id, data, name)
-        vim.notify(vim.inspect(data) .. '\n' .. vim.inspect(name) .. '\n' .. vim.inspect(chan_id))
-    end
-})
-end) --
+    vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())
+end)
+
