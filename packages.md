@@ -16,7 +16,7 @@ sudo apt-mark showmanual
 * lolcat
 * lynx
 * tmux
-* screen
+* screen (build from source for 256 color support)
 * tldr
 * fzf
 * shfmt
@@ -63,6 +63,7 @@ libgtk-3-dev \
 libxt-dev
 ```
 
+
 ## Other Packages
 *These are package either unavailable, not up-to-date on`apt`, or have extra requirements.*
 * nvim (latest neovim - see below)
@@ -76,43 +77,57 @@ libxt-dev
 * cargo (rust)
     * `curl -fsSL https://sh.rustup.rs | sh`
 
-### Basic Package Installation
+## Basic Package Installation
 ```bash
-sudo apt-get update && sudo apt-get upgrade
-sudo apt-get install -y \
-stow \
-gcc \
-unzip \
-tree \
-entr \
-w3m \
-lolcat \
-lynx \
-tmux \
-screen \
-tldr \
-fzf \
-shfmt \
-ncal \
-nodejs \
-npm \
-xterm \
-visidata \
-python3.10-venv \
-python3-pip \
-gopls \
-clang \
-libtool-bin \
-libpython3-dev \
-net-tools \
-network-manager \
-whois
+#!/bin/bash
 
+sudo apt-get update && sudo apt-get upgrade -y
+
+PACKAGES=(
+    "stow"
+    "gcc"
+    "unzip"
+    "tree"
+    "entr"
+    "w3m"
+    "lolcat"
+    "lynx"
+    "tmux"
+    "screen"
+    "tldr"
+    "fzf"
+    "shfmt"
+    "ncal"
+    "nodejs"
+    "npm"
+    "xterm"
+    "visidata"
+    "python3.10-venv"
+    "python3-pip"
+    "gopls"
+    "clang"
+    "libtool-bin"
+    "libpython3-dev"
+    "net-tools"
+    "network-manager"
+    "whois"
+)
+
+sudo apt-get install -y "$(printf "%s " "${PACKAGES[@]}")"
 sudo npm install -g pyright
 ```
 
-### Installing Other Packages (packages not up-to-date or unavailable on `apt`)
+## 256-Color in GNU Screen
+Screen doesn't support 256-color by default, so you have to build it from source.
+```bash
+curl -O https://ftp.gnu.org/gnu/screen/screen-4.9.1.tar.gz
+tar -zxvf screen-4.9.1.tar.gz
+./configure --enable-colors256 
+make 
+sudo make install
+```
 
+## Installing Other Packages (packages not up-to-date or unavailable on `apt`)
 * charmbracelet/mods (ChatGPT from the command line)
 ```bash
 sudo mkdir -p /etc/apt/keyrings
@@ -144,7 +159,7 @@ sudo apt update && sudo apt install vault
 ```
 
 
-### Tools to check out
+## Tools to check out
 * parallel (GNU Parallel) - Shell tool for executing jobs in parallel using one or more machines.
     * A job is typically a inslge command or small script that has to be run
       for each line in the input.
@@ -179,9 +194,6 @@ sudo apt update && sudo apt install vault
   ```bash
   sudo apt install openjdk-17-jdk openjdk-17-jre
   ```
-* Wrong Java version in `apt`:
-    * default-jre (v11)
-    * default-jdk (v11)
 
 ## Package Install Script
 ```bash
@@ -222,3 +234,12 @@ PACKAGES=(
 sudo apt-get install -y "$(printf "%s " "${PACKAGES[@]}")"
 sudo npm install -g pyright
 ```
+
+## Installing Different Versions with `apt`
+On Debian-based distros, you can specify the version number while 
+installing with `apt`.
+```bash
+sudo apt install screen=4.5.0
+```
+
+
