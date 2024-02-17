@@ -4,12 +4,15 @@ bind j focus down
 bind h focus left
 bind l focus right
 
-# allow bold colors - necessary for some reason
-color b ".I"
+shell "bash"
+hardstatus alwayslastline "%{.bW}%-w%{.rW}%n %t%{-}%+w %=%{..G} %H %{..Y} %Y-%m-%d %c"
+termcapinfo xterm* 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+attrcolor b ".I"
+term screen-256color
 
-# tell screen how to set colors. AB = backgro
-termcapinfo xterm 'Co#256:AB=\e[48;5;%dm:AF=\e[38;5;%dm'  
-
-# use current bg color for erased chars
-defbce on    
+startup_message off
+vbell off
+altscreen on
+defbce on
 
