@@ -81,7 +81,7 @@ vim.keymap.set({ 'n' }, '<leader>rn', function ()
     vim.lsp.buf.rename()
 end)
 
-vim.keymap.set({ 'n' }, '<leader>rh', function ()
+vim.keymap.set({ 'n' }, '<leader>ho', function ()
     vim.lsp.buf.hover()
 end)
 
@@ -89,7 +89,7 @@ vim.keymap.set({ 'n' }, '<leader>ri', function()
     vim.lsp.buf.implmentations()
 end)
 
-vim.keymap.set({ 'n' }, '<leader>ho', function()
+vim.keymap.set({ 'n' }, '<leader>hs', function()
     vim.lsp.buf.signature_help()
 end)
 
@@ -114,31 +114,37 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
         end, { silent = true, noremap = true, buffer = true })
 
         -- Toggle the selection/line between an unordered-list and normal line
-        vim.keymap.set({ 'v', 'n' }, ',ls', function()
+        vim.keymap.set({ 'n', 'v' }, ',ls', function()
             fns:md_ul_handler()
         end, { silent = true, noremap = true, buffer = true })
 
         -- Toggle the selection/line between an ordered-list and normal line
-        vim.keymap.set({ 'v', 'n' }, ',lc', function()
+        vim.keymap.set({ 'n', 'v' }, ',lc', function()
             fns:md_ol_handler()
         end, { silent = true, noremap = true, buffer = true })
 
         -- Reformat weirdly formatted markdown
-        vim.keymap.set({ 'v', 'n' }, ',le', function()
+        vim.keymap.set({ 'n', 'v' }, ',le', function()
             fns:strip_nonsense()
         end, { silent = true, noremap = true, buffer = true })
 
-        -- TEST: Generate table of contents
+        -- Generate table of contents
         vim.keymap.set({ 'n' }, ',lw', function()
             fns:generate_toc()
         end)
+
+        -- Wrap current selection in a code block
+        vim.keymap.set({ 'n', 'v' }, ',lz', function()
+            fns:wrap_code_block()
+        end)
     end,
     group = md_aug_id,
-    desc = 'Add keybindings ( ,ls ,lc ,lt ,lb ) to add list items, todo boxes, and linebreaks.',
+    desc = [[Add keybindings ( ,ls ,lc ,lt ,lb ,lw ,lz ) to add list items, todo boxes, table of contents, code blocks, and linebreaks.]],
 })
 
 -- Test keybinding
-vim.keymap.set({ 'n', 'v' }, '<leader>as', function()
-    vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())
+vim.keymap.set({  'v' }, '<leader>as', function()
+    -- fns:wrap_code_block()
+    print("Nothing mapped to test key.")
 end)
 

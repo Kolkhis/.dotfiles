@@ -84,7 +84,7 @@ vim.o.expandtab = true
 
 vim.o.showbreak = '> ' -- Show a > when lines wrap
 vim.o.autoread = true -- Automatically reload file when it was changed elsewhere.
-vim.o.textwidth = 100
+vim.o.textwidth = 85
 
 -- Autosaving
 vim.o.updatecount = 50

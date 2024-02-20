@@ -362,8 +362,7 @@ function M:generate_toc()
         if line:match('^#+ .+') then
             if self.match_markdown_header(i) then
                 line = line:gsub('(.*)%s+$', '%1')
-                local level = line:match('^(#+)')
-                local title = line:match('^#+ (.+)'):gsub('%s+$', '')
+                local level, title = line:match('^(#+) (.+[^%s$])')
                 if #level < 5 then
                     table.insert(toc, { level = #level, title = title })
                 end
@@ -375,14 +374,15 @@ function M:generate_toc()
     table.insert(toc_lines, '## Table of Contents')
     for _, header in ipairs(toc) do
         local spacing = string.rep('    ', header.level - 2)
-        local link_dest = header.title:lower():gsub('([,`{}:^$])', '')
-        link_dest = link_dest:gsub('%s', '-')
+        local link_dest = header.title:lower():gsub('([.(),`{}:^$])', ''):gsub('%s', '-')
+        -- link_dest = link_dest:gsub('%s', '-')
         local link = ([[%s* [%s](#%s) ]]):format(spacing, header.title:gsub(':$', ''), link_dest)
         table.insert(toc_lines, link)
     end
 
     local completed_toc = table.concat(toc_lines, '\n')
     vim.fn.setreg('a', completed_toc)
+    vim.cmd.norm('Oo')
     vim.cmd('normal! "ap')
 end
 
@@ -450,5 +450,30 @@ function M:loop_selection()
     end
     vim.cmd.norm('gv')
 end
+
+-- TODO: Function to break lines that are too long:
+--       '<'>s/^\(.\{,85}[,.]\?\)/\1\r /g
+--       Maybe use vim.g.textwidth instead of 85?
+
+function M:wrap_code_block()
+    -- TODO: Check if visual selection is already a code block.
+    --          * If it is, then remove the code block.
+    local ln_start, ln_end = vim.fn.line('.'), vim.fn.line('.')
+
+    if vim.api.nvim_get_mode().mode ~= 'n' then
+        vim.cmd.norm('I')
+        ln_start, ln_end = vim.fn.line("'<"), vim.fn.line("'>")
+    end
+
+    vim.cmd.norm(([[%dggk]]):format(ln_start))
+    vim.api.nvim_put({'```'}, 'l', true, true)
+
+    vim.cmd.norm(([[%dgg]]):format(ln_end))
+    vim.api.nvim_put({'```'}, 'l', true, true)
+
+    vim.cmd.norm("'<kA")
+
+end
+
 
 return M
