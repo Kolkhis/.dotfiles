@@ -1,0 +1,55 @@
+#!/bin/bash
+
+trap "stty echo" EXIT
+
+while [[ -n "$1" ]]; do
+    case $1 in
+        (-p|--prompt)
+            shift;
+            PROMPT="$1"
+            shift;
+            ;;
+        (-h|--hide|--hide-all)
+            HIDE_ALL=true;
+            shift;
+            ;;
+        (*)
+            PROMPT="$1"
+            shift;
+            ;;
+    esac
+done
+
+[[ -z "$PROMPT" ]] && PROMPT="Input: "
+
+
+printf "%s" "$PROMPT"
+unset INPUT
+if [[ -z "$HIDE_ALL" ]]; then
+    while IFS= read -r -s -n1 KEYPRESS; do
+        # KEYPRESS is empty when the user hits enter
+        if [[ -z $KEYPRESS ]]; then
+            printf "\n"
+            break
+        elif [[ $KEYPRESS == $'\x7f' ]] || [[ $KEYPRESS == $'\x08' ]]; then
+            if [[ -n $INPUT ]]; then
+                printf "\b \b"
+                # INPUT=${INPUT:0:$((${#INPUT} - 1))}
+                [[ -n "$INPUT" ]] && INPUT=${INPUT%?}
+            fi
+        else
+            printf "*"
+            INPUT+=$KEYPRESS
+        fi
+    done
+    printf "%s" "$INPUT" 2>/dev/null
+else
+    # This method is POSIX-compliant.
+    stty_original=$(stty -g)
+    stty -echo
+    read -r INPUT
+    stty "$stty_original"
+    printf "%s" "$INPUT" 2>/dev/null
+fi
+
+
