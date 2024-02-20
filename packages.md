@@ -1,5 +1,22 @@
 # Package List for Ubuntu Server Workstation
 
+## Table of Contents
+* [Getting Explicitly Installed Packages](#getting-explicitly-installed-packages) 
+* [Basic Tools](#basic-tools) 
+* [Programming](#programming) 
+    * [Needed for compiling Vim from source](#needed-for-compiling-vim-from-source) 
+* [Other Packages](#other-packages) 
+* [Basic Package Installation](#basic-package-installation) 
+* [Building GNU Screen from Source](#building-gnu-screen-from-source) 
+* [Installing Other Packages (packages not up-to-date or unavailable on `apt`)](#installing-other-packages-(packages-not-up-to-date-or-unavailable-on-apt)) 
+* [Tools to check out](#tools-to-check-out) 
+    * [Static site generator (available on pip)](#static-site-generator-(available-on-pip)) 
+    * [Totally unrelated things to check out](#totally-unrelated-things-to-check-out) 
+* [Lavalink](#lavalink) 
+* [Package Install Script](#package-install-script) 
+* [Installing Different Versions with `apt`](#installing-different-versions-with-apt) 
+
+
 ## Getting Explicitly Installed Packages
 ```bash
 sudo apt-mark showmanual
@@ -41,7 +58,7 @@ sudo apt-mark showmanual
 * pyright (use npm - `sudo npm install -g pyright`)
 * gopls
 
-### Needed for compiling Vim from source:  
+### Packages needed for compiling Vim from source:  
 The default installation of Vim doesn't have Python3 support, at least on Ubuntu Server.  
 In addition, the latest available version from 'apt' is 8.2, so that's another reason to
 [build Vim from Source](https://github.com/vim/vim/blob/master/src/INSTALL).  
@@ -51,6 +68,7 @@ In addition, the latest available version from 'apt' is 8.2, so that's another r
 * libpython3-dev (python support)
 * libxt-dev (clipboard support)
 * valgrind (debugging support)
+
 ```bash
 sudo apt-get update && sudo apt-get install -y \
 git \
@@ -83,52 +101,60 @@ libxt-dev
 
 sudo apt-get update && sudo apt-get upgrade -y
 
-PACKAGES=(
-    "stow"
-    "gcc"
-    "unzip"
-    "tree"
-    "entr"
-    "w3m"
-    "lolcat"
-    "lynx"
-    "tmux"
-    "screen"
-    "tldr"
-    "fzf"
-    "shfmt"
-    "ncal"
-    "nodejs"
-    "npm"
-    "xterm"
-    "visidata"
-    "python3.10-venv"
-    "python3-pip"
-    "gopls"
-    "clang"
-    "libtool-bin"
-    "libpython3-dev"
-    "net-tools"
-    "network-manager"
-    "whois"
-)
+sudo apt-get install -y \
+    stow \
+    gcc \
+    unzip \
+    tree \
+    entr \
+    w3m \
+    lolcat \
+    lynx \
+    tmux \
+    screen \
+    tldr \
+    fzf \
+    shfmt \
+    ncal \
+    nodejs \
+    npm \
+    xterm \
+    visidata \
+    python3.10-venv \
+    python3-pip \
+    gopls \
+    clang \
+    libtool-bin \
+    libpython3-dev \
+    net-tools \
+    network-manager \
+    whois 
 
-sudo apt-get install -y "$(printf "%s " "${PACKAGES[@]}")"
 sudo npm install -g pyright
 ```
 
-## 256-Color in GNU Screen
-Screen doesn't support 256-color by default, so you have to build it from source.
+
+## Building GNU Screen from Source
 ```bash
 curl -O https://ftp.gnu.org/gnu/screen/screen-4.9.1.tar.gz
 tar -zxvf screen-4.9.1.tar.gz
-./configure --enable-colors256 
-make 
-sudo make install
+cd screen-4.9.1
+sh autogen.sh &&
+    ./configure --prefix=/usr \
+        --enable-colors256 \
+        --infodir=/usr/share/info \
+        --mandir=/usr/share/man \
+        --with-socket-dir=/run/screen \
+        --with-pty-group=5 \
+        --with-sys-screenrc=/etc/screenrc &&
+    sed -i -e "s%/usr/local/etc/screenrc%/etc/screenrc%" {etc,doc}/* &&
+    make && 
+    sudo make install 
 ```
 
+
 ## Installing Other Packages (packages not up-to-date or unavailable on `apt`)
-* charmbracelet/mods (ChatGPT from the command line)
+* `charmbracelet/mods` (ChatGPT from the command line)
 ```bash
 sudo mkdir -p /etc/apt/keyrings
 curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
@@ -137,21 +163,21 @@ sudo apt-get update && sudo apt-get install mods
 ```
 
 
-* nvm (Node Version Manager)
+* `nvm` (Node Version Manager)
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash )
 nvm install node
 ```
 
 
-* nvim
+* `nvim`
 ```bash
 sudo add-apt-repository ppa:neovim-ppa/unstable -y
 sudo apt-get update
 sudo apt-get install neovim -y
 ```
 
-* vault
+* `vault`
 ```bash
 wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
@@ -160,19 +186,22 @@ sudo apt update && sudo apt install vault
 
 
 ## Tools to check out
-* parallel (GNU Parallel) - Shell tool for executing jobs in parallel using one or more machines.
+* `parallel` (GNU Parallel) - Shell tool for executing jobs in parallel using one or more machines
     * A job is typically a inslge command or small script that has to be run
       for each line in the input.
     * Typical input is a list of either files, hosts, users, or tables.
-* KeePassXC - Password manager or safe. Locked with one master key or key-disk.  
-* traefik - HTTP reverse proxy and load balancer that makes deploying microservices easy.  
-* vault - Product data management (PDM) tool. Integrates with CAD systems. Autodesk product.  
-* Ncat - What's the difference between `netcat` and `Ncat`?  
-* sleuthkit - File and filesystem analysis/forensics toolkit.
-* ranger - a console file manager (vi hotkeys)
-* btop - Customizable TUI Resource monitor. See the [github](https://github.com/aristocratos/btop) page
+* `KeePassXC` - Password manager or safe. Locked with one master key or key-disk.  
+* `traefik` - HTTP reverse proxy and load balancer that makes deploying microservices easy.  
+* `vault` - Product data management (PDM) tool. Integrates with CAD systems. Autodesk product.  
+* `Ncat` - What's the difference between `netcat` and `Ncat`?  
+* `sleuthkit` - File and filesystem analysis/forensics toolkit.
+* [`sherlock`](https://github.com/sherlock-project/sherlock) - User accounts on socials
+* `ranger` - a console file manager (vi hotkeys)
+* `btop` - Customizable TUI Resource monitor. See the [github](https://github.com/aristocratos/btop) page
     * See [example btop.conf](https://github.com/aristocratos/btop?tab=readme-ov-file#configurability)
     * Goes in `$XDG_CONFIG_HOME/btop/btop.conf` or `$HOME/.config/btop/btop.conf`
+* `pfsense` - A tool for authentication  
+* `OpenSCAP` - benchmarking tool  
 
 
 ### Static site generator (available on pip):
@@ -199,6 +228,7 @@ sudo apt update && sudo apt install vault
 ```bash
 #!/bin/bash
 
+sudo add-apt-repository ppa:neovim-ppa/unstable -y
 sudo apt-get update && sudo apt-get upgrade -y
 
 PACKAGES=(
@@ -229,9 +259,14 @@ PACKAGES=(
     "net-tools"
     "network-manager"
     "whois"
+    "neovim"
 )
 
 sudo apt-get install -y "$(printf "%s " "${PACKAGES[@]}")"
+
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash )
+nvm install node
 sudo npm install -g pyright
 ```
 
