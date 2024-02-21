@@ -459,20 +459,15 @@ function M:wrap_code_block()
     -- TODO: Check if visual selection is already a code block.
     --          * If it is, then remove the code block.
     local ln_start, ln_end = vim.fn.line('.'), vim.fn.line('.')
-
     if vim.api.nvim_get_mode().mode ~= 'n' then
         vim.cmd.norm('I')
         ln_start, ln_end = vim.fn.line("'<"), vim.fn.line("'>")
     end
-
-    vim.cmd.norm(([[%dggk]]):format(ln_start))
+    vim.cmd.norm(([[%dgg]]):format(ln_start-1))
     vim.api.nvim_put({'```'}, 'l', true, true)
-
-    vim.cmd.norm(([[%dgg]]):format(ln_end))
+    vim.cmd.norm(([[%dgg]]):format(ln_end+1))
     vim.api.nvim_put({'```'}, 'l', true, true)
-
-    vim.cmd.norm("'<kA")
-
+    vim.cmd.norm(("%dggA"):format(ln_start))
 end
 
 
