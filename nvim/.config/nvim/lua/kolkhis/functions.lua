@@ -230,7 +230,6 @@ function M.match_complete_todo(line)
     return vim.fn.match(line, [[^\(\s*\)\?\([*-]\|\d\{1,}\. \)\[x\] \?]]) ~= -1
 end
 
--- TODO: Add keybindings for code blocks
 --- Check if the line is a code block start for any language. i.e., (```python)
 ---@param line string
 ---@return boolean is_code_block_start: true if the line is a code block start
@@ -238,7 +237,7 @@ function M.match_code_block_start(line)
     return vim.fn.match(line, [[^\(\s*\)\?[`]\{3}\(\w\)\{1,}]]) ~= -1
 end
 
---- Check if the line is a code block end for any language. i.e., (```)
+--- Check if the line is a code block end. i.e., (```)
 ---@param line string
 ---@return boolean is_code_block_end: true if the line is a code block end
 function M.match_code_block_end(line)
@@ -456,18 +455,26 @@ end
 --       Maybe use vim.g.textwidth instead of 85?
 
 function M:wrap_code_block()
-    -- TODO: Check if visual selection is already a code block.
-    --          * If it is, then remove the code block.
     local ln_start, ln_end = vim.fn.line('.'), vim.fn.line('.')
     if vim.api.nvim_get_mode().mode ~= 'n' then
         vim.cmd.norm('I')
         ln_start, ln_end = vim.fn.line("'<"), vim.fn.line("'>")
     end
+    local start_line = vim.fn.getline(ln_start)
+    if self.match_code_block_start(start_line) or
+        self.match_code_block_end(start_line) then
+        vim.cmd(([[%ds/^\(\s*\)\?`\{3}.\{-}\n//]]):format(ln_start))
+        vim.cmd(([[%ds/^\(\s*\)\?`\{3}\n//]]):format(ln_end - 1))
+        -- vim.cmd.norm(("%dggdd%dggdd"):format(ln_start, ln_end - 1))
+        return true
+    end
+    local indentation = start_line:match('^(%s*)')
     vim.cmd.norm(([[%dgg]]):format(ln_start-1))
-    vim.api.nvim_put({'```'}, 'l', true, true)
+    vim.api.nvim_put({('%s```'):format(indentation)}, 'l', true, true)
     vim.cmd.norm(([[%dgg]]):format(ln_end+1))
-    vim.api.nvim_put({'```'}, 'l', true, true)
+    vim.api.nvim_put({('%s```'):format(indentation)}, 'l', true, true)
     vim.cmd.norm(("%dggA"):format(ln_start))
+    return true
 end
 
 
