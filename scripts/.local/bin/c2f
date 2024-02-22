@@ -1,0 +1,6 @@
+#!/bin/bash
+
+
+printf "scale=2;%s*1.8+32\n" "$1" | bc
+
+
