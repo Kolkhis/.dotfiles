@@ -96,10 +96,6 @@ function! kolkhis#AddOListItem(mode)
     endif
 endfunction
 
-" function! kolkhis#AddMarkdownCheckbox()
-"   call setline('.', '* [ ]')
-"   call cursor(line('.'), col('$'))
-" endfunction
 
 " Check current markdown line for a TODO item (`* [ ]`, `* [x]`, `* [_]`)
 " If the current line is an ordered list item, convert it into a TODO item.
@@ -139,7 +135,6 @@ endfunction
 
 function! kolkhis#match_ol(line)
     return match(a:line, '^\(\s*\)\?\d\{1,}\. ') != -1
-    " return match(a:line, '\d\{1,}\. ') != -1
 endfunction
 
 function! kolkhis#match_ul(line)
@@ -151,7 +146,6 @@ function! kolkhis#match_todo(line)
 endfunction
 
 """""""""""""""""" Netrw """""""""""""""""
-
 fu! kolkhis#NetrwStartup()
   if expand('%') ==# ''
     exe 'e .'
@@ -168,6 +162,8 @@ fu! kolkhis#ToggleNetrw()
 endf
 
 
+
+"""""""""""""""""" Case Toggles """""""""""""""""
 function! kolkhis#ToggleCase()
   let cword = expand('<cword>')
   let lcase = cword =~? '\l'
@@ -305,7 +301,7 @@ function! kolkhis#SetColors()
   hi link FIXME TODO
   hi link XXX TODO
 
-  " status line
+  " Status line
   let s:active_font_color = '#7286D3'
   let s:inactive_font_color = '#144272'
   let s:inactive_window = '#181D31'
