@@ -304,7 +304,7 @@ end
 --- [ ] Account for when lines are broken into multiple lines
 ---
 --- Strip out all of the weird markdown formatting from the current visual selection or current line.
-function M.strip_nonsense()
+function M.reformat_markdown()
     local mode = vim.api.nvim_get_mode().mode
     local line_start, line_end = vim.fn.line('.'), vim.fn.line('.')
     local range, line = '', ''

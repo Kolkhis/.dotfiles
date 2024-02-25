@@ -14,14 +14,21 @@ require('telescope').setup({
                 ['<C-d>'] = false,
                 ['<C-p>'] = actions.move_selection_previous,
                 ['<C-n>'] = actions.move_selection_next,
-                ['<C-k>'] = actions.cycle_history_prev,
-                ['<C-j>'] = actions.cycle_history_next,
-                ['<C-f>'] =  actions.send_selected_to_qflist, -- actions.smart_add_to_qflist,
+                ['<C-f>'] = actions.preview_scrolling_down,
+                ['<C-b>'] = actions.preview_scrolling_down,
+                ['<C-j>'] = actions.move_selection_next,
+                ['<C-k>'] = actions.move_selection_previous,
+                ['<C-x>'] = actions.file_tab,
+                ['<C-t>'] = actions.select_tab,
+                ['<C-s>'] = actions.file_split,
+                ['<C-o>'] = actions.results_scrolling_up,
+                ['<C-i>'] = actions.results_scrolling_down,
             },
 
             n = {
                 ['o'] = actions.file_vsplit,
                 ['<Tab>'] = actions.toggle_selection,
+                ['<C-z>'] = actions.select_tab,
                 ['<C-d>'] = actions.preview_scrolling_down,
                 ['<C-u>'] = actions.preview_scrolling_up,
                 ['<C-p>'] = actions.move_selection_previous,
@@ -32,12 +39,6 @@ require('telescope').setup({
     },
 })
 
--- -- Need to prepend 'lua.' to get autocompletion (y tho).
--- local actions = require('lua.telescope.actions')
--- local builtin = require('lua.telescope.builtin')
--- local themes = require('lua.telescope.themes')
--- local telescope = require('lua.telescope').setup({})
--- local utils = require('lua.telescope.utils')
 
 --------------------------Seach Current Word Usage
 vim.keymap.set('n', '<leader>su', function()
@@ -63,12 +64,12 @@ end, { silent = true, noremap = true, desc = '[ ] Find existing buffers' })
 
 --------------------------Current Buffer Fuzzy Find
 vim.keymap.set('n', '<leader>/', function()
-    builtin.current_buffer_fuzzy_find(themes.get_dropdown({ winblend = 5, previewer = false }))
+    builtin.current_buffer_fuzzy_find(themes.get_ivy({ winblend = 5, previewer = false }))
 end, { silent = true, noremap = true, desc = '[/] Fuzzily search in current buffer' })
 
 --------------------------Command History
 vim.keymap.set({ 'n', 'v' }, '<leader>ch', function()
-    builtin.command_history(themes.get_dropdown())
+    builtin.command_history(themes.get_ivy())
 end, { silent = true, noremap = true, desc = '[C]ommand [H]istory' })
 
 --------------------------Registers
@@ -77,14 +78,14 @@ vim.keymap.set('n', '<leader>rs', function()
 end, { silent = true, noremap = true, desc = 'Vim [R]egister [S]earch' })
 
 --------------------------Quickfix
-vim.keymap.set({ 'n' }, '<leader>qf', function()
+vim.keymap.set({ 'n' }, '<leader>ql', function()
     builtin.quickfix(themes.get_dropdown())
-end, { silent = true, noremap = true, desc = '[Q]uick[f]ix' })
+end, { silent = true, noremap = true, desc = '[Q]uickfix [L]ist' })
 
 --------------------------Man Pages
-vim.keymap.set('n', '<leader>ma', function()
+vim.keymap.set('n', '<leader>sm', function()
     builtin.man_pages(themes.get_ivy())
-end, { silent = true, noremap = true, desc = '[Ma]n Pages' })
+end, { silent = true, noremap = true, desc = '[S]earch [M]an Pages' })
 
 --------------------------Search Help
 vim.keymap.set('n', '<leader>sh', function()

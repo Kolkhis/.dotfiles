@@ -5,18 +5,28 @@ vim.g.maplocalleader = ' '
 
 vim.keymap.set({ 'i', 'v' }, 'xj', '<Esc>', { silent = true, noremap = true })
 
+
+vim.keymap.set('t', '<C-[><C-[>', [[<C-\><C-n>]], { noremap = true })
+
 -- Keep cursor centered
 vim.keymap.set({ 'n', 'v' }, '<C-u>', '<C-u>zz', { silent = true, noremap = true })
 vim.keymap.set({ 'n', 'v' }, '<C-d>', '<C-d>zz', { silent = true, noremap = true })
 
 -- paste register in insert mode (handle ^@ control sequence)
-vim.keymap.set({ 'i' }, '<C-Space>', [[<Esc>"+p:s/<C-q><C-Enter>/\r/g<CR>]], { silent = true, noremap = true })
+vim.keymap.set({ 'i' }, '<C-Space>', [[<Esc>"+p]], { silent = true, noremap = true })
+
 
 -- Navigate word wraps (swap j/k with gj/gk for wrapped lines)
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true, noremap = true })
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true, noremap = true })
-vim.keymap.set('n', 'gj', "v:count == 0 ? 'j' : 'gj'", { expr = true, silent = true, noremap = true })
-vim.keymap.set('n', 'gk', "v:count == 0 ? 'k' : 'gk'", { expr = true, silent = true, noremap = true })
+-- vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true, noremap = true })
+-- vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true, noremap = true })
+-- vim.keymap.set('n', 'gj', "v:count == 0 ? 'j' : 'gj'", { expr = true, silent = true, noremap = true })
+-- vim.keymap.set('n', 'gk', "v:count == 0 ? 'k' : 'gk'", { expr = true, silent = true, noremap = true })
+
+-- TODO: Combine this with the above, using the pipe operator to separate expressions
+vim.keymap.set('n', '/', '<cmd>set hls<cr>/', { noremap = true, silent = true })
+vim.keymap.set('n', 'j', "v:hlsearch == 0 ? 'j' : ':set nohls<CR>j'", { expr = true, silent = true  })
+vim.keymap.set('n', 'k', "v:hlsearch == 0 ? 'k' : ':set nohls<CR>k'", { expr = true, silent = true  })
+
 
 -- Formatting
 vim.keymap.set({ 'n', 'v' }, '<leader>fm', function()
@@ -125,7 +135,7 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
 
         -- Reformat weirdly formatted markdown
         vim.keymap.set({ 'n', 'v' }, ',le', function()
-            fns:strip_nonsense()
+            fns:reformat_markdown()
         end, { silent = true, noremap = true, buffer = true })
 
         -- Generate table of contents
