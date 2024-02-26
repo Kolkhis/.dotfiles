@@ -29,6 +29,8 @@ require('nvim-treesitter.configs').setup({
         'markdown_inline',
         'comment',
         'psv',
+        'nix',
+        'terraform',
 
         'xml',
         'csv',
