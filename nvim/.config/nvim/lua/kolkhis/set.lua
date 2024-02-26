@@ -123,3 +123,15 @@ vim.api.nvim_create_autocmd('VimEnter', {
     end,
     desc = 'Open the current directory in netrw if no file or directory is given when running vim.',
 })
+
+
+local term_aug = vim.api.nvim_create_augroup('TermOpen', { clear = false })
+vim.api.nvim_create_autocmd('TermOpen', {
+    pattern = '*',
+    group = term_aug,
+    callback = function ()
+        vim.opt_local.nu = false
+        vim.opt_local.rnu = false
+    end,
+})
+
