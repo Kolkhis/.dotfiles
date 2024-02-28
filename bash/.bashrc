@@ -54,8 +54,12 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$HOME/.cargo/env" ] && \. "$HOME/.cargo/env"
 
 # Set XDG_CONFIG_HOME/DATA if it's unset
-[ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="${HOME}/.config"
-[ -z "$XDG_DATA_HOME" ] && export XDG_DATA_HOME="${HOME}/.local/share"
+case "$(uname)" in 
+    Linux)
+        [ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="${HOME}/.config";
+        [ -z "$XDG_DATA_HOME" ] && export XDG_DATA_HOME="${HOME}/.local/share";
+        ;;
+esac
 
 export FZF_DEFAULT_COMMAND='find . -type f ! -path "*/.git/*"'
 export FZF_DEFAULT_OPTS="\
@@ -93,7 +97,6 @@ eval "$(dircolors -b ~/.dircolors)"
 # cdpath
 export CDPATH='.:~:~/.dotfiles/nvim/.config/:~/notes:~/Repos/github.com/kolkhis:~/notes/linux:~/notes/c:~/.dotfiles:~/.dotfiles/vim'
 
-export NVIMRC="$HOME/.dotfiles/nvim/.config/nvim/"
 export SCREENRC="$HOME/.config/.screenrc"
 
 ################################## PS1 ################################## 
