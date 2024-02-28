@@ -12,7 +12,7 @@ alias "??"="gpt"
 alias py="python3"
 alias python="python3"
 alias pythong="python3"
-alias vi="/usr/local/bin/vim"
+alias vi="\$(which vim)";
 alias vim="nvim"
 alias lv="vim -c \"normal '0\""
 alias vl="vi -c \"normal '0\""
@@ -53,39 +53,24 @@ case $(hostname) in
         ;;
 esac
 
+alias ls='ls --color=auto'
+alias dir='dir --color=auto'
+alias vdir='vdir --color=auto'
+
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Add an "alert" alias for long running commands. E.g.: sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Using vim/neovim as `less`
 export VRT="/usr/share/vim/vim82"
 alias vless="\${VRT}/macros/less.sh"
 export NVRT="/usr/share/nvim/runtime/"
 alias nvl="\${NVRT}/macros/less.sh"
-
-# godmode
-set -o vi
-
-# Allow ** for recursive searching and pattern matching
-shopt -s globstar
-
-# Include dotfiles in pathname expansion
-shopt -s dotglob
-shopt -s nocaseglob
-
-#extdebug
-#force_fignore
-
-# set timezone
-export TZ="America/New_York"
-export TERM=xterm-256color
-export NOTES_HOME="/home/kolkhis/notes"
-export LC_ALL=C.UTF-8
-export EDITOR=nvim
-export PATH=~/bin:$PATH
-export force_color_prompt=yes
-export COLUMNS=120 LINES=30
-GPG_TTY=$(tty)
-export GPG_TTY
-
-export PATH=$PATH:/usr/local/go/bin
-export CGO_ENABLED=0
-export GO111MODULE=on
 
