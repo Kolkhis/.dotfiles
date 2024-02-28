@@ -88,7 +88,7 @@ vim.o.textwidth = 85
 
 -- Autosaving
 vim.o.updatecount = 50
-vim.o.updatetime = 200
+vim.o.updatetime = 2000
 
 -- Matching paren QOL
 vim.o.showmatch = true

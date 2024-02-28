@@ -72,38 +72,38 @@ vim.keymap.set({ 'n', 'v' }, '<leader>yf', '<cmd>%y+<CR>', { silent = true, desc
 
 vim.keymap.set(
     { 'c' },
-    [[<leader>\]],
+    [[<C-z>]],
     [[\(\)<Left><Left>]],
     { silent = true, noremap = true, desc = 'Put Capture Group in expression in command mode.' }
 )
 
-vim.keymap.set({ 'c' }, '<leader>am', [[\@<=]], {
+vim.keymap.set({ 'c' }, '<C-y>', [[\@<=]], {
     silent = true,
     noremap = true,
     desc = 'Put a "Match After" pattern in command mode.',
 })
 
+
 -- Toggle :Lexplore
 vim.keymap.set({ 'n' }, '<leader>ns', '<Plug>NetrwShrink', { noremap = true, silent = true })
 
 -- LSP
-vim.keymap.set({ 'n' }, '<leader>rn', function ()
-    vim.lsp.buf.rename()
-end)
+vim.keymap.set({ 'n' }, '<leader>rn', function () vim.lsp.buf.rename() end)
 
-vim.keymap.set({ 'n' }, '<leader>ho', function ()
-    vim.lsp.buf.hover()
-end)
+vim.keymap.set({ 'n' }, '<leader>ho', function () vim.lsp.buf.hover() end)
 
-vim.keymap.set({ 'n' }, '<leader>ri', function()
-    vim.lsp.buf.implmentations()
-end)
+vim.keymap.set({ 'n' }, '<leader>hs', function() vim.lsp.buf.signature_help() end)
 
-vim.keymap.set({ 'n' }, '<leader>hs', function()
-    vim.lsp.buf.signature_help()
-end)
+vim.api.nvim_create_user_command('HL', function()
+    vim.lsp.buf.document_highlight() -- Could bind this to the CursorHold or CursorHoldI event instead
+end, {} )
+
+vim.api.nvim_create_user_command('CHL', function()
+    vim.lsp.buf.clear_references() -- and this one to the CursorMoved event
+end, {} )
 
 
+-- My own functions
 local fns = require('kolkhis.functions')
 vim.keymap.set({ 'i', 'n' }, '<C-c>', fns.lower_upper_toggle, { noremap = true, silent = true })
 vim.keymap.set({ 'i', 'n' }, '<C-x>', fns.camel_snake_toggle, { noremap = true, silent = true })

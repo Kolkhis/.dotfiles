@@ -15,7 +15,7 @@ require('telescope').setup({
                 ['<C-p>'] = actions.move_selection_previous,
                 ['<C-n>'] = actions.move_selection_next,
                 ['<C-f>'] = actions.preview_scrolling_down,
-                ['<C-b>'] = actions.preview_scrolling_down,
+                ['<C-b>'] = actions.preview_scrolling_up,
                 ['<C-j>'] = actions.move_selection_next,
                 ['<C-k>'] = actions.move_selection_previous,
                 ['<C-x>'] = actions.file_tab,
@@ -28,12 +28,14 @@ require('telescope').setup({
             n = {
                 ['o'] = actions.file_vsplit,
                 ['<Tab>'] = actions.toggle_selection,
-                ['<C-z>'] = actions.select_tab,
+                ['<C-t>'] = actions.select_tab,
                 ['<C-d>'] = actions.preview_scrolling_down,
                 ['<C-u>'] = actions.preview_scrolling_up,
                 ['<C-p>'] = actions.move_selection_previous,
                 ['<C-n>'] = actions.move_selection_next,
-                ['<C-f>'] =  actions.send_selected_to_qflist, -- actions.smart_add_to_qflist,
+                ['<C-f>'] = actions.send_selected_to_qflist, -- actions.smart_add_to_qflist,
+                ['<C-o>'] = actions.results_scrolling_up,
+                ['<C-i>'] = actions.results_scrolling_down,
             },
         },
     },
@@ -119,7 +121,7 @@ end, { silent = true, noremap = true, desc = '[G]it [S]tatus' })
 
 --------------------------Git Commits
 vim.keymap.set('n', '<leader>gc', function()
-    builtin.git_commits(themes.get_ivy())
+    builtin.git_bcommits(themes.get_ivy())
 end, { silent = true, noremap = true, desc = '[G]it [C]ommits' })
 
 --------------------------Current Buffer Commits
@@ -153,7 +155,9 @@ end, { silent = true, noremap = true, desc = 'Search [P]roject for c[W]ORD Under
 --------------------------Find Files
 vim.keymap.set('n', '<leader>pf', function()
     builtin.find_files(themes.get_dropdown({
-        hidden = true,
+        hidden = false,
+        no_ignore = true,
+        no_ignore_parent = true,
         layout_config = { prompt_position = 'bottom' },
     }))
 end, { silent = true, noremap = true, desc = '<leader>fi Search [Fi]les' })
@@ -179,3 +183,8 @@ vim.api.nvim_create_user_command('P', function()
     require('telescope.builtin').planets()
 end, {})
 
+vim.api.nvim_create_user_command('SeeTags', function ()
+    builtin.current_buffer_tags()
+end, {})
+
+-- See :h telescope.defaults telescope.pickers

@@ -19,11 +19,8 @@ return require('packer').startup(function(use)
         use('Kolkhis/streamer-mode.nvim')
     end
 
-    -- use('Kolkhis/streamer-mode.nvim')
-    -- use('E:/Coding/nvim_plugin/dev/streamer-mode.nvim')
-    -- use('/home/kolkhis/Repos/github.com/kolkhis/streamer-mode.nvim/')
-
     use('ThePrimeagen/harpoon')
+
     --Telescope
     use({
         'nvim-telescope/telescope.nvim',
