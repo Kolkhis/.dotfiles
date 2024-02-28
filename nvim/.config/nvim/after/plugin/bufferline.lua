@@ -1,7 +1,7 @@
 local bufferline = require('bufferline')
 bufferline.setup({
     options = {
-        mode = 'tabs', -- set to "tabs" to only show tabpages instead -- "tabs" | "buffers"
+        mode = 'tabs', -- 'tabs' | 'buffers'
         indicator = {
             icon = '▎', -- this should be omitted if indicator style is not 'icon'
             style = 'icon', -- | 'underline' | 'none',
@@ -15,17 +15,9 @@ bufferline.setup({
         buffer_close_icon = '󰅖',
         color_icons = true, -- whether or not to add the filetype icon highlights
         diagnostics = 'nvim_lsp',
-        -- get_element_icon = function(element)
-        --   -- element consists of {filetype: string, path: string, extension: string, directory: string}
-        --   -- This can be used to change how bufferline fetches the icon
-        --   -- for an element e.g. a buffer or a tab.
-        --   -- e.g.
-        --   local icon, hl = require('nvim-web-devicons').get_icon_by_filetype(element.filetype, { default = false })
-        --   return icon, hl
-        -- end,
         show_buffer_icons = true, -- disable filetype icons for buffers
-        show_buffer_close_icons = true,
-        show_close_icon = true,
+        show_buffer_close_icons = false,
+        show_close_icon = false,
         show_tab_indicators = true,
     },
 })

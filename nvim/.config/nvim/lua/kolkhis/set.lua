@@ -1,7 +1,3 @@
-vim.cmd('colo material-deep-ocean')
-
-vim.api.nvim_set_hl(0, 'Cursor', { fg = 'White', bg = 'Red' })
-
 -- Netrw Options
 vim.g.netrw_banner = 0
 vim.g.netrw_alto = 0
