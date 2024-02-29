@@ -8,8 +8,9 @@ luasnip.filetype_extend('python', { 'django' })
 
 cmp.setup({
     mapping = cmp.mapping.preset.insert({
-        ['<Tab>'] = cmp.mapping.confirm({ select = true }),
+        ['<C-y>'] = cmp.mapping.confirm({ select = true }),
     }),
+
     -- Sources for autocomplete
     sources = cmp.config.sources({
         { name = 'cody' },
