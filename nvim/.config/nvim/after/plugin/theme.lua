@@ -11,11 +11,8 @@ require('material').setup({
     },
     high_visibility = { darker = true, },
     lualine_style = 'stealth',
-    custom_colors = function(colors)
-        colors.syntax.comments = '#35374B'
-    end,
     custom_highlights = {
-        Comment = { fg = '#35374B' }, -- Add hlgroups
+        Comment = { fg = '#424769' }, -- 424769 7077A1 45474B
         Cursor = { fg = 'White', bg = 'Red' },
     },
 })
