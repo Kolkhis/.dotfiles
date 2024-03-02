@@ -373,7 +373,7 @@ function M:generate_toc()
     table.insert(toc_lines, '## Table of Contents')
     for _, header in ipairs(toc) do
         local spacing = string.rep('    ', header.level - 2)
-        local link_dest = header.title:lower():gsub('([.(),`{}:^$])', ''):gsub('%s', '-')
+        local link_dest = header.title:lower():gsub([[([.(),\[\]`{}:^$])]], ''):gsub('%s', '-')
         -- link_dest = link_dest:gsub('%s', '-')
         local link = ([[%s* [%s](#%s) ]]):format(spacing, header.title:gsub(':$', ''), link_dest)
         table.insert(toc_lines, link)
@@ -450,9 +450,22 @@ function M:loop_selection()
     vim.cmd.norm('gv')
 end
 
--- TODO: Function to break lines that are too long:
---       '<'>s/^\(.\{,85}[,.]\?\)/\1\r /g
---       Maybe use vim.g.textwidth instead of 85?
+--- Function to break lines that are too long:
+--
+-- :'<,'>s/^\(\s*\)\?\(.\{,80}\>\%[`,][^\.]\)/\1\2\r\1/g
+function M:break_long_lines()
+    -- TODO: Fix indentation for list items
+    local width = vim.o.textwidth or 80
+    if vim.api.nvim_get_mode().mode ~= 'n' then
+        vim.cmd.norm('I')
+        vim.cmd(([['<,'>s/^\(\s*\)\?\(.\{,%d}\>\%%[`,][^\.]\)/\1\2\r\1/g]]):format(width))
+        return
+    else
+        vim.cmd(([[s/^\(\s*\)\?\(.\{,%d}\>\%%[`,][^\.]\)/\1\2\r\1/g]]):format(width))
+    end
+    -- Maybe loop over selection afterwards and check indentation of list items
+end
+
 
 function M:wrap_code_block()
     local ln_start, ln_end = vim.fn.line('.'), vim.fn.line('.')
@@ -461,21 +474,19 @@ function M:wrap_code_block()
         ln_start, ln_end = vim.fn.line("'<"), vim.fn.line("'>")
     end
     local start_line = vim.fn.getline(ln_start)
-    if self.match_code_block_start(start_line) or
-        self.match_code_block_end(start_line) then
+    if self.match_code_block_start(start_line) or self.match_code_block_end(start_line) then
         vim.cmd(([[%ds/^\(\s*\)\?`\{3}.\{-}\n//]]):format(ln_start))
         vim.cmd(([[%ds/^\(\s*\)\?`\{3}\n//]]):format(ln_end - 1))
         -- vim.cmd.norm(("%dggdd%dggdd"):format(ln_start, ln_end - 1))
         return true
     end
     local indentation = start_line:match('^(%s*)')
-    vim.cmd.norm(([[%dgg]]):format(ln_start-1))
-    vim.api.nvim_put({('%s```'):format(indentation)}, 'l', true, true)
-    vim.cmd.norm(([[%dgg]]):format(ln_end+1))
-    vim.api.nvim_put({('%s```'):format(indentation)}, 'l', true, true)
-    vim.cmd.norm(("%dggA"):format(ln_start))
+    vim.cmd.norm(([[%dgg]]):format(ln_start - 1))
+    vim.api.nvim_put({ ('%s```'):format(indentation) }, 'l', true, true)
+    vim.cmd.norm(([[%dgg]]):format(ln_end + 1))
+    vim.api.nvim_put({ ('%s```'):format(indentation) }, 'l', true, true)
+    vim.cmd.norm(('%dggA'):format(ln_start))
     return true
 end
-
 
 return M

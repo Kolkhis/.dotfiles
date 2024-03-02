@@ -147,6 +147,11 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
         vim.keymap.set({ 'n', 'v' }, ',lz', function()
             fns:wrap_code_block()
         end)
+
+        -- Break long lines
+        vim.keymap.set({ 'n', 'v' }, ',ll', function()
+            fns:break_long_lines()
+        end)
     end,
     group = md_aug_id,
     desc = [[Add keybindings ( ,ls ,lc ,lt ,lb ,lw ,lz ) to add list items, todo boxes, table of contents, code blocks, and linebreaks.]],
