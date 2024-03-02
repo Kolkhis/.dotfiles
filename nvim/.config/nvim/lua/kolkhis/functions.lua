@@ -301,23 +301,26 @@ end
 
 --- TODO:
 --- [x] Loop through each line in visual selection
---- [ ] Account for when lines are broken into multiple lines
+--- [x] Account for when lines are broken into multiple lines
 ---
 --- Strip out all of the weird markdown formatting from the current visual selection or current line.
 function M.reformat_markdown()
     local mode = vim.api.nvim_get_mode().mode
-    local line_start, line_end = vim.fn.line('.'), vim.fn.line('.')
+    local line_start = vim.fn.line('.')
     local range, line = '', ''
     if mode == 'n' then
         range, line = tostring(vim.fn.line('.')), vim.fn.getline('.')
     else
         vim.cmd.norm('I')
-        line_start, line_end = vim.fn.line("'<"), vim.fn.line("'>")
+        line_start = vim.fn.line("'<")
         range, line = "'<,'>", vim.fn.getline("'<")
     end
-    for i = line_start, line_end do
-        range = tostring(i)
-        line = vim.fn.getline(i)
+
+    local line_num = line_start
+    while line_num <= vim.fn.line("'>") do
+        ::top_of_loop::
+        range = tostring(line_num)
+        line = vim.fn.getline(line_num)
 
         if vim.regex([[\(^\s*[*|-]\)]]):match_str(line) then
             if vim.regex([[^\s*-\s*]]):match_str(line) then
@@ -328,15 +331,20 @@ function M.reformat_markdown()
             end
             if vim.regex([[[^0-9]\. \([A-Za-z`]\)]]):match_str(line) then
                 vim.cmd(([[%ss/\([^0-9]\)\. \([A-Za-z`]\)/\1\.  \r    * \2/g]]):format(range))
+                goto top_of_loop
             end
         else
             if vim.regex([[[^0-9]\zs\. \([A-Za-z`]\)]]):match_str(line) then
                 vim.cmd(([[%ss/[^0-9]\zs\. \([A-Za-z`]\)/\.  \r\1/g]]):format(range))
+                goto top_of_loop
             end
         end
+
         if vim.regex([[\*\{2,}]]):match_str(line) then
             vim.cmd(([[%ss/\*\{2}//g]]):format(range))
         end
+
+        line_num = line_num + 1
     end
 end
 
