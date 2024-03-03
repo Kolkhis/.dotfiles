@@ -62,30 +62,28 @@ mc() {
         fi
     else
         mods -C --quiet "$*" | sed 's,[?25l [0D[2K[?25h[?1002l[?1003l,,g'
-        # |sed 's/\x1B\[[0-9;\?]*[a-zA-Z]//g'
     fi
 }
 
 pwd_shortened() {
-    # pwd | sed -E 's/.*\/(.*\/.*$)/\1/' 2>/dev/null
     pwd | sed -E "s;^$HOME;~;" 2>/dev/null | sed -E 's;.*/(.*/.*$);\1;' 2>/dev/null
 }
 
 read_hide() {
     while [[ -n "$1" ]]; do
         case $1 in
-            (-p|--prompt)
-                shift;
+            -p | --prompt)
+                shift
                 PROMPT="$1"
-                shift;
+                shift
                 ;;
-            (-h|--hide|--hide-all)
-                HIDE_ALL=true;
-                shift;
+            -h | --hide | --hide-all)
+                HIDE_ALL=true
+                shift
                 ;;
-            (*)
+            *)
                 PROMPT="$1"
-                shift;
+                shift
                 ;;
         esac
     done
@@ -118,3 +116,10 @@ read_hide() {
     fi
 }
 
+m() {
+    if [[ -z "$1" ]]; then
+        nvim -c "tab Man bash" -c 'normal gt' -c "wincmd q"
+    elif [[ -n "$1" ]]; then
+        nvim -c "tab Man $1" -c "normal gt" -c "wincmd q"
+    fi
+}
