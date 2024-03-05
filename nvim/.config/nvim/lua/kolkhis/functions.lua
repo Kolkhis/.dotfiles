@@ -306,18 +306,18 @@ end
 --- Strip out all of the weird markdown formatting from the current visual selection or current line.
 function M.reformat_markdown()
     local mode = vim.api.nvim_get_mode().mode
-    local line_start = vim.fn.line('.')
+    local line_start, line_end = vim.fn.line('.'), vim.fn.line('.')
     local range, line = '', ''
     if mode == 'n' then
         range, line = tostring(vim.fn.line('.')), vim.fn.getline('.')
     else
         vim.cmd.norm('I')
-        line_start = vim.fn.line("'<")
+        line_start, line_end = vim.fn.line("'<"), vim.fn.line("'>")
         range, line = "'<,'>", vim.fn.getline("'<")
     end
 
     local line_num = line_start
-    while line_num <= vim.fn.line("'>") do
+    while line_num <= line_end do
         ::top_of_loop::
         range = tostring(line_num)
         line = vim.fn.getline(line_num)
@@ -331,11 +331,13 @@ function M.reformat_markdown()
             end
             if vim.regex([[[^0-9]\. \([A-Za-z`]\)]]):match_str(line) then
                 vim.cmd(([[%ss/\([^0-9]\)\. \([A-Za-z`]\)/\1\.  \r    * \2/g]]):format(range))
+                line_end = line_end + (vim.fn.line('.') - line_num)
                 goto top_of_loop
             end
         else
             if vim.regex([[[^0-9]\zs\. \([A-Za-z`]\)]]):match_str(line) then
                 vim.cmd(([[%ss/[^0-9]\zs\. \([A-Za-z`]\)/\.  \r\1/g]]):format(range))
+                line_end = line_end + (vim.fn.line('.') - line_num)
                 goto top_of_loop
             end
         end
@@ -366,7 +368,7 @@ function M:generate_toc()
     local toc = {}
     local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
     for i, line in ipairs(lines) do
-        if line:match('^#+ .+') then
+        if line:match('^##+ .+') then
             if self.match_markdown_header(i) then
                 line = line:gsub('(.*)%s+$', '%1')
                 local level, title = line:match('^(#+) (.+[^%s$])')
@@ -463,17 +465,68 @@ end
 -- :'<,'>s/^\(\s*\)\?\(.\{,80}\>\%[`,][^\.]\)/\1\2\r\1/g
 function M:break_long_lines()
     -- TODO: Fix indentation for list items
+    -- Do this by checking list items and indentation.
+    -- Get line diff with `starting_line = vim.fn.line('.')`
+    local ln_start, ln_end = vim.fn.line('.'), vim.fn.line('.')
     local width = vim.o.textwidth or 80
-    if vim.api.nvim_get_mode().mode ~= 'n' then
+    local visual = vim.api.nvim_get_mode().mode ~= 'n'
+    if visual then
         vim.cmd.norm('I')
-        vim.cmd(([['<,'>s/^\(\s*\)\?\(.\{,%d}\>\%%[`,][^\.]\)/\1\2\r\1/g]]):format(width))
-        return
-    else
-        vim.cmd(([[s/^\(\s*\)\?\(.\{,%d}\>\%%[`,][^\.]\)/\1\2\r\1/g]]):format(width))
+        ln_start, ln_end = vim.fn.line("'<"), vim.fn.line("'>")
     end
+    local line_number = ln_start
+
+    while line_number <= ln_end do
+        -- ::top_of_loop::
+        print('Top of loop -- line_number:', line_number, '| ln_end:', ln_end)
+        local line = vim.fn.getline(line_number)
+
+        -- FIXME: Remove the need for this check.
+        --            Fix line breaking at the end of a line, resulting in lines with
+        --            only whitespace.
+        if line:match('^%s+$') then
+            print('Whitespace line detected on line:', line_number)
+            vim.cmd(([[%dd]]):format(line_number))
+        end
+
+        -- if self.match_code_block_start(line) or self.match_code_block_end(line) then
+        --     line_number = line_number + 1
+        --     goto top_of_loop
+        -- end
+
+        if self.match_ul(vim.fn.getline(line_number)) then
+            vim.cmd(([[%ds/^\(\s*\)\(.\{,%d}\>[-*:`,\.)( ><}{]*\)/\1\2\r  \1/g]]):format(line_number, width))
+        elseif self.match_ol(vim.fn.getline(line_number)) then
+            vim.cmd(([[%ds/^\(\s*\)\(.\{,%d}\>[-*:`,\.)( ><}{]*\)/\1\2\r   \1/g]]):format(line_number, width))
+        elseif #line >= width then
+            vim.cmd(([[%ds/^\(\s*\)\(.\{,%d}\>[-*:`,\.)( ><}{!]*\)/\1\2\r\1/g]]):format(line_number, width))
+        end
+
+        if visual then
+            local diff = vim.fn.line('.') - line_number
+            ln_end = ln_end + diff
+            print('Current line number: ', line_number, '| ln_end:', ln_end)
+        else
+            local diff = vim.fn.line('.') - line_number
+            ln_end = ln_end + diff
+            print('Current line number: ', line_number, '| ln_end:', ln_end, '| diff:', diff)
+        end
+
+        line_number = line_number + 1
+
+    end
+
+    -- Old fn
+    -- local width = vim.o.textwidth or 80
+    -- if vim.api.nvim_get_mode().mode ~= 'n' then
+    --     vim.cmd.norm('I')
+    --     vim.cmd(([['<,'>s/^\(\s*\)\?\(.\{,%d}\>\%%[`,][^\.]\)/\1\2\r\1/g]]):format(width))
+    --     return
+    -- else
+    --     vim.cmd(([[s/^\(\s*\)\?\(.\{,%d}\>\%%[`,][^\.]\)/\1\2\r\1/g]]):format(width))
+    -- end
     -- Maybe loop over selection afterwards and check indentation of list items
 end
-
 
 function M:wrap_code_block()
     local ln_start, ln_end = vim.fn.line('.'), vim.fn.line('.')
