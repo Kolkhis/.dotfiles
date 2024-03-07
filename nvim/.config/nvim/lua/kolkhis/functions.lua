@@ -495,11 +495,11 @@ function M:break_long_lines()
         -- end
 
         if self.match_ul(vim.fn.getline(line_number)) then
-            vim.cmd(([[%ds/^\(\s*\)\(.\{,%d}\>[-*:`,\.)( ><}{]*\)/\1\2\r  \1/g]]):format(line_number, width))
+            vim.cmd(([[%ds/^\(\s*\)\(.\{,%d}\>[-*:`,\.)( ><}{!;]*\)/\1\2\r  \1/g]]):format(line_number, width))
         elseif self.match_ol(vim.fn.getline(line_number)) then
-            vim.cmd(([[%ds/^\(\s*\)\(.\{,%d}\>[-*:`,\.)( ><}{]*\)/\1\2\r   \1/g]]):format(line_number, width))
+            vim.cmd(([[%ds/^\(\s*\)\(.\{,%d}\>[-*:`,\.)( ><}{!;]*\)/\1\2\r   \1/g]]):format(line_number, width))
         elseif #line >= width then
-            vim.cmd(([[%ds/^\(\s*\)\(.\{,%d}\>[-*:`,\.)( ><}{!]*\)/\1\2\r\1/g]]):format(line_number, width))
+            vim.cmd(([[%ds/^\(\s*\)\(.\{,%d}\>[-*:`,\.)( ><}{!;]*\)/\1\2\r\1/g]]):format(line_number, width))
         end
 
         if visual then
