@@ -14,7 +14,7 @@ return require('packer').startup(function(use)
 
     if require('kolkhis.detect_os').is_linux then
         use({ 'sourcegraph/sg.nvim', run = 'nvim -l build/init.lua' })
-        use('/home/kolkhis/Repos/github.com/kolkhis/streamer-mode.nvim/')
+        use(vim.fs.normalize('~/Repos/github.com/kolkhis/streamer-mode.nvim/'))
     else
         use('Kolkhis/streamer-mode.nvim')
     end

@@ -1,6 +1,7 @@
 local os = require('kolkhis.detect_os')
 -- Sourcegraph config. All keys are optional
 if os.is_linux then
+    local commands = require('sg.cody.commands')
     local sg = require('sg')
     local sgui = require('sg.extensions.telescope')
     sg.setup({})
@@ -13,10 +14,12 @@ if os.is_linux then
         local prompt = mode == 'n' and 'Ask Cody (file) > ' or 'Ask Cody (selection) > '
         vim.ui.input({ prompt = prompt }, function(question)
             if mode == 'n' then
-                vim.cmd((':%% CodyAsk %s'):format(question))
+                commands.ask_range(0, 0, -1, question)
+                -- vim.cmd((':%% CodyAsk %s'):format(question))
             else
                 vim.cmd.norm('I')
-                vim.cmd(("'<,'>CodyAsk %s"):format(question))
+                commands.ask_range(vim.fn.line("'<"), vim.fn.line("'>"), -1, question)
+                -- vim.cmd(("'<,'>CodyAsk %s"):format(question))
             end
         end)
     end
@@ -52,4 +55,43 @@ if os.is_linux then
         noremap = true,
         desc = 'Task [C]ody with a [P]rompt about file or selection.',
     })
+
+
+     -- Cody autocompletion keymap (WIP)
+    vim.keymap.set({ 'i', 'n' }, 'zy', function ()
+        commands.autocomplete({
+            -- REQUEST
+            ---@diagnostic disable:assign-type-mismatch
+            filename = vim.api.nvim_buf_get_name(0), row = vim.fn.line('.'), col = vim.fn.col('.') },
+            -- CALLBACK
+            function (err, data)
+                if err then
+                    vim.print(err)
+                    return
+                end
+                vim.print(data)
+                vim.print("Data: ", data.completionEvent.items[1].insertText)
+                vim.api.nvim_put({data.completionEvent.items[1].insertText}, 'c', true, true)
+            end)
+    end)
+
 end
+
+
+
+
+
+--[[ 
+{
+  completionEvent = {
+    id = "d7ff2741-cb70-473b-a1eb-d58c6f74328b",
+    items = { {
+        charCount = 9,
+        insertText = "im.cmd([[",
+        stopReason = "stop"
+      } },
+    }
+}
+--]]
+
+
