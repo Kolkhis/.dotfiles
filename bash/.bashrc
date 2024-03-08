@@ -80,16 +80,16 @@ export FZF_DEFAULT_OPTS="\
 "
 
 # cody
-declare SRC_ENDPOINT
-declare SRC_ACCESS_TOKEN
 if [[ -f "$HOME/.config/cody/endpoint" ]] && [[ -f "$HOME/.config/cody/token" ]]; then
+    declare SRC_ENDPOINT
+    declare SRC_ACCESS_TOKEN
     SRC_ENDPOINT="$(head -1 "$HOME/.config/cody/endpoint")"
     SRC_ACCESS_TOKEN="$(head -1 "$HOME/.config/cody/token")"
+    export SRC_ENDPOINT
+    export SRC_ACCESS_TOKEN
 fi
-export SRC_ENDPOINT
-export SRC_ACCESS_TOKEN
 
-# colored GCC warnings and errors
+# colors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 export GREP_COLORS=':ms=01;31:mc=01;31:sl=38;5;248:cx=38;5;244:fn=38;5;68:ln=38;5;81:bn=32:se=36' 
 eval "$(dircolors -b ~/.dircolors)"
@@ -143,7 +143,8 @@ set_prompt() {
     else
         SEP_COLOR="\[\e[38;5;88m\]";
     fi
-    PS1=\
+    if [[ -f ~/.bash_functions ]]; then
+        PS1=\
 "${SEP_COLOR}${FIRST_SEP} \
 ${NAME_COLOR}\
 \u${GREY}@\
@@ -156,6 +157,19 @@ ${RED_256}\
 \n${SEP_COLOR}${SECOND_SEP} \
 ${VENV_COLOR}\$(check_venv)\
 ${GREY}\\$ ${RESET}"
+    else
+        PS1=\
+"${SEP_COLOR}${FIRST_SEP} \
+${NAME_COLOR}\
+\u${GREY}@\
+${HOST_COLOR}\
+\h${GREY}:\
+${PATH_COLOR}\
+${RED_256}\
+\n${SEP_COLOR}${SECOND_SEP} \
+${VENV_COLOR}\$(check_venv)\
+${GREY}\\$ ${RESET}"
+    fi
 }
 # \W\
 
