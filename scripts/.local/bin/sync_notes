@@ -27,3 +27,14 @@ while read -r f; do
 done < <(find "${NOTES_HOME}" -name '*.md')
         
 
+# or
+
+declare -a FILES
+IFS=$'\n' read -r -d '' -a FILES < <(find ~/notes -type f -name '*.md')
+# FILES="$(find ~/notes -type f -name '*.md')"
+
+for f in "${FILES[@]}"; do
+    printf "$f"
+done
+
+
