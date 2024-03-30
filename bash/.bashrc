@@ -1,12 +1,11 @@
 # shellcheck disable=SC2059,SC1091,SC1090
 
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc) for examples
+# /usr/share/doc/bash/examples/startup-files (in the package bash-doc) for examples
 
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
-    *) return;;
+    *) return ;;
 esac
 
 # make less more friendly for non-text input files, see lesspipe(1)
@@ -24,8 +23,6 @@ if [ -x /usr/bin/dircolors ]; then
     fi
 fi
 
-
-
 if [ -f ~/.bash_functions ]; then
     . ~/.bash_functions
 fi
@@ -34,8 +31,7 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-
-# enable programmable completion features
+# Enable programmable bash completion in interactive shells
 if ! shopt -oq posix; then
     if [ -f /usr/share/bash-completion/bash_completion ]; then
         . /usr/share/bash-completion/bash_completion
@@ -44,20 +40,20 @@ if ! shopt -oq posix; then
     fi
 fi
 
-################################## Env ################################## 
+################################## Env ##################################
 # nvm
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" 
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" 
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-# crablang 
+# crablang
 [ -s "$HOME/.cargo/env" ] && \. "$HOME/.cargo/env"
 
 # Set XDG_CONFIG_HOME/DATA if it's unset
-case "$(uname)" in 
+case "$(uname)" in
     Linux)
-        [ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="${HOME}/.config";
-        [ -z "$XDG_DATA_HOME" ] && export XDG_DATA_HOME="${HOME}/.local/share";
+        [ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="${HOME}/.config"
+        [ -z "$XDG_DATA_HOME" ] && export XDG_DATA_HOME="${HOME}/.local/share"
         ;;
 esac
 
@@ -91,7 +87,7 @@ fi
 
 # colors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-export GREP_COLORS=':ms=01;31:mc=01;31:sl=38;5;248:cx=38;5;244:fn=38;5;68:ln=38;5;81:bn=32:se=36' 
+export GREP_COLORS=':ms=01;31:mc=01;31:sl=38;5;248:cx=38;5;244:fn=38;5;68:ln=38;5;81:bn=32:se=36'
 eval "$(dircolors -b ~/.dircolors)"
 
 # cdpath
@@ -99,7 +95,7 @@ export CDPATH='.:~:~/.dotfiles/nvim/.config/:~/notes:~/Repos/github.com/kolkhis:
 
 export SCREENRC="$HOME/.config/.screenrc"
 
-################################## PS1 ################################## 
+################################## PS1 ##################################
 # Python: Prevent default "(venv)" text
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 YELLOW='\[\e[38;5;214m\]'
@@ -117,35 +113,34 @@ SOFT_PINK="\[\e[38;5;212m\]"
 # SOFT_PURPLE="\[\e[38;5;61m\]"
 DARK_RED="\[\e[38;5;88m\]"
 SEP_COLOR=${DARK_RED}
-FIRST_SEP="┎"   # ┎┏┍ ┏ ┒ ┒┎ ┏ ┍
-SECOND_SEP="┖"  # ┖┗┕ ┖ ┚ ┨┠ ┣ ┝ ┫┠
-                #         ┚┖ ┗ ┕
+FIRST_SEP="┎"  # ┎┏┍ ┏ ┒ ┒┎ ┏ ┍
+SECOND_SEP="┖" # ┖┗┕ ┖ ┚ ┨┠ ┣ ┝ ┫┠
+#         ┚┖ ┗ ┕
 case $USER in
-    (root)
-        NAME_COLOR=${RED_256};
-        HOST_COLOR=${BURNT_ORANGE};
-        PATH_COLOR=${LIGHT_PURPLE};
+    root)
+        NAME_COLOR=${RED_256}
+        HOST_COLOR=${BURNT_ORANGE}
+        PATH_COLOR=${LIGHT_PURPLE}
         VENV_COLOR=${SOFT_PINK}
-	;;
-    (*)
-        NAME_COLOR=${DARK_YELLOW};
-        HOST_COLOR=${BURNT_ORANGE};
-        PATH_COLOR=${MUTED_BLUEGREEN};
+        ;;
+    *)
+        NAME_COLOR=${DARK_YELLOW}
+        HOST_COLOR=${BURNT_ORANGE}
+        PATH_COLOR=${MUTED_BLUEGREEN}
         VENV_COLOR=${YELLOW}
-	;;
+        ;;
 esac
 
 set_prompt() {
-    if echo "$ORIGINAL_PATH" | grep 'cyg' > /dev/null 2>&1; then
-        SEP_COLOR="\[\e[38;5;95m\]";
-        NAME_COLOR="\[\e[38;5;61m\]";
-        PATH_COLOR="\[\e[38;5;24m\]";
+    if echo "$ORIGINAL_PATH" | grep 'cyg' >/dev/null 2>&1; then
+        SEP_COLOR="\[\e[38;5;95m\]"
+        NAME_COLOR="\[\e[38;5;61m\]"
+        PATH_COLOR="\[\e[38;5;24m\]"
     else
-        SEP_COLOR="\[\e[38;5;88m\]";
+        SEP_COLOR="\[\e[38;5;88m\]"
     fi
     if [[ -f ~/.bash_functions ]]; then
-        PS1=\
-"${SEP_COLOR}${FIRST_SEP} \
+        PS1="${SEP_COLOR}${FIRST_SEP} \
 ${NAME_COLOR}\
 \u${GREY}@\
 ${HOST_COLOR}\
@@ -158,8 +153,7 @@ ${RED_256}\
 ${VENV_COLOR}\$(check_venv)\
 ${GREY}\\$ ${RESET}"
     else
-        PS1=\
-"${SEP_COLOR}${FIRST_SEP} \
+        PS1="${SEP_COLOR}${FIRST_SEP} \
 ${NAME_COLOR}\
 \u${GREY}@\
 ${HOST_COLOR}\
@@ -176,22 +170,21 @@ ${GREY}\\$ ${RESET}"
 # pwd_shortened:  sed -E 's/.*\/(.*\/.*$)/\1/' 2>/dev/null
 # different prompt for git bash
 case $(hostname) in
-    ("D01")
-        if echo "$ORIGINAL_PATH" | grep mingw > /dev/null 2>&1; then
-            source /etc/profile.d/git-prompt.sh;
+    "D01")
+        if echo "$ORIGINAL_PATH" | grep mingw >/dev/null 2>&1; then
+            source /etc/profile.d/git-prompt.sh
         else
-            set_prompt;
+            set_prompt
         fi
         ;;
-    (*)
-        set_prompt;
+    *)
+        set_prompt
         ;;
 esac
 export PS1
 export PS2="${GREY}~>${RESET} "
 
-
-################################## Shell Options ################################## 
+################################## Shell Options ##################################
 # omit duplicate lines or lines starting with space
 HISTCONTROL=ignoreboth
 HISTSIZE=1000
@@ -212,7 +205,8 @@ shopt -s nocaseglob
 # god mode
 set -o vi
 
-# set timezone
+
+################################## System Variables ##################################
 export TZ="America/New_York"
 export TERM=xterm-256color
 export NOTES_HOME="/home/kolkhis/notes"

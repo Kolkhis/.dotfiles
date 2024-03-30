@@ -32,7 +32,7 @@ alias vl="vi -c \"normal '0\""
 alias clsa='printf "\e[H\e[2J"'
 alias cls='printf "\e[H\e[2J"'
 alias c='clear'
-alias path='printf "${PATH//:/\\n}"'
+alias path='printf "${PATH//:/\\n}\n"'
 
 
 # Navigation
