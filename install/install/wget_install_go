@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC2059
+# shellcheck disable=SC2059,SC1091
 
 go_install() {
 
@@ -8,14 +8,14 @@ go_install() {
     cd ~/install/go || exit
 
     # Download Go ()
-    if [[ ! -f ~/install/go/go1.21.1.linux-amd64.tar.gz ]]; then
-        wget https://go.dev/dl/go1.21.1.linux-amd64.tar.gz
+    if [[ ! -f ~/install/go/go1.22.1.linux-amd64.tar.gz ]]; then
+        wget -O /tmp/go1.22.1.linux-amd64.tar.gz https://go.dev/dl/go1.22.1.linux-amd64.tar.gz
     fi
 
     # Check that the download succeeded
-    if [[ -f ~/install/go/go1.21.1.linux-amd64.tar.gz ]]; then
+    if [[ -f ~/tmp/go1.22.1.linux-amd64.tar.gz ]]; then
         # Extract Go
-        sudo tar -C /usr/local -xzf go1.21.1.linux-amd64.tar.gz
+        sudo tar -C /usr/local -xzf go1.22.1.linux-amd64.tar.gz
 
         # Add Go to PATH if it's not already
         go_path_exists=false
