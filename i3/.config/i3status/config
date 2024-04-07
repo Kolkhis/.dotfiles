@@ -1,0 +1,70 @@
+
+general {
+        output_format = "i3bar"
+        separator = " / "
+        colors = true
+        interval = 5
+}
+
+order += "wireless _first_"
+order += "ethernet _first_"
+order += "disk /"
+order += "load"
+order += "memory"
+
+wireless _first_ {
+        format_up = "W: (%quality at %essid) %ip"
+        format_down = "W: down"
+}
+
+ethernet _first_ {
+        format_up = "E: %ip (%speed)"
+        format_down = "E: down"
+}
+
+battery all {
+        format = "%status %percentage %remaining"
+}
+
+disk "/" {
+        format = "%avail"
+}
+
+load {
+        # format = "%1min"
+       format = "[ load: %1min, %5min, %15min ]"
+}
+
+memory {
+        format = "Memory: %used / %available"
+        threshold_degraded = "1G"
+        format_degraded = "MEMORY < %available"
+}
+
+order += "tztime local"
+tztime local {
+        format = "%m-%d-%Y - %H:%M"
+}
+
+
+order += "volume master"
+# volume master {
+#    #  name: <alsa_output.usb-Logitech_G433_Gaming_Headset_000000000000-00.analog-stereo>
+#    %alsa_output.usb-Logitech_G433_Gaming_Headset_000000000000-00.analog-stereo
+#    format = "♪ Vol: %volume"
+# }
+
+volume master {
+       format = "♪ Vol: %volume"
+       format_muted = "♪: muted (%volume)"
+       device = "default"
+       mixer = "Master"
+       mixer_idx = 0
+}
+
+
+order += "volume headest"
+volume headest {
+    device = "alsa_output.usb-Logitech_G433_Gaming_Headset_000000000000-00.analog-stereo"
+    format = "(%devicename): 0%%"
+}
