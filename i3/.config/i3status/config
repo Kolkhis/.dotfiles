@@ -15,7 +15,10 @@ order += "memory"
 wireless _first_ {
         format_up = "W: (%quality at %essid) %ip"
         format_down = "W: down"
+        align = "left"
+        separator_block_width = 30
 }
+
 
 ethernet _first_ {
         format_up = "E: %ip (%speed)"
@@ -32,7 +35,7 @@ disk "/" {
 
 load {
         # format = "%1min"
-       format = "[ load: %1min, %5min, %15min ]"
+       format = "CPU Load: 1m-%1min, 5m-%5min, 15m-%15min"
 }
 
 memory {
@@ -48,6 +51,7 @@ tztime local {
 
 
 order += "volume master"
+
 # volume master {
 #    #  name: <alsa_output.usb-Logitech_G433_Gaming_Headset_000000000000-00.analog-stereo>
 #    %alsa_output.usb-Logitech_G433_Gaming_Headset_000000000000-00.analog-stereo
@@ -56,7 +60,7 @@ order += "volume master"
 
 volume master {
        format = "♪ Vol: %volume"
-       format_muted = "♪: muted (%volume)"
+       format_muted = "♪: --MUTED-- (%volume)"
        device = "default"
        mixer = "Master"
        mixer_idx = 0
@@ -68,3 +72,12 @@ volume headest {
     device = "alsa_output.usb-Logitech_G433_Gaming_Headset_000000000000-00.analog-stereo"
     format = "(%devicename): 0%%"
 }
+
+
+
+
+# TODO: 
+# ```bash
+# entr -c bash -c "[[ -n $SPID ]] && kill $SPID; i3status; export SPID=\"$!\";" < <(find . -name 'config')
+# ```
+
