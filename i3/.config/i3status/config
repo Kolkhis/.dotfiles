@@ -1,78 +1,110 @@
 
 general {
-        output_format = "i3bar"
-        separator = " / "
-        colors = true
-        interval = 5
+    output_format = "i3bar"
+    # separator = " / "
+    colors = true
+    interval = 5
+    # markup = "pango"
 }
 
 order += "wireless _first_"
 order += "ethernet _first_"
 order += "disk /"
-order += "load"
 order += "memory"
+order += "cpu_usage"
+order += "load"
+order += "path_exists VPN"
+order += "volume master"
+order += "tztime local"
 
 wireless _first_ {
-        format_up = "W: (%quality at %essid) %ip"
-        format_down = "W: down"
-        align = "left"
-        separator_block_width = 30
+    format_up = "WiFi: (%quality at %essid) %ip"
+    format_down = "WiFi: Not Connected"
+    align = "left"
+    separator_block_width = 25
 }
 
 
 ethernet _first_ {
-        format_up = "E: %ip (%speed)"
-        format_down = "E: down"
+    format_up = "Eth: %ip (%speed)"
+    format_down = "Eth: down"
+    separator_block_width = 25
 }
 
-battery all {
-        format = "%status %percentage %remaining"
+cpu_usage {
+    separator_block_width = 25
+    format = "CPU Usage: %usage"
+    # For each CPU individually: "CPU_0: %cpu0 CPU_1: %cpu1"
 }
 
 disk "/" {
-        format = "%avail"
+    format = "Disk: %avail / %total - %used (%percentage_used) used"
+    separator_block_width = 25
+    prefix_type = custom
+    format_below_threshold = "Warning: %percentage_avail"
+    low_threshold = 10
+    threshold_type = "percentage_free"
+    # %percentage_used used, %percentage_free free, %percentage_avail avail
+    # format = "%percentage_used used, %percentage_free free, %percentage_avail avail"
 }
 
 load {
-        # format = "%1min"
-       format = "CPU Load: 1m-%1min, 5m-%5min, 15m-%15min"
+    # format = "%1min"
+    format = "CPU Load: 1m-%1min, 5m-%5min, 15m-%15min"
+    separator_block_width = 25
 }
 
 memory {
-        format = "Memory: %used / %available"
-        threshold_degraded = "1G"
-        format_degraded = "MEMORY < %available"
+    format = "Memory: %used / %available"
+    threshold_degraded = "1G"
+    format_degraded = "MEMORY < %available"
+    separator_block_width = 25
 }
 
-order += "tztime local"
 tztime local {
-        format = "%m-%d-%Y - %H:%M"
+    format = "%m-%d-%Y - %H:%M"
+    separator_block_width = 25
 }
 
-
-order += "volume master"
-
-# volume master {
-#    #  name: <alsa_output.usb-Logitech_G433_Gaming_Headset_000000000000-00.analog-stereo>
-#    %alsa_output.usb-Logitech_G433_Gaming_Headset_000000000000-00.analog-stereo
-#    format = "♪ Vol: %volume"
-# }
 
 volume master {
-       format = "♪ Vol: %volume"
-       format_muted = "♪: --MUTED-- (%volume)"
-       device = "default"
-       mixer = "Master"
-       mixer_idx = 0
+    format = "♪ Vol: %volume"
+    format_muted = "♪: --MUTED-- (%volume)"
+    device = "default"
+    mixer = "Master"
+    mixer_idx = 0
+    separator_block_width = 25
+}
+
+path_exists VPN {
+    path = "/proc/sys/net/ipv4/conf/tun0"
+    format = "%title: %status"
+    separator_block_width = 25
+    format_down = " - "
 }
 
 
-order += "volume headest"
+### UNUSED MODULES ###
+cpu_temperature 0 {
+    format = "CPU Temp: %degrees"
+    max_threshold = 50
+    format_above_threshold = "Warning: CPU Temp > 50C"
+}
+
+battery all {
+    format = "%status %percentage %remaining"
+}
 volume headest {
     device = "alsa_output.usb-Logitech_G433_Gaming_Headset_000000000000-00.analog-stereo"
     format = "(%devicename): 0%%"
+    separator_block_width = 25
 }
-
+read_file UPTIME {
+    path = "/proc/uptime"
+    format = "%title: %content"
+    format_bad = "%title - %errno: %error"
+    Max_characters = 255
+}
 
 
 
