@@ -14,5 +14,6 @@ set completion-map-case on
 # Max completions before user is prompted to display them
 set completion-query-items 80
 
+set completion-ignore-case On
 
 
