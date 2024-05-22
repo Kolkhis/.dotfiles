@@ -383,9 +383,9 @@ function M:generate_toc()
     table.insert(toc_lines, '## Table of Contents')
     for _, header in ipairs(toc) do
         local spacing = string.rep('    ', header.level - 2)
-        local link_dest = header.title:lower():gsub([[([.(),\[\]`{}:^$])]], ''):gsub('%s', '-')
+        local link_dest = header.title:lower():gsub([[([\..(),\[\]`{}/:^$])]], ''):gsub('%s', '-')
         -- link_dest = link_dest:gsub('%s', '-')
-        local link = ([[%s* [%s](#%s) ]]):format(spacing, header.title:gsub(':$', ''), link_dest)
+        local link = ([[%s* [%s](#%s) ]]):format(spacing, header.title:gsub(':|/|:$', ''), link_dest)
         table.insert(toc_lines, link)
     end
 
