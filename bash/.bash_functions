@@ -45,6 +45,18 @@ standardcolor() {
     done
 }
 
+soundbar() {
+    if pacmd list-sinks | grep "alsa_output.pci-0000_29_00.4.iec958-stereo" > /dev/null 2>&1; then
+        if ! pacmd set-default-sink alsa_output.pci-0000_29_00.4.iec958-stereo; then
+            printf "Couldn't set the audio output to the soundbar!\n"
+        else
+            printf "Successfully redirected audio output to the soundbar.\n"
+        fi
+    else
+        printf "Soundbar not found!\nTry one of these:\n%s" "$(pacmd list-sinks | grep "name:")";
+    fi;
+}
+
 goto() {
     d="$(dirname "$(which "$1")")"
     printf "Going to %s. \n" "$d" && cd "$d" || return 1
