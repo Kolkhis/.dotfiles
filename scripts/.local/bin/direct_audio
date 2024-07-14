@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# pacmd set-default-sink alsa_output.pci-0000_29_00.4.iec958-stereo
+
+SOUNDBAR="alsa_output.pci-0000_29_00.4.iec958-stereo"
+
+if [[ -z "$1" ]]; then
+    TARGET_DEVICE="$SOUNDBAR"
+else
+    TARGET_DEVICE="$1"
+fi
+
+
+for source in $(pacmd list-sink-inputs | grep "index:" | awk '{print $2}'); do
+    pacmd move-sink-input "$source" "$TARGET_DEVICE"
+done
+
+
+
+
