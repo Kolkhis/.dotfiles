@@ -7,7 +7,7 @@ general {
     # markup = "pango"
 }
 
-order += "wireless _first_"
+order += "wireless _up_"
 order += "ethernet _first_"
 order += "disk /"
 order += "memory"
@@ -20,6 +20,13 @@ order += "tztime local"
 wireless _first_ {
     format_up = "WiFi: (%quality at %essid) %ip"
     format_down = "WiFi: Not Connected"
+    align = "left"
+    separator_block_width = 25
+}
+
+wireless _up_ {
+    format_up = "WiFi: (%quality at %essid) %ip"
+    format_down = "No WiFi"
     align = "left"
     separator_block_width = 25
 }
