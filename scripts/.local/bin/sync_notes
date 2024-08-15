@@ -9,32 +9,41 @@
 # au! BufEnter contents.md nnoremap gf ?/notes/<CR>gf 
 # ^ Try that?
 
-existing=0
-if [[ -z "$NOTES_HOME" ]]; then
-    echo "NOTES_HOME=\"${HOME}/notes\"" >> ~/.bash_aliases
-fi
+## Attempting to keep track of the number of files that have headers ##
+# existing=0
+# if [[ -z "$NOTES_HOME" ]]; then
+#     echo "NOTES_HOME=\"${HOME}/notes\"" >> ~/.bash_aliases
+# fi
 
-while read -r f; do
-    existing+=1
-    printf "File found: %s\n" "$f"
-    # headers=$(grep -i -E -A3 '^#+' "$f")
-    while read -r l; do
-        printf "Header: %s\n" " $l"
-    done < <(grep -i -E -n '^#+' "$f")
-    continue
-    # if grep -q "$f" "${NOTES_HOME}/contents.md"; then
-    # fi
-done < <(find "${NOTES_HOME}" -name '*.md')
-        
+# while read -r f; do
+#     existing+=1
+#     printf "File found: %s\n" "$f"
+#     # headers=$(grep -i -E -A3 '^#+' "$f")
+#     while read -r l; do
+#         printf "Header: %s\n" " $l"
+#     done < <(grep -i -E -n '^#+' "$f")
+#     continue
+#     # if grep -q "$f" "${NOTES_HOME}/contents.md"; then
+#     # fi
+# done < <(find "${NOTES_HOME}" -name '*.md')
+ 
 
-# or
+# Listing files
 
 declare -a FILES
 IFS=$'\n' read -r -d '' -a FILES < <(find ~/notes -type f -name '*.md')
 # FILES="$(find ~/notes -type f -name '*.md')"
 
+# Get file names
 for f in "${FILES[@]}"; do
-    printf "$f"
+    printf "%s\n" "$f"
 done
+printf "******************** With only printf ***************************\n"
+# Alternative, easier way of getting file names
+printf "%s\n" "${FILES[@]}"
+
+# TODO: Add headers (2s and 3s) sequentially underneath the filename.
+#       OR - Add the table of contents for the file underneath filename. 
+#            The TOC may need to be modified to include path and line number
 
 
