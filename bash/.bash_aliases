@@ -48,6 +48,7 @@ alias ta="cd ~/Repos/github.com/kolkhis/taggart"
 alias tw="cd ~/Repos/github.com/kolkhis/twitch_chat_bot/"
 alias gl="cd ~/Repos/github.com/kolkhis/go-fundamentals/"
 alias db="cd ~/Repos/github.com/kolkhis/discord_bot/"
+alias tb="cd ~/Repos/github.com/kolkhis/twitch_chat_bot/"
 alias i3c="vim ~/.dotfiles/i3/.config/i3/config"
 
 case $(hostname) in
