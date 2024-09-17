@@ -1,6 +1,6 @@
 local os = require('kolkhis.detect_os')
 -- Sourcegraph config. All keys are optional
-if os.is_linux then
+if os.is_linux and not os.is_termux then
     local commands = require('sg.cody.commands')
     local sg = require('sg')
     local sgui = require('sg.extensions.telescope')
@@ -18,7 +18,12 @@ if os.is_linux then
                 -- vim.cmd((':%% CodyAsk %s'):format(question))
             else
                 vim.cmd.norm('I')
-                commands.ask_range(vim.fn.line("'<"), vim.fn.line("'>"), -1, question)
+                local start_point, end_point = vim.fn.line("'<"), vim.fn.line("'>")
+                if start_point and end_point then
+                    commands.ask_range(start_point, end_point, -1, question)
+                else
+                    vim.cmd('echoerr "No selection to be passed to Cody."')
+                end
                 -- vim.cmd(("'<,'>CodyAsk %s"):format(question))
             end
         end)
