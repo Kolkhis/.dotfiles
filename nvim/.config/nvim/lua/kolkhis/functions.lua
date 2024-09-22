@@ -371,7 +371,7 @@ function M:generate_toc()
         if line:match('^##+ .+') then
             if self.match_markdown_header(i) then
                 line = line:gsub('(.*)%s+$', '%1')
-                local level, title = line:match('^(#+) (.+[^%s$])')
+                local level, title = line:match('^(#+) +(.+[^%s$])')
                 if #level < 5 then
                     table.insert(toc, { level = #level, title = title })
                 end
