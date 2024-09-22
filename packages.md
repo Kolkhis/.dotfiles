@@ -24,50 +24,51 @@ sudo apt-mark showmanual
 "Bootstrapping" script at the bottom.
 
 ## Basic Tools
-* stow - dotfile management
-* gcc
-* unzip
-* tree
-* entr
-* w3m
-* lolcat
-* lynx
-* tmux
-* screen (build from source for 256 color support)
-* tldr
-* fzf
-* shfmt
-* netstat
-* ncal - calendar
-* nodejs
-* npm
-* xterm
-* visidata
-* youtube-dl
-* cmatrix
-* net-tools
-* network-manager (nmcli)
-* nmap
-* sysstat - system tools
-* whois - also contains mkpasswd
+* `stow` - dotfile management
+* `gcc`
+* `unzip`
+* `tree`
+* `entr`
+* `w3m`
+* `lolcat`
+* `lynx`
+* `tmux`
+* `screen` (build from source for 256 color support)
+* `tldr`
+* `fzf`
+* `shfmt`
+* `netstat`
+* `ncal` - calendar
+* `nodejs`
+* `npm`
+* `xterm`
+* `visidata`
+* `youtube-dl`
+* `cmatrix`
+* `net-tools`
+* `network-manager` (nmcli)
+* `nmap`
+* `sysstat` - system tools
+* `whois` - also contains mkpasswd
+* `showmount` - part of nfs-common
 
 ## Programming
-* jq (jquery - install )
-* python3.10-venv
-* python3-pip
-* pyright (use npm - `sudo npm install -g pyright`)
-* gopls
+* `jq` (jquery - install )
+* `python3.10-venv`
+* `python3-pip`
+* `pyright` (use npm - `sudo npm install -g pyright`)
+* `gopls`
 
 ### Packages needed for compiling Vim from source:  
 The default installation of Vim doesn't have Python3 support, at least on Ubuntu Server.  
 In addition, the latest available version from 'apt' is 8.2, so that's another reason to
 [build Vim from Source](https://github.com/vim/vim/blob/master/src/INSTALL).  
 (Also see `~/notes/vim_nvim/build_from_source.md`)  
-* clang
-* libtool-bin 
-* libpython3-dev (python support)
-* libxt-dev (clipboard support)
-* valgrind (debugging support)
+* `clang`
+* `libtool-bin` 
+* `libpython3-dev` (python support)
+* `libxt-dev` (clipboard support)
+* `valgrind` (debugging support)
 
 ```bash
 sudo apt-get update && sudo apt-get install -y \
