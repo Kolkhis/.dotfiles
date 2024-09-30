@@ -85,10 +85,19 @@ if [[ -f "$HOME/.config/cody/endpoint" ]] && [[ -f "$HOME/.config/cody/token" ]]
     export SRC_ACCESS_TOKEN
 fi
 
-# colors
+# Colors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 export GREP_COLORS=':ms=01;31:mc=01;31:sl=38;5;248:cx=38;5;244:fn=38;5;68:ln=38;5;81:bn=32:se=36'
 eval "$(dircolors -b ~/.dircolors)"
+
+# Add colors to less output (TODO)
+# export LESS_TERMCAP_md=$'\e[33m'  # Start Bold
+# export LESS_TERMCAP_mb=$'\e[4m'   # Start Blinking
+# export LESS_TERMCAP_us=$'\e[10m'  # Start Underline 
+# export LESS_TERMCAP_so=$'\e[11m'  # Start Standout
+
+# -R is needed for the escape sequences
+export LESS="-FXR"
 
 # cdpath
 export CDPATH='.:~:~/.dotfiles/nvim/.config/:~/notes:~/Repos/github.com/kolkhis:~/notes/linux:~/notes/c:~/.dotfiles:~/.dotfiles/vim'
