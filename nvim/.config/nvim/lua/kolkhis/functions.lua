@@ -141,6 +141,7 @@ end
 --- Add linebreaks (two spaces) to the end of lines that don't end with
 --- a comma, two spaces, or three backticks (code blocks).
 function M:md_add_linebreaks()
+    -- TODO: Fix linebreaks not being added to lines ending in single spaces.  
     local mode = vim.api.nvim_get_mode().mode
     if mode == 'n' then
         vim.cmd([[%s/\([^,\| \{2}\|`\{3}]$\)/\1  /]])
@@ -364,7 +365,11 @@ function M.match_markdown_header(ln_num)
 end
 
 --- Inserts a Markdown table of contents into the current buffer, at the cursor.
-function M:generate_toc()
+---@param user_spacing? number
+function M:generate_toc(user_spacing)
+    --- TODO: Optional support for custom spacing 
+    local indentation_spacing = user_spacing or 4
+    local spacing = string.rep(' ', indentation_spacing)
     local toc = {}
     local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
     for i, line in ipairs(lines) do
@@ -382,14 +387,14 @@ function M:generate_toc()
     local toc_lines = {}
     table.insert(toc_lines, '## Table of Contents')
     for _, header in ipairs(toc) do
-        local spacing = string.rep('    ', header.level - 2)
-        local link_dest = header.title:lower():gsub([[([\..(),\[\]`{}/:^$])]], ''):gsub('%s', '-')
-        -- link_dest = link_dest:gsub('%s', '-')
-        local link = ([[%s* [%s](#%s) ]]):format(spacing, header.title:gsub(':|/|:$', ''), link_dest)
+        local indentation = string.rep(spacing, header.level - 2)
+        local link_dest = header.title:lower():gsub('[^%w%s-]+', ''):gsub('%s', '-')
+        local link = ([[%s* [%s](#%s) ]]):format(indentation, header.title:gsub('[: ]$', ''), link_dest)
         table.insert(toc_lines, link)
     end
 
     local completed_toc = table.concat(toc_lines, '\n')
+    -- TODO: Refactor to not use a register
     vim.fn.setreg('a', completed_toc)
     vim.cmd.norm('Oo')
     vim.cmd('normal! "ap')
