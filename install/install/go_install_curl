@@ -41,6 +41,5 @@ go_install() {
 
 if ! go_install; then
     printf "Could not install Go.\n"
-    return 1
 fi
-return 0
+
