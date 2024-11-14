@@ -33,7 +33,7 @@ alias clsa='printf "\e[H\e[2J"'
 alias cls='printf "\e[H\e[2J"'
 alias c='clear'
 alias path='printf "${PATH//:/\\n}\n"'
-
+alias f='fzf'
 
 # Navigation
 alias dots="cd ~/.dotfiles/"
