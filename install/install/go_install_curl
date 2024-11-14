@@ -4,14 +4,14 @@
 go_install() {
 
     # Download Go
-    if ! curl -fsSL -o /tmp/go1.22.1.linux-amd64.tar.gz \
-        https://go.dev/dl/go1.22.1.linux-amd64.tar.gz; then
+    if ! curl -fsSL -o /tmp/go1.23.3.linux-amd64.tar.gz \
+        https://go.dev/dl/go1.23.3.linux-amd64.tar.gz; then
         printf "There was a problem downloading Go.\n" && return 1
     fi
 
-    # Extract Go
+    # Extract Go to /usr/local/ 
     if [[ -f /tmp/go1.21.1.linux-amd64.tar.gz ]]; then
-        if ! sudo tar -C /usr/local -xzf /tmp/go1.22.1.linux-amd64.tar.gz; then
+        if ! sudo tar -C /usr/local -xzf /tmp/go1.23.3.linux-amd64.tar.gz; then
             printf >&2 "There was a problem unzipping the Go tarball.\n" && return 1
         fi
     else
@@ -19,23 +19,14 @@ go_install() {
     fi
 
     # Add Go to PATH if it's not already
-    go_path_exists=false
-    for file in ~/.bash*; do
-        if [[ $file == "$HOME/.bash_history" ]] || [[ $file == "$HOME/.bash_logout" ]]; then
-            continue
-        fi
-        if grep -q "/usr/local/go/bin" "$file"; then
-            printf "Go already exists in PATH.\n"
-            go_path_exists=true
-        fi
-    done
-
-    if ! $go_path_exists; then
+    if ! printf "$PATH" | grep -q '/go/bin'; then
+        printf "Go was not found in PATH.\n"
         printf "Adding Go to PATH...\n"
-        printf "export PATH=\$PATH:/usr/local/go/bin\n" >>~/.bashrc
+        printf "export PATH=\$PATH:/usr/local/go/bin\n" >> ~/.bashrc
         printf "Go added to PATH.\n"
+    else
+        printf "Go already exists in PATH. Not adding it.\n"
     fi
-
     # Reload bash
     source "$HOME/.bashrc"
 
@@ -50,5 +41,6 @@ go_install() {
 
 if ! go_install; then
     printf "Could not install Go.\n"
-    exit 1
+    return 1
 fi
+return 0
