@@ -199,7 +199,7 @@ end
 ---@param line string
 ---@return boolean is_unordered_list: true if the line is an unordered list item
 function M.match_ul(line)
-    return vim.fn.match(line, [[^\(\s*\)\?\(-\|\*\) ]]) ~= -1
+    return vim.fn.match(line, [[^\(\s*\)\?\(-\{1}\|\*\{1}\) ]]) ~= -1
 end
 
 --- Check if line is a TODO item (`* [ ]`, `* [x]`, `1. [ ]`, `1. [x]`, etc)
@@ -323,7 +323,7 @@ function M.reformat_markdown()
         range = tostring(line_num)
         line = vim.fn.getline(line_num)
 
-        if vim.regex([[\(^\s*[*|-]\)]]):match_str(line) then
+        if vim.regex([[\(^\s*[*|-] \)]]):match_str(line) then
             if vim.regex([[^\s*-\s*]]):match_str(line) then
                 vim.cmd(([[%ss/^\(\s*\)\?-\s*/\1\* /]]):format(range))
             end
