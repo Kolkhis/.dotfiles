@@ -131,3 +131,11 @@ vim.api.nvim_create_autocmd('TermOpen', {
     end,
 })
 
+vim.api.nvim_create_autocmd('BufEnter', {
+    pattern = { '*.yml', '*.yaml' },
+    callback = function ()
+        vim.opt_local.shiftwidth = 2
+        vim.opt_local.softtabstop = 2
+    end,
+})
+
