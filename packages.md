@@ -50,7 +50,10 @@ sudo apt-mark showmanual
 * `nmap`
 * `sysstat` - system tools
 * `whois` - also contains mkpasswd
-* `showmount` - part of nfs-common
+* `nfs-common` - nfs tools. has `showmount`
+* `weechat` 
+* `mdadm` - managing software RAID
+* `ansible`
 
 ## Programming
 * `jq` (jquery - install )
@@ -72,14 +75,14 @@ In addition, the latest available version from 'apt' is 8.2, so that's another r
 
 ```bash
 sudo apt-get update && sudo apt-get install -y \
-git \
-make \
-clang \
-libtool-bin \
-libxt-dev \
-libpython3-dev \
-libgtk-3-dev \
-libxt-dev
+    git \
+    make \
+    clang \
+    libtool-bin \
+    libxt-dev \
+    libpython3-dev \
+    libgtk-3-dev \
+    libxt-dev
 ```
 
 
@@ -174,8 +177,10 @@ nvm install node
 * `nvim`
 ```bash
 sudo add-apt-repository ppa:neovim-ppa/unstable -y
-sudo apt-get update
-sudo apt-get install neovim -y
+sudo apt update && sudo apt-get install neovim -y
+# Download packer.nvim:
+git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+ ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 ```
 
 * `vault`
@@ -226,6 +231,7 @@ sudo apt update && sudo apt install vault
   ```
 
 ## Package Install Script
+<!-- TODO: Make this cross-platform (for RH/dnf etc) -->
 ```bash
 #!/bin/bash
 
@@ -261,6 +267,12 @@ PACKAGES=(
     "network-manager"
     "whois"
     "neovim"
+    "nmap"
+    "sysstat"
+    "weechat"
+    "nfs-common"
+    "mdadm"
+    "ansible"
 )
 
 sudo apt-get install -y "$(printf "%s " "${PACKAGES[@]}")"
