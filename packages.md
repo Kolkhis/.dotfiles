@@ -54,6 +54,7 @@ sudo apt-mark showmanual
 * `weechat` 
 * `mdadm` - managing software RAID
 * `ansible`
+* `iperf3` - network throughput testing tool
 
 ## Programming
 * `jq` (jquery - install )
@@ -273,12 +274,17 @@ PACKAGES=(
     "nfs-common"
     "mdadm"
     "ansible"
+    "jq"
+    "iperf3"
+    "podman"
+    "youtube-dl"
+    "software-properties-common"
 )
 
 sudo apt-get install -y "$(printf "%s " "${PACKAGES[@]}")"
 
-
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash )
+# nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash 
 nvm install node
 sudo npm install -g pyright
 ```
