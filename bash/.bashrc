@@ -49,12 +49,16 @@ export NVM_DIR="$HOME/.nvm"
 # crablang
 [ -s "$HOME/.cargo/env" ] && \. "$HOME/.cargo/env"
 
-# Set XDG_CONFIG_HOME/DATA if it's unset
-case "$(uname)" in
-    Linux)
+# Set XDG_CONFIG_HOME/DATA on Linux if it's unset, add nvim to path if on windows
+case $OSTYPE in
+    *msys*)
+        if ! echo "$PATH" | grep -qi -E 'neovim' > /dev/null 2>&1; then
+            export PATH="$PATH:/c/Program Files/Neovim/bin"
+        fi
+        ;;
+    *linux*)
         [ -z "$XDG_CONFIG_HOME" ] && export XDG_CONFIG_HOME="${HOME}/.config"
         [ -z "$XDG_DATA_HOME" ] && export XDG_DATA_HOME="${HOME}/.local/share"
-        ;;
 esac
 
 export FZF_DEFAULT_COMMAND='find . -type f ! -path "*/.git/*"'
@@ -88,7 +92,7 @@ fi
 # Colors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 export GREP_COLORS=':ms=01;31:mc=01;31:sl=38;5;248:cx=38;5;244:fn=38;5;68:ln=38;5;81:bn=32:se=36'
-eval "$(dircolors -b ~/.dircolors)"
+[[ -s "$HOME/.dircolors" ]] && eval "$(dircolors -b ~/.dircolors)"
 
 # Add colors to less output (TODO)
 # export LESS_TERMCAP_md=$'\e[33m'  # Start Bold
@@ -176,6 +180,7 @@ ${GREY}\\$ ${RESET}"
 }
 # \W\
 
+# TODO: Rewrite this logic to utilize OSTYPE
 # pwd_shortened:  sed -E 's/.*\/(.*\/.*$)/\1/' 2>/dev/null
 # different prompt for git bash
 case $(hostname) in
@@ -229,4 +234,3 @@ export GPG_TTY
 export PATH=$PATH:/usr/local/go/bin
 export CGO_ENABLED=0
 export GO111MODULE=on
-
