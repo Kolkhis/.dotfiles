@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC1017
+
+# Uses fzf to select a file, then creates a new session in the directory of the
+# file. Names the session after the file.  
+
+if [[ $# -gt 0 ]]; then
+    search_path=$1
+else
+    search_path="$HOME/notes"
+fi
+
+selected=$(find "${search_path}" -mindepth 1 -maxdepth 2 -type d \! -path '*.git/*' | fzf)
+
+if [[ -z "$selected" ]]; then
+    printf "No selection was made.\n"
+    exit 0
+fi
+
+# Get rid of characters that tmux doesn't like
+selected_name=$(basename "$selected" | tr ".,: " "____")
+
+switch_to() {
+    if [[ -z "$TMUX" ]]; then
+        tmux attach-session "$selected_name"
+    else
+        tmux switch-client "$selected_name"
+    fi
+}
+
+if tmux has-session -t="$selected_name" > /dev/null 2>&1; then
+    switch_to 
+    exit 0
+fi
+
+if ! tmux has-session -t="$selected_name" > /dev/null 2>&1; then
+    tmux new -s "$selected_name" -c "$selected"
+    tmux new-session -ds "$selected_name" -c "$selected"
+    switch_to
+    # tmux send-keys -t $selected_name "ready_tmux" 
+    #  a bash script (in path) to initialize tmux in a state that you want
+    # e.g., make panes, etc. The ^M is a carriage return (enter)
+    # tmux neww -n "WindowName"
+    # tmux new-window --name "WindowName"
+fi
+
+# <prefix>L - go to Last session
+
+
