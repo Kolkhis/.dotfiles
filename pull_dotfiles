@@ -1,10 +1,21 @@
 #!/bin/bash
 # script for pulling dotfiles from homelab to main PC
-homelab_sync() {
-    if [[ "$(hostname)" == "D01" ]]; then
-        scp homelab:/home/kolkhis/.dotfiles/bash/.bash* ~
-        scp -r homelab:/home/kolkhis/.dotfiles/vim/.vim/* ~
-        scp homelab:/home/kolkhis/.dotfiles/vim/.vimrc ~
-    fi
-}
-homelab_sync
+REMOTE_HOST="homelab"
+DOTFILES_DIR="/home/kolkhis/.dotfiles"
+declare -a FILES
+FILES=(
+    "${REMOTE_HOST}:${DOTFILES_DIR}/vim/.vim/"
+    "${REMOTE_HOST}:${DOTFILES_DIR}/vim/.vimrc"
+    "${REMOTE_HOST}:${DOTFILES_DIR}/bash/.bash*"
+    "${REMOTE_HOST}:${DOTFILES_DIR}/wezterm/.wezterm.lua"
+)
+
+printf "Files to be copied:\n"
+printf "%s\n" "${FILES[@]}"
+if [[ $HOSTNAME == "D01" ]]; then
+    for f in "${FILES[@]}"; do
+        printf "Copying: %s\n" "$f"
+        scp -r "$f" ~
+    done
+fi
+
