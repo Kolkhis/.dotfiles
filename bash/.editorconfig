@@ -6,11 +6,15 @@
 indent_style = tab
 
 [*.lua]
-indent_size = 2
+indent_size = 4
 align_table_field = true
 extra_sep_at_table_end = true
 keep_simple_function_one_line = true
 table_sep = ','
+
+[*.yml,*.yaml]
+indent_size = 2
+indent_style = space
 
 # Matches exact files `package.json` or `.travis.yml`
 [{package.json,.travis.yml}]
