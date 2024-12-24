@@ -30,6 +30,7 @@ Set-PSReadLineKeyHandler -Chord Ctrl+w BackwardDeleteWord
 
 if ($PSEdition -eq "Core") # PowerShell(pwsh.exe)
 {
+    Set-PSReadLineKeyHandler -Chord Ctrl+Oem4 -Function ViCommandMode
 
     $BURNT_ORANGE="`e[38;5;130m"
     $DARK_YELLOW="`e[38;5;58m"
@@ -49,7 +50,6 @@ if ($PSEdition -eq "Core") # PowerShell(pwsh.exe)
     $FIRST_SEP="┏"   # ┎┏┍ ┏ ┒ ┒┎ ┏ ┍
     $SECOND_SEP="┗"  # ┖┗┕ ┖ ┚ ┨┠ ┣ ┝ ┫┠
 
-    Set-PSReadLineKeyHandler -Chord Ctrl+Oem4 -Function ViCommandMode
 
     # TODO: Get a Python (venv) prompt going.
     # Return a blank prompt and let Write-Host handle everything
