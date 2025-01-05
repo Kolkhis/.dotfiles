@@ -33,6 +33,12 @@ if ! install_neovim; then
 fi
 
 printf "\e[32mNeovim was successfully installed!\n\e[0m"
-
+printf "Remember to install the following packages for everything:\n"
+cat <<- EOL
+    - clang
+    - python3.10-venv
+    - nvm / node
+    - go (1.23+)
+EOL
 
 
