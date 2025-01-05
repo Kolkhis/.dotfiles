@@ -1,6 +1,6 @@
 local os = require('kolkhis.detect_os')
 -- Sourcegraph config. All keys are optional
-if os.is_linux and not os.is_termux then
+if os.is_linux and not os.is_termux and package.loaded['sg'] then
     local commands = require('sg.cody.commands')
     local sg = require('sg')
     local sgui = require('sg.extensions.telescope')
