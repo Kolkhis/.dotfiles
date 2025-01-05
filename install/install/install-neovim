@@ -12,6 +12,13 @@ install_neovim() {
         return 1
     fi
 
+    if ! git clone --depth 1 https://github.com/wbthomason/packer.nvim \
+        ~/.local/share/nvim/site/pack/packer/start/packer.nvim; then
+        printf "Couldn't clone packer.nvim - is Git installed?\n";
+        return 1
+    fi
+
+
     return 0
 }
 
