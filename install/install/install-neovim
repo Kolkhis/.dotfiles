@@ -5,18 +5,22 @@ install_neovim() {
         printf "There was a problem adding the repository for neovim.\n"
 	return 1
     fi
+    printf "Added the Neovim repository (ppa).\n"
+
 
     sudo apt-get update 
     if ! sudo apt-get install neovim -y; then
         printf "There was a problem installing neovim.\n"
         return 1
     fi
+    printf "Successfully downloaded neovim.\n"
 
     if ! git clone --depth 1 https://github.com/wbthomason/packer.nvim \
         ~/.local/share/nvim/site/pack/packer/start/packer.nvim; then
         printf "Couldn't clone packer.nvim - is Git installed?\n";
         return 1
     fi
+    printf "Successfully cloned packer.nvim.\n"
 
 
     return 0
@@ -28,7 +32,7 @@ if ! install_neovim; then
     return 1
 fi
 
-printf "\e[32mNeovim was successfully installed! \e[0m"
+printf "\e[32mNeovim was successfully installed!\n\e[0m"
 
 
 
