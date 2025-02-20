@@ -2,9 +2,37 @@
 # TODO: Finish error handling
 # TODO: Add options to specify keyfile and github username.
 
+
+while [[ -n $1 ]]; do
+    case $1 in 
+        -k|--keyfile)
+            if [[ -n $2 ]]; then
+                printf "Setting key file as: %s\n" "$2"
+                shift;
+                KEYFILE="$1"
+            else
+                printf -- "-k was specified but no key file was given.\n" && exit 1
+            fi
+            shift;
+            ;;
+        -u|--username)
+            if [[ -n $2 ]]; then
+                printf "Setting GitHub username as: %s\n" "$2"
+                shift;
+                GH_USERNAME=$1
+            else
+                printf -- "-u/--username was specified but no username was given.\n" && exit 1
+            fi
+            shift;
+            ;;
+        *)
+            printf "Unknown option: %s\n" "$1"
+            shift;
+    esac
+done
+
 : "${GH_USERNAME:="kolkhis"}"
 : "${KEYFILE:=~/.ssh/id_ed25519.pub}"
-
 
 git config --global gpg.format ssh || {
     printf >&2 "Couldn't set Git's GPG signing format to SSH.\n"
@@ -30,17 +58,19 @@ mkdir -p ~/.config/git || {
 }
 
 touch ~/.config/git/allowed_signers || {
-    :
+    printf >&2 "Failed to create file ~/.config/git/allowed_signers\n" && exit 1
 }
 
-echo "${GH_USERNAME} $(cat ~/.ssh/id_ed25519.pub)" > ~/.config/git/allowed_signers || {
-    :
+echo "${GH_USERNAME} $(cat "$KEYFILE")" > ~/.config/git/allowed_signers || {
+    printf >&2 "Failed to add %s as an allowed signer with the key %s\n" "${GH_USERNAME}" "${KEYFILE}" && exit 1
 }
 
 git config --global gpg.ssh.allowedSignersFile ~/.config/git/allowed_signers || {
-    :
+    printf >&2 "Failed to configure gpg.ssh.allowedSignersFile\n" && exit 1
 }
 
 printf "Successfully configured Git to sign both tags and commits using the key file: %s\n" "${KEYFILE:=}"
 printf "Make a commit to verify that the signing is properly configured.\n"
 printf "After committing a change, use 'git log --oneline --show-signature -1' to verify.\n"
+
+
