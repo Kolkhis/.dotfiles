@@ -1,0 +1,46 @@
+#!/bin/bash
+# TODO: Finish error handling
+# TODO: Add options to specify keyfile and github username.
+
+: "${GH_USERNAME:="kolkhis"}"
+: "${KEYFILE:=~/.ssh/id_ed25519.pub}"
+
+
+git config --global gpg.format ssh || {
+    printf >&2 "Couldn't set Git's GPG signing format to SSH.\n"
+    exit 1
+}
+
+if [[ -f ~/.ssh/id_ed25519.pub ]]; then
+    git config --global user.signingkey ~/.ssh/id_ed25519.pub || {
+    printf >&2 "Couldn't add the user's signing key as ~/.ssh/id_ed25519.pub\n" && exit 1
+    }
+fi
+
+git config --global tag.gpgSign true || {
+    printf >&2 "Couldn't enable tag GPG signing.\n" && exit 1
+}
+
+git config --global commit.gpgSign true || {
+    printf >&2 "Couldn't enable Git commit signing.\n" && exit 1
+}
+
+mkdir -p ~/.config/git || {
+    printf >&2 "Couldn't create the directory ~/.config/git\n" && exit 1
+}
+
+touch ~/.config/git/allowed_signers || {
+    :
+}
+
+echo "${GH_USERNAME} $(cat ~/.ssh/id_ed25519.pub)" > ~/.config/git/allowed_signers || {
+    :
+}
+
+git config --global gpg.ssh.allowedSignersFile ~/.config/git/allowed_signers || {
+    :
+}
+
+printf "Successfully configured Git to sign both tags and commits using the key file: %s\n" "${KEYFILE:=}"
+printf "Make a commit to verify that the signing is properly configured.\n"
+printf "After committing a change, use 'git log --oneline --show-signature -1' to verify.\n"
