@@ -15,7 +15,7 @@
 # TODO: Write to a file to remember which files were managed by this script.
 
 
-declare SKIP
+declare SKIP       # skip if file already exists
 declare FORCE      #    
 declare BACKUP     # Use `ln -b` when creating symlinks
 # Debug Output - create FIFO pipe and print to that, if true attach that fifo to stdout
@@ -30,18 +30,22 @@ while [[ -n $1 ]]; do
         -f|--force)
             printf "Forcing symlinks.\n"
             FORCE=true
+            shift;
             ;;
         -b|--backup)
             printf "Backups will be made for all existing files.\n"
             BACKUP=true
+            shift;
             ;;
         -s|--skip)
             printf "Skipping files that already exist (no forced overwrite)\n"
             SKIP=true
+            shift;
             ;;
         -v|--verbose)
             printf "Using verbose output.\n"
             VERBOSE=true
+            shift;
             ;;
         *)
             printf "Unknown argument: %s\n" "$1"
