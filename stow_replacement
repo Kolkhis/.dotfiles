@@ -15,6 +15,41 @@
 # TODO: Write to a file to remember which files were managed by this script.
 
 
+declare SKIP
+declare FORCE      #    
+declare BACKUP     # Use `ln -b` when creating symlinks
+# Debug Output - create FIFO pipe and print to that, if true attach that fifo to stdout
+declare VERBOSE    
+
+while [[ -n $1 ]]; do
+    case $1 in
+        -h|--help)
+            printf "TODO: Add help documentation.\n"
+            shift;
+            ;;
+        -f|--force)
+            printf "Forcing symlinks.\n"
+            FORCE=true
+            ;;
+        -b|--backup)
+            printf "Backups will be made for all existing files.\n"
+            BACKUP=true
+            ;;
+        -s|--skip)
+            printf "Skipping files that already exist (no forced overwrite)\n"
+            SKIP=true
+            ;;
+        -v|--verbose)
+            printf "Using verbose output.\n"
+            VERBOSE=true
+            ;;
+        *)
+            printf "Unknown argument: %s\n" "$1"
+            shift;
+            ;;
+    esac
+done
+
 
 # Check if the terminal supports 256 colors.
 case "$TERM" in
@@ -41,10 +76,13 @@ if [[ -f /tmp/FILES ]]; then
     declare -a SAVED_MANAGED_FILES
     IFS=$'\n' read -r -d '' -a SAVED_MANAGED_FILES < /tmp/FILES
     for f in "${SAVED_MANAGED_FILES[@]}"; do
-        printf "%sManaged file: %s\n" "${GREEN}" "${RESET}$f"
+        printf "%s[Managed file]: %s\n" "${GREEN}" "${RESET}$f"
     done
 fi
 
+# TODO: Use an associative array to determine which file is managed
+#      e.g., [$file]=true
+#      Gather file names when 
 file_is_managed() {
     printf "Debug: Checking if file is managed: %s\n" "$1"
     if [[ ${#MANAGED_FILES[@]} -eq 0 ]] && [[ ${#SAVED_MANAGED_FILES} -eq 0 ]]; then
@@ -68,8 +106,8 @@ file_is_managed() {
 }
 
 declare -a DIRS
-IFS=$'\n' read -r -d '' -a DIRS < \
-    <(find ~/.dotfiles/ -mindepth 1 -maxdepth 1 -type d ! -name '.git')
+IFS=$'\n' read -r -d '' -a DIRS < <(
+    find ~/.dotfiles/ -mindepth 1 -maxdepth 1 -type d ! -name '.git')
 
 
 for d in "${DIRS[@]}"; do
@@ -78,6 +116,9 @@ for d in "${DIRS[@]}"; do
     for f in "${FILES[@]}"; do
 
         ### POSIX-compliant way to remove the leading path for final_destination ###
+        # TODO: Accomodate dotfiles directories with different names (e.g., dot)
+        DOTFILES_DIR=$(basename "${PWD}")
+
         final_destination=$(printf "%s" "$f" | sed -E "s/.dotfiles\/$(basename "$d")\///")
 
         ### Using Parameter Expansion (Bash 4.0+) ###
